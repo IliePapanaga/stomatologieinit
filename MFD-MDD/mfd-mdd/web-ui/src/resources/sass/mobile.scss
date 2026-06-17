@@ -1,0 +1,288 @@
+@media (max-width: 1200px) {
+  html{
+    min-width: 100% !important;
+    min-height: auto !important;
+  }
+
+  & .login{
+    margin-top: 100px !important;
+    margin-bottom: 150px !important;
+  }
+}
+
+.container{
+  min-width: 1200px !important;
+  & + .footer__wrapper{
+    min-width: 1200px;
+  }
+}
+
+@media (max-height: 720px){
+  body{
+    min-height: auto !important;
+  }
+
+  .wrapper{
+    min-height: auto !important;
+    align-items: flex-start;
+  }
+
+  .ui-dialog.react-draggable{
+    top: 100% !important;
+    left: 100% !important;
+    transform: translate(-165px, 0px) !important;
+  }
+
+  .ui-dialog-container{
+    position: relative;
+  }
+
+  .register__form{
+    & +  .logo__absolute{
+      display: none;
+      & + .footer__wrapper{
+        min-width: 960px;
+        height: 80px;
+        bottom: -29px;
+      }
+    }
+    & .signup__practice{
+      margin-top: 0;
+    }
+    & .footer__btn{
+      padding-bottom: 30px !important;
+    }
+  }
+
+  .ui-dialog.react-draggable{
+    top: 100% !important;
+    left: 100% !important;
+    transform: translate(-94vw, 10px) !important;
+  }
+
+  .ui-dialog-container{
+    position: relative;
+  }
+
+  .pro__setting-general .pro__setting-right-input .pro__setting-right-input-item:nth-child(2){
+    margin-top: 0 !important;
+  }
+
+  .pro__setting-general .pro__setting-right-input .pro__setting-right-input-item:nth-child(1){
+    & .item__box.item__box-salary {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .pro__setting-general .pro__setting-left{
+    padding-bottom: 2px !important;
+  }
+
+  .pro__setting-general .pro__setting-wrapper .pro__setting-left .pro__setting-left-account{
+    padding-bottom: 2px !important;
+  }
+
+  .pro__setting-right-preferences{
+    margin-bottom: 0px !important;
+  }
+
+  .modal__static{
+    & div{
+      width: 90% !important;
+      height: auto !important;
+      margin: auto;
+    }
+    & .signUp__main{
+      flex-direction: column;
+    }
+    & .modal__header{
+      height: 53px !important;
+      width: 100% !important;
+      margin-bottom: 20px;
+    }
+    & .modal.signUp{
+      width: 100% !important;
+    }
+    & .signUp__main-item-img{
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    & .signUp__main-item{
+      margin-bottom: 20px;
+    }
+    & .signUp__main-item-btn{
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    & .signUp__main-item-text{
+      & p{
+        text-align: center;
+      }
+    }
+    & .close__icon{
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+}
+
+@media(max-width: 720px) {
+  .register__form {
+    & + .logo__absolute {
+      display: none;
+      & + .footer__wrapper {
+        min-width: 960px;
+        height: 80px;
+        bottom: -29px;
+      }
+    }
+    & .signup__practice {
+      margin-top: 0;
+    }
+    .signup__practice-registration {
+      & .item__box.zip {
+        & .input {
+          width: 260px !important;
+        }
+      }
+    }
+    & .footer__btn{
+      padding-bottom: 30px !important;
+    }
+  }
+  & .modal__static-change{
+    top: -50px !important;
+  }
+
+  & .rrt-confirm-holder{
+    & .rrt-confirm{
+      width: 90% !important;
+      margin: auto;
+    }
+  }
+
+  .ui-dialog.react-draggable{
+    top: 100% !important;
+    left: 100% !important;
+    transform: translate(-94vw, -46vh) !important;
+  }
+
+  .ui-dialog-container{
+    position: relative;
+  }
+
+  .pro__setting-general .pro__setting-right-input .pro__setting-right-input-item:nth-child(2){
+    margin-top: 0 !important;
+  }
+
+  .pro__setting-general .pro__setting-right-input .pro__setting-right-input-item:nth-child(1){
+    & .item__box.item__box-salary {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .pro__setting-general .pro__setting-left{
+    padding-bottom: 2px !important;
+  }
+
+  .pro__setting-general .pro__setting-wrapper .pro__setting-left .pro__setting-left-account{
+    padding-bottom: 2px !important;
+  }
+
+  .pro__setting-right-preferences{
+    margin-bottom: 0px !important;
+  }
+  .modal__static{
+    & div{
+      width: 90% !important;
+      height: auto !important;
+      margin: auto;
+    }
+    & .signUp__main{
+      flex-direction: column;
+    }
+    & .modal__header{
+      height: 53px !important;
+      width: 100% !important;
+      margin-bottom: 20px;
+    }
+    & .modal.signUp{
+      width: 100% !important;
+    }
+    & .signUp__main-item-img{
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    & .signUp__main-item{
+      margin-bottom: 20px;
+    }
+    & .signUp__main-item-btn{
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    & .signUp__main-item-text{
+      & p{
+        text-align: center;
+      }
+    }
+    & .close__icon{
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+}
+
+
+.createPass__main-input{
+  position: relative;
+  & input{
+    padding-right: 70px !important;
+  }
+}
+
+.signup__practice-cred{
+  .for__pass-btn{
+    position: relative;
+    & .input{
+      width: 252px !important;
+    }
+  }
+}
+
+.signup__practice-prof-wrapper {
+  .for__pass-btn {
+    position: relative;
+    & .input {
+      width: 256px !important;
+    }
+  }
+}
+
+.pass__hide{
+  width: 30px;
+  height: 32px;
+  background: url("../img/icons/passShow.png") 50% 50% no-repeat;
+  position: absolute;
+  right: 30px;
+  top: 1px;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.pass__show{
+  width: 30px;
+  height: 32px;
+  background: url("../img/icons/passHide.png") 50% 50% no-repeat;
+  position: absolute;
+  right: 30px;
+  top: 1px;
+  &:hover{
+    cursor: pointer;
+  }
+}

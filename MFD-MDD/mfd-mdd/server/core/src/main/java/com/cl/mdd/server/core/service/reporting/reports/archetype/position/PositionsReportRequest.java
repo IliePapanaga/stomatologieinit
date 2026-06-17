@@ -1,0 +1,66 @@
+package com.cl.mdd.server.core.service.reporting.reports.archetype.position;
+
+import com.cl.mdd.server.core.service.reporting.ReportRequest;
+import com.cl.mdd.server.core.service.reporting.ReportFormat;
+import com.cl.mdd.server.core.service.reporting.reports.controls.DateFrom;
+import com.cl.mdd.server.core.service.reporting.reports.controls.DateTo;
+import com.cl.mdd.server.core.service.reporting.reports.controls.PositionType;
+import com.google.common.collect.ImmutableList;
+
+import javax.annotation.Nullable;
+import java.time.LocalDate;
+import java.util.List;
+
+public class PositionsReportRequest implements ReportRequest {
+
+    private String reportId;
+
+    private LocalDate from;
+
+    private LocalDate to;
+
+    private String positionType;
+
+    private ReportFormat format;
+
+    public PositionsReportRequest(String reportId,
+                                  @Nullable LocalDate from,
+                                  @Nullable LocalDate to,
+                                  @Nullable String positionType,
+                                  String format) {
+        this.reportId = reportId;
+        this.from = from;
+        this.to = to;
+        this.positionType = positionType;
+        this.format = ReportFormat.valueOf(format);
+    }
+
+    @Override
+    public String getReportId() {
+        return reportId;
+    }
+
+    @Override
+    public ReportFormat getFormat() {
+        return format;
+    }
+
+    @Override
+    public List<Parameter> parameters() {
+        ImmutableList.Builder<Parameter> builder = ImmutableList.builder();
+
+        if (from != null) {
+            builder.add(DateFrom.of(from));
+        }
+
+        if (to != null) {
+            builder.add(DateTo.of(to));
+        }
+
+        if (positionType != null) {
+            builder.add(PositionType.of(positionType));
+        }
+
+        return builder.build();
+    }
+}

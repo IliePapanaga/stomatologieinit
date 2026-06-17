@@ -1,0 +1,7 @@
+.board__date-start {
+  display: flex;
+  align-items: center; }
+
+.board__date-text {
+  color: white;
+  width: 100px; }

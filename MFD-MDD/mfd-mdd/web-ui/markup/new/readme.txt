@@ -1,0 +1,1 @@
+This folder is intend for keeping not implemented disgn.

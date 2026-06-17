@@ -1,0 +1,365 @@
+{
+  "functionalAreas": [
+    {
+      "urlKey": "systemadministration",
+      "roles": [
+        "ROLE_SYSTEM_USER"
+      ],
+      "title": "System Administration",
+      "iconCls": "",
+      "viewSets": [
+        {
+          "urlKey": "offices",
+          "title": "Offices",
+          "iconXlinkHref": "#sys1",
+          "iconHoverXlinkHref": "#sys1H",
+          "views": [
+            {
+              "urlKey": "offices",
+              "className": "Offices",
+              "title": "Offices",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "professionals",
+          "title": "Professionals",
+          "iconXlinkHref": "#sys2",
+          "iconHoverXlinkHref": "#sys2H",
+          "views": [
+            {
+              "urlKey": "professionals",
+              "className": "Professionals",
+              "title": "Professionals",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "payments",
+          "title": "Payments",
+          "iconXlinkHref": "#sys3",
+          "iconHoverXlinkHref": "#sys3H",
+          "views": [
+            {
+              "urlKey": "payments",
+              "className": "Payments",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "postings",
+          "title": "Postings",
+          "iconXlinkHref": "#sys4",
+          "iconHoverXlinkHref": "#sys4H",
+          "views": [
+            {
+              "urlKey": "temporary-job",
+              "className": "TemporaryJob",
+              "title": "Temporary Job",
+              "entity-types": []
+            },
+            {
+              "urlKey": "permanent-job",
+              "className": "PermanentJob",
+              "title": "Permanent Job",
+              "entity-types": []
+            },
+            {
+              "urlKey": "interview",
+              "className": "Interview",
+              "title": "Interview",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "templates",
+          "title": "Notification Templates",
+          "iconXlinkHref": "#sys6",
+          "iconHoverXlinkHref": "#sys6H",
+          "views": [
+            {
+              "urlKey": "templates",
+              "className": "Templates",
+              "title": "Notification Templates",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "users",
+          "title": "Users",
+          "iconXlinkHref": "#sys7",
+          "iconHoverXlinkHref": "#sys7H",
+          "views": [
+            {
+              "urlKey": "users",
+              "className": "Users",
+              "title": "Users",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "reports",
+          "title": "Reports",
+          "iconXlinkHref": "#sys8",
+          "iconHoverXlinkHref": "#sys8H",
+          "views": [
+            {
+              "urlKey": "clients",
+              "className": "Clients",
+              "title": "Clients",
+              "entity-types": []
+            },
+            {
+              "urlKey": "professionals",
+              "className": "Professionals",
+              "title": "Professionals",
+              "entity-types": []
+            },
+            {
+              "urlKey": "payments",
+              "className": "Payments",
+              "title": "Payments",
+              "entity-types": []
+            },
+            {
+              "urlKey": "positions",
+              "className": "Positions",
+              "title": "Positions",
+              "entity-types": []
+            },
+            {
+              "urlKey": "canceled-postings",
+              "className": "CanceledPostings",
+              "title": "Canceled Postings",
+              "entity-types": []
+            },
+            {
+              "urlKey": "not-filled-positions",
+              "className": "NotFilledPositions",
+              "title": "Not Filled Positions",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "settings",
+          "title": "Settings",
+          "iconXlinkHref": "#sys9",
+          "iconHoverXlinkHref": "#sys9H",
+          "views": [
+            {
+              "urlKey": "payments",
+              "className": "Payments",
+              "title": "Payments",
+              "entity-types": []
+            },
+            {
+              "urlKey": "job-fees",
+              "className": "JobFees",
+              "title": "Job Fees",
+              "entity-types": []
+            },
+            {
+              "urlKey": "attendance",
+              "className": "Attendance",
+              "title": "Attendance",
+              "entity-types": []
+            },
+            {
+              "urlKey": "account",
+              "className": "Account",
+              "title": "Account",
+              "entity-types": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "urlKey": "professional",
+      "roles": [
+        "ROLE_PROFESSIONAL"
+      ],
+      "title": "Professional",
+      "iconCls": "",
+      "viewSets": [
+        {
+          "urlKey": "applications",
+          "title": "Assignments",
+          "iconXlinkHref": "#sys7",
+          "iconHoverXlinkHref": "#sys7H",
+          "views": [
+            {
+              "urlKey": "temporary-job",
+              "className": "TemporaryJob",
+              "title": "Temporary Job",
+              "entity-types": []
+            },
+            {
+              "urlKey": "permanent-job",
+              "className": "PermanentJob",
+              "title": "Permanent Job",
+              "entity-types": []
+            },
+            {
+              "urlKey": "blacklisted-offices",
+              "className": "BlacklistedOffices",
+              "title": "Banned Offices",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "job-history",
+          "title": "Job History",
+          "iconXlinkHref": "#sys6",
+          "iconHoverXlinkHref": "#sys6H",
+          "views": [
+            {
+              "urlKey": "temporary-job",
+              "className": "TemporaryJob",
+              "title": "Temporary Job",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "settings",
+          "title": "My Account",
+          "iconXlinkHref": "#sys9",
+          "iconHoverXlinkHref": "#sys9H",
+          "views": [
+            {
+              "urlKey": "general",
+              "className": "General",
+              "title": "My Profile/Edit",
+              "entity-types": []
+            },
+            {
+              "urlKey": "specialties",
+              "className": "Specialties",
+              "title": "Add/Edit Specialties",
+              "entity-types": []
+            },
+            {
+              "urlKey": "certificates",
+              "className": "Certificates",
+              "title": "Add/Edit Certificates",
+              "entity-types": []
+            },
+            {
+              "urlKey": "profile",
+              "className": "Profile",
+              "title": "Skills and Experience",
+              "entity-types": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "urlKey": "practice-owner",
+      "roles": [
+        "ROLE_PRACTICE_OWNER"
+      ],
+      "title": "Dental Office Management",
+      "iconCls": "",
+      "viewSets": [
+        {
+          "urlKey": "postings-in-progress",
+          "title": "Create A Posting / Postings In Progress",
+          "iconXlinkHref": "#sys4",
+          "iconHoverXlinkHref": "#sys4H",
+          "views": [
+            {
+              "urlKey": "temporary-job",
+              "className": "TemporaryJob",
+              "title": "Temporary Job",
+              "entity-types": []
+            },
+            {
+              "urlKey": "permanent-job",
+              "className": "PermanentJob",
+              "title": "Permanent Job",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "current-attendance",
+          "title": "Currently Booked",
+          "iconXlinkHref": "#sys10",
+          "iconHoverXlinkHref": "#sys10H",
+          "views": [
+            {
+              "urlKey": "temporary-job",
+              "className": "TemporaryJob",
+              "title": "Temporary Job",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "post-hiring-history",
+          "title": "Previously Booked",
+          "iconXlinkHref": "#sys6",
+          "iconHoverXlinkHref": "#sys6H",
+          "views": [
+            {
+              "urlKey": "professionals",
+              "className": "Professionals",
+              "title": "Professionals",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "payments",
+          "title": "Past Transactions",
+          "iconXlinkHref": "#sys3",
+          "iconHoverXlinkHref": "#sys3H",
+          "views": [
+            {
+              "urlKey": "payments",
+              "className": "Payments",
+              "title": "Payments",
+              "entity-types": []
+            }
+          ]
+        },
+        {
+          "urlKey": "settings",
+          "title": "My Account",
+          "iconXlinkHref": "#sys9",
+          "iconHoverXlinkHref": "#sys9H",
+          "views": [
+            {
+              "urlKey": "general",
+              "className": "General",
+              "title": "Office Profile",
+              "entity-types": []
+            },
+            {
+              "urlKey": "locations",
+              "className": "Locations",
+              "title": "Locations",
+              "entity-types": []
+            },
+            {
+              "urlKey": "payment-methods",
+              "className": "PaymentMethods",
+              "title": "Payment Methods",
+              "entity-types": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>mdd-server-notification</artifactId>
+        <groupId>com.cl.mdd.server</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>mdd-server-notification-embedded</artifactId>
+
+    <name>MDD Server :: Notification :: Embedded</name>
+    <description>Client for notification service if it is deployed as a part of application</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cl.sns.server</groupId>
+            <artifactId>sns-server-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cl.mdd.server</groupId>
+            <artifactId>mdd-server-notification-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

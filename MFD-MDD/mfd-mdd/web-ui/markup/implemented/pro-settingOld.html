@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="login__wrapper" id="root">
+    <div class="container">
+        <div class="main">
+
+
+            <div class="main__header">
+                <div class="main__header-logo">
+                    <img src="img/logo.svg">
+                </div>
+
+                <div class="main__header-bar">
+                    <div class="main__header-logout">
+                        <div class="logout__text">Hello,</div>
+                        <div class="logout__name">Garry Norman</div>
+                        <div class="logout__img"><a>
+                            <svg class="log__icon">
+                                <use xlink:href="#Logout"></use>
+                            </svg>
+                        </a></div>
+                    </div>
+                    <div class="main__header-help">
+                        <a href="#">
+                            <img src="img/icons/help.png">
+                            <svg class="help__icon">
+                                <use xlink:href="#help"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="main__content">
+                <div class="main__bar">
+
+                    <div class="main__bar-item main__bar-item-active">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#applicants"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#applicantsH"></use>
+                                </svg>
+                            </div>
+                            <p>Applications</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#bar3"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#bar3H"></use>
+                                </svg>
+                            </div>
+                            <p>Job History</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#bar5"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#bar5H"></use>
+                                </svg>
+                            </div>
+                            <p>Settings</p>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="main__board">
+                    <div class="board">
+
+
+                        <div class="board__header">
+                            <div class="board__header-links">
+                                <div class="board__header-links-item board__header-links-item-active">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#general"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#generalH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>General</p>
+                                    </button>
+                                </div>
+                                <div class="board__header-links-item">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#Specialties"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#SpecialtiesH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>Specialties</p>
+                                    </button>
+                                </div>
+
+                                <div class="board__header-links-item">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#profile"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#profileH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>Profile</p>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="board__header-info setting">
+
+                            </div>
+                        </div>
+
+                        <div class="content pro__setting">
+                            <div class="pro__setting-wrapper">
+
+
+                                <div class="pro__setting-left">
+                                    <div class="pro__setting-left-account">
+
+                                        <h3>Account Details</h3>
+
+
+                                        <div class="pro__setting-left-account-item">
+                                            <div class="text">
+                                                <p>Email Address*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="email">
+                                            </div>
+                                            <div class="eye__wrapper hidden">
+                                                <div class="eye-show"></div>
+                                            </div>
+                                            <div class="btn">
+                                                <button class="blue">Change</button>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="pro__setting-left-account-item">
+                                            <div class="text">
+                                                <p>Password:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="password">
+                                            </div>
+
+                                            <div class="eye__wrapper">
+                                                <div class="eye-show"></div>
+                                            </div>
+
+                                            <div class="btn">
+                                                <button class="blue">Change</button>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="pro__setting-left-account-item">
+                                            <div class="text">
+                                                <p>Activate Account:</p>
+                                            </div>
+                                            <div class="input">
+                                                <div class="modal__main-item-check">
+                                                    <div class="check__point"></div>
+                                                    <div class="check__line"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="pro__setting-left-contact">
+
+                                        <h3>Contact Details</h3>
+
+
+                                        <div class="item__box photo">
+                                            <div class="text">
+                                                <p>Photo*:</p>
+                                            </div>
+                                            <div class="img">
+                                                <img src="img/photo.png">
+                                            </div>
+                                            <div class="btn">
+                                                <button class="blue">Browse</button>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>Title:</p>
+                                            </div>
+                                            <div class="input board__input-wrapper">
+                                                <select required class="board__input">
+                                                    <option value="" disabled selected hidden>Select</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>First Name*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>Last Name*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>Contact Phone*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="tel">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>ZIP*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="number">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>State*:</p>
+                                            </div>
+                                            <div class="input board__input-wrapper">
+                                                <select required class="board__input">
+                                                    <option value="" disabled selected hidden>Select</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>City:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input class="board__input" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>Street*:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input class="board__input" type="text">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="vertical__line"></div>
+
+
+                                <div class="pro__setting-right">
+
+                                    <div class="pro__setting-right-preferences">
+
+                                        <div class="pro__setting-right-preferences-header">
+                                            <h3>Preferences & Availability</h3>
+
+                                            <div class="pro__setting-right-preferences-header-choose">
+                                                <p>Yes</p>
+                                                <p>No</p>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="item__radio">
+                                            <div class="item__radio-header">Looking for permament position*:</div>
+                                            <div class="item__radio-wrapper">
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences1" type="radio" name="radio1">
+                                                    <label for="Preferences1"></label>
+                                                </div>
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences2" type="radio" name="radio1">
+                                                    <label for="Preferences2"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__radio">
+                                            <div class="item__radio-header">Looking for permament position*:</div>
+                                            <div class="item__radio-wrapper">
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences1" type="radio" name="radio1">
+                                                    <label for="Preferences1"></label>
+                                                </div>
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences2" type="radio" name="radio1">
+                                                    <label for="Preferences2"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="item__radio">
+                                            <div class="item__radio-header">Looking for permament position*:</div>
+                                            <div class="item__radio-wrapper">
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences1" type="radio" name="radio1">
+                                                    <label for="Preferences1"></label>
+                                                </div>
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences2" type="radio" name="radio1">
+                                                    <label for="Preferences2"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="item__radio">
+                                            <div class="item__radio-header">Looking for permament position*:</div>
+                                            <div class="item__radio-wrapper">
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences1" type="radio" name="radio1">
+                                                    <label for="Preferences1"></label>
+                                                </div>
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences2" type="radio" name="radio1">
+                                                    <label for="Preferences2"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="item__radio">
+                                            <div class="item__radio-header">Looking for permament position*:</div>
+                                            <div class="item__radio-wrapper">
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences1" type="radio" name="radio1">
+                                                    <label for="Preferences1"></label>
+                                                </div>
+                                                <div class="item__radio-content">
+                                                    <input id="Preferences2" type="radio" name="radio1">
+                                                    <label for="Preferences2"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="pro__setting-right-availability">
+                                        <div class="item__check">
+
+                                            <div class="item__check-header">Availability*:</div>
+
+                                            <div class="item__check-content-wrapper">
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check">
+                                                    <label for="check">Monday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check1">
+                                                    <label for="check1">Tuesday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check2">
+                                                    <label for="check2">Wednesday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check3">
+                                                    <label for="check3">Thursday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check4">
+                                                    <label for="check4">Friday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check5">
+                                                    <label for="check5">Saturday</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check6">
+                                                    <label for="check6">Sunday</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="pro__setting-right-input">
+
+                                        <div class="pro__setting-right-input-item">
+
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Desired Rate Per Hour ($)*:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input class="board__input" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Your salary range ($): </p>
+                                                </div>
+                                                <div class="item__box-time-top-from">
+                                                    <input class="board__input" type="text">
+                                                </div>
+                                                <div class="item__box-time-top-to">
+                                                    <input class="board__input" type="text">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="pro__setting-right-input-item">
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Radius willing to travel in miles from home location*:</p>
+                                                </div>
+                                                <div class="board__input-wrapper input">
+                                                    <select required class="board__input">
+                                                        <option value="" disabled selected hidden>Select</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="pro__setting-right-locations">
+                                        <div class="item__check">
+
+                                            <div class="item__check-header">Which of the following Bay Area locations
+                                                can you work in?
+                                            </div>
+
+                                            <div class="item__check-content-wrapper">
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check">
+                                                    <label for="check">NB</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check1">
+                                                    <label for="check1">NB</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check2">
+                                                    <label for="check2">SACR</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check3">
+                                                    <label for="check3">SF</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check4">
+                                                    <label for="check4">MONTER/SAN CRUZ</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check5">
+                                                    <label for="check5">SB</label>
+                                                </div>
+                                                <div class="item__check-content">
+                                                    <input type="checkbox" name="check" id="check6">
+                                                    <label for="check6">PENNIN</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="pro__setting-right-check">
+                                        <div class="item__box">
+                                            <div class="text">
+                                                <p>Willing to relocate:</p>
+                                            </div>
+                                            <div class="input">
+                                                <input type="checkbox" name="check15" id="check15">
+                                                <label for="check15"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="footer__btn">
+                                <button class="blue white">Cencel</button>
+                                <button class="blue">Ok</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer__wrapper">
+        <div class="footer">2017 Copyright © MaydayDentalStaffing.com All rights reserved</div>
+    </footer>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+

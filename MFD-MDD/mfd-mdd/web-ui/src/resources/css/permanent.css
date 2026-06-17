@@ -1,0 +1,97 @@
+.candidate-wrapper {
+  left: calc(50% - 233px); }
+
+.candidate .modal__header {
+  position: relative; }
+  .candidate .modal__header:before {
+    width: 36px;
+    height: 36px;
+    content: ' ';
+    background: url("../img/icons/attention.png") 50% 50% no-repeat;
+    left: 0;
+    top: 0; }
+  .candidate .modal__header h4 {
+    margin-left: 10px; }
+
+.candidate .modal__main-header {
+  padding: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px; }
+  .candidate .modal__main-header p {
+    color: #333333;
+    font-size: 16px; }
+
+.candidate .modal__main-item-text {
+  font-size: 14px;
+  color: #5d5d5d;
+  width: 180px; }
+
+.candidate .modal__main-item-data span {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 700; }
+
+.candidate__center {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .candidate__center div {
+    color: #f88f00;
+    font-size: 14px; }
+
+.schedule-wrapper {
+  left: calc(50% - 336px); }
+
+.schedule .modal__main-white {
+  padding-left: 15px;
+  padding-bottom: 5px; }
+
+.schedule .modal__main-gray {
+  padding-left: 15px;
+  border-top: 1px solid #bcbcbc;
+  border-bottom: 1px solid #bcbcbc; }
+
+.schedule .modal__main-item {
+  margin-bottom: 12px; }
+  .schedule .modal__main-item-text {
+    margin-right: 10px; }
+  .schedule .modal__main-item-data {
+    font-size: 14px;
+    color: #333333; }
+  .schedule .modal__main-item-date {
+    position: relative;
+    margin-right: 20px; }
+    .schedule .modal__main-item-date:after {
+      position: absolute;
+      content: ' ';
+      background: url(../img/icons/blueDate.png) 50% 50% no-repeat;
+      right: 0;
+      top: 0;
+      width: 46px;
+      height: 40px;
+      pointer-events: none; }
+    .schedule .modal__main-item-date input {
+      border: 1px solid #bcbcbc;
+      box-shadow: none;
+      background: white; }
+      .schedule .modal__main-item-date input:hover {
+        box-shadow: none; }
+
+.schedule .modal__main-comments {
+  margin-left: 20px;
+  margin-top: -20px; }
+  .schedule .modal__main-comments-header {
+    margin-bottom: 10px; }
+    .schedule .modal__main-comments-header p {
+      font-size: 14px;
+      color: #5d5d5d; }
+  .schedule .modal__main-comments-content {
+    width: 600px;
+    height: 90px; }
+    .schedule .modal__main-comments-content textarea {
+      width: 560px;
+      height: 60px;
+      border-radius: 10px;
+      font-size: 14px;
+      padding: 10px; }

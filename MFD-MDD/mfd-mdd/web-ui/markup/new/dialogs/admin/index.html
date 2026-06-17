@@ -1,0 +1,327 @@
+7.4.3	Accept one-time New Credit Card payment
+<!---------------------------------------->
+
+<div class="modal__gray" style="width: 960px; height: 800px">
+
+    <div class="modal__header">
+        <div class="modal__header-icon">
+            <div><svg class="close__icon"><use xlink:href="#Close"></use></svg></div>
+        </div>
+        <h2>Accept one-time new credit card payment</h2>
+    </div>
+
+<div class="modal__gray-main  modal40">
+    <div class="modal__gray-main-item">
+        <div class="item__box">
+            <div class="text">
+                <p>Credit Card Number<span class="star">*</span>:</p>
+            </div>
+            <div class="input">
+                <input/>
+            </div>
+        </div>
+
+        <div class="item__box">
+            <div class="text">
+                <p>Credit Card Expiration Date(MM/YY)<span class="star">*</span>:</p>
+            </div>
+            <div class="input">
+                <input/>
+            </div>
+        </div>
+
+        <div class="item__box">
+            <div class="text">
+                <p>First Name<span class="star">*</span>:</p>
+            </div>
+            <div class="input">
+                <input/>
+            </div>
+        </div>
+
+        <div class="item__box">
+            <div class="text">
+                <p>Last Name<span class="star">*</span>:</p>
+            </div>
+            <div class="input">
+                <input/>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal__gray-main-item">
+        <p class="mandatory">Fields marked* are mandatory</p>
+    </div>
+
+</div>
+
+    <div class="footer__btn-wrapper">
+        <div class="footer__btn">
+            <button class="blue white">Cancel</button>
+            <button class="blue">Ok</button>
+        </div>
+    </div>
+
+</div>
+
+<!---------------------------------------->
+
+
+
+
+
+7.4.1	Re-run this payment
+<!---------------------------------------->
+
+<div class="modal__gray" style="width: 960px; height: 800px">
+
+    <div class="modal__header">
+        <div class="modal__header-icon">
+            <div><svg class="close__icon"><use xlink:href="#Close"></use></svg></div>
+        </div>
+        <h2>Re-run this payment</h2>
+    </div>
+
+    <div class="modal__gray-main  modal41">
+        <div class="modal__gray-main-item">
+            <div class="item__box">
+                <div class="text">
+                    <p>Use payment method first:</p>
+                </div>
+                    <div class="input board__input-wrapper">
+                        <Field name="paymentMethodFirst" component={SelectField} menuItems={TITLES} required={false} />
+                    </div>
+            </div>
+
+        </div>
+
+        <div class="modal__gray-main-item">
+            <p class="mandatory">Fields marked* are mandatory</p>
+        </div>
+
+    </div>
+
+    <div class="footer__btn-wrapper">
+        <div class="footer__btn">
+            <button class="blue white">Cancel</button>
+            <button class="blue">Ok</button>
+        </div>
+    </div>
+
+</div>
+
+
+<!---------------------------------------->
+
+
+
+
+
+
+
+7.4.2	Accept one-time Existing Credit Card payment
+<!---------------------------------------->
+
+<div class="modal__gray" style="width: 960px; height: 800px">
+
+    <div class="modal__header">
+        <div class="modal__header-icon">
+            <div><svg class="close__icon"><use xlink:href="#Close"></use></svg></div>
+        </div>
+        <h2>Re-run this payment</h2>
+    </div>
+
+    <div class="modal__gray-main  modal42">
+        <div class="modal__gray-main-item">
+            <div class="item__box">
+                <div class="text">
+                    <p>Use Credit Card:</p>
+                </div>
+                <div class="input board__input-wrapper">
+                    <Field name="paymentMethodFirst" component={SelectField} menuItems={TITLES} required={false} />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal__gray-main-item">
+            <p class="mandatory">Fields marked* are mandatory</p>
+        </div>
+
+    </div>
+
+    <div class="footer__btn-wrapper">
+        <div class="footer__btn">
+            <button class="blue white">Cancel</button>
+            <button class="blue">Ok</button>
+        </div>
+    </div>
+
+</div>
+
+<!---------------------------------------->
+
+
+5.6.1	Edit Review
+<!----------------------------------->
+
+
+<div class="modal__gray" style="width: 470px; height: 520px">
+
+    <div class="modal__header">
+        <div class="modal__header-icon">
+            <div><svg class="close__icon"><use xlink:href="#Close"></use></svg></div>
+        </div>
+        <h2>Edit review</h2>
+    </div>
+
+    <div class="modal__gray-main modal46">
+        <div class="modal__gray-main-item">
+            <div class="item__box">
+                <div class="title">
+                    <p>Rate the Office</p>
+                </div>
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__gray-main-item">
+            <p class="title header">Legend:</p>
+
+            <div class="item__box">
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                </div>
+                <div class="title">
+                    <p>Will not go back, worst experience.</p>
+                </div>
+            </div>
+
+            <div class="item__box">
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                </div>
+                <div class="title">
+                    <p>Don't want to go back.</p>
+                </div>
+            </div>
+
+            <div class="item__box">
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                </div>
+                <div class="title">
+                    <p>Might go back if no other jobs are available.</p>
+                </div>
+            </div>
+
+            <div class="item__box">
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__default"><use xlink:href="#star"></use></svg></div>
+                </div>
+                <div class="title">
+                    <p>I like working in that office.</p>
+                </div>
+            </div>
+
+            <div class="item__box">
+                <div class="data">
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                    <div><svg class="star__active"><use xlink:href="#star"></use></svg></div>
+                </div>
+                <div class="title">
+                    <p>Excellent office, I would work here permanently.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__gray-main-item">
+            <div class="item__box">
+                <div class="text">
+                    <p>Comments:</p>
+                </div>
+                <div class="input">
+                    <textarea></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer__btn-wrapper">
+        <div class="footer__btn">
+            <button class="blue white">Cancel</button>
+            <button class="blue">Ok</button>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------->
+
+
+
+12.1	Reports for Clients
+<!----------------------------------->
+<div class="modal__gray" style="width: 470px; height: 260px">
+
+    <div class="modal__header">
+        <div class="modal__header-icon">
+            <div><svg class="close__icon"><use xlink:href="#Close"></use></svg></div>
+        </div>
+        <h2>Select date range</h2>
+    </div>
+
+    <div class="modal__gray-main modal51">
+
+        <div class="modal__gray-main-item">
+
+            <div class="item__box">
+                <div class="input__date-wrapper">
+                    <div class="input input__date">
+                        <input>
+                    </div>
+                </div>
+
+                <div class="input__date-wrapper">
+                    <div class="input input__date">
+                        <input>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="footer__btn-wrapper">
+        <div class="footer__btn">
+            <button class="blue white">Cancel</button>
+            <button class="blue">Ok</button>
+        </div>
+    </div>
+</div>
+<!----------------------------------->

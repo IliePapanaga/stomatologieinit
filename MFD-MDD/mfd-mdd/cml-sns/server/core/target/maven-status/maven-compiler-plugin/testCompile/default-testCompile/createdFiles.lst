@@ -1,0 +1,7 @@
+com/cl/sns/server/core/validation/validator/SmsNotificationTemplateValidatorTest.class
+com/cl/sns/server/core/validation/validator/NotificationTransportValidatorTest.class
+com/cl/sns/server/core/dao/MessagingTransportDaoIT.class
+com/cl/sns/server/core/validation/validator/EmailNotificationTemplateValidatorTest.class
+com/cl/sns/server/core/SNSBaseIntegrationTest.class
+com/cl/sns/server/core/validation/validator/NotificationTemplateUniquenessValidatorTest.class
+com/cl/sns/server/core/service/msg/sms/aws/AwsSmsMessageDetailsFactoryTest.class

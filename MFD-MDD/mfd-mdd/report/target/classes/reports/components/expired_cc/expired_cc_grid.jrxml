@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="expired_cc_grid" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="50" bottomMargin="0" uuid="c9ddc2cb-a985-4e92-a496-fcfc0d9d50cf">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MDD_VIRTUAL_BOX"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<template><![CDATA[$P{IS_ON_JASPER_REPORT_SERVER} ? "/mfd_mdd/reports/components/commons/style/mfd_mdd_styles.jrtx" : "src/main/resources/reports/components/commons/style/mfd_mdd_styles.jrtx"]]></template>
+	<parameter name="DATE_TO" class="java.time.LocalDate" evaluationTime="Early">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="DATE_FROM" class="java.time.LocalDate" evaluationTime="Early">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="IS_ON_JASPER_REPORT_SERVER" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[java.lang.Boolean.FALSE]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SQL_DATE_FROM" class="java.sql.Date" isForPrompting="false" evaluationTime="Late">
+		<defaultValueExpression><![CDATA[java.sql.Date.valueOf($P{DATE_FROM})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SQL_DATE_TO" class="java.sql.Date" isForPrompting="false" evaluationTime="Late">
+		<defaultValueExpression><![CDATA[java.sql.Date.valueOf($P{DATE_TO})]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  c.name_last,
+		c.name_first,
+        c.email,
+        c.phone,
+        a.street,
+        a.city,
+        a.state,
+        a.zip_code,
+        u.last_activity_date,
+        DATE_FORMAT(STR_TO_DATE(cc.cc_exp,'%m%y'), '%m %Y'),
+        cc.cc_number
+FROM users u JOIN contacts c ON (u.fk_contact_id = c.id)
+			 JOIN addresses a ON (a.id = c.fk_address_id)
+             JOIN payment_methods p ON (u.id = p.fk_practice_id)
+             JOIN payment_methods_card cc ON (p.id = cc.id)
+WHERE u.user_type = 'PRACTICE_OWNER' AND STR_TO_DATE(cc.cc_exp,'%m%y') < CURDATE()]]>
+	</queryString>
+	<field name="NAME_LAST" class="java.lang.String"/>
+	<field name="NAME_FIRST" class="java.lang.String"/>
+	<field name="EMAIL" class="java.lang.String"/>
+	<field name="PHONE" class="java.lang.String"/>
+	<field name="STREET" class="java.lang.String"/>
+	<field name="CITY" class="java.lang.String"/>
+	<field name="STATE" class="java.lang.String"/>
+	<field name="ZIP_CODE" class="java.lang.String"/>
+	<field name="LAST_ACTIVITY_DATE" class="java.sql.Timestamp"/>
+	<field name="DATE_FORMAT(STR_TO_DATE(CC.CC_EXP,&apos;%m%y&apos;), &apos;%m %Y&apos;)" class="java.lang.String"/>
+	<field name="CC_NUMBER" class="java.lang.String"/>
+	<variable name="SQL_DATE_TO" class="java.sql.Date">
+		<variableExpression><![CDATA[java.sql.Date.valueOf($P{DATE_TO})]]></variableExpression>
+	</variable>
+	<variable name="SQL_DATE_FROM" class="java.sql.Date">
+		<variableExpression><![CDATA[java.sql.Date.valueOf($P{DATE_FROM})]]></variableExpression>
+	</variable>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement style="grid_header_line" x="0" y="9" width="555" height="1" uuid="595ba68b-88dd-4c4b-a8de-32cee33b40a6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement key="" style="column_header" x="0" y="-20" width="80" height="30" uuid="4cda051e-3672-4ae3-b18d-284627f780f0"/>
+				<text><![CDATA[Client Last Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" x="80" y="-20" width="140" height="30" uuid="e8f90c59-b9a1-4bd1-981c-7ff4974b4a5f"/>
+				<text><![CDATA[Client First Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" x="220" y="-20" width="160" height="30" uuid="685f98df-981e-49ac-aa8d-6388427d9a06">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Card]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" x="380" y="-20" width="174" height="30" uuid="3dc15831-ea6e-4488-af0d-6bd3dd75b4a8">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Expiration]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<line>
+				<reportElement style="grid_gray_thin_line" x="0" y="40" width="555" height="1" uuid="bd5aec3c-61ca-41ca-b4a0-7d7a5de63a06">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="30" uuid="854fd9ec-49f3-4fc6-8c61-7d2a80c0a581"/>
+				<textFieldExpression><![CDATA[$F{NAME_LAST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="140" height="30" uuid="7c9e48aa-f83c-49bf-a86d-93f04b88c8cf"/>
+				<textFieldExpression><![CDATA[$F{NAME_FIRST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="174" height="30" uuid="6d07243e-ceff-4004-b3e4-785d7ba4edfc"/>
+				<textFieldExpression><![CDATA[$F{DATE_FORMAT(STR_TO_DATE(CC.CC_EXP,'%m%y'), '%m %Y')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="160" height="30" uuid="250bebf6-01fe-44ef-be39-fff25b41c1d0"/>
+				<textFieldExpression><![CDATA[$F{CC_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

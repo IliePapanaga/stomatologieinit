@@ -1,0 +1,168 @@
+.signup__practice {
+  width: 960px;
+  height: auto;
+  border-radius: 5px;
+  background: white;
+  margin-top: 20px;
+  z-index: 999;
+  margin-bottom: 50px; }
+  .signup__practice-cred {
+    padding: 20px; }
+    .signup__practice-cred-header {
+      margin-bottom: 20px; }
+      .signup__practice-cred-header .cred {
+        position: relative;
+        margin-left: 30px; }
+        .signup__practice-cred-header .cred:before {
+          position: absolute;
+          content: ' ';
+          left: -30px;
+          top: -5px;
+          background: url("../img/icons/cred.png") 50% 50% no-repeat;
+          width: 23px;
+          height: 23px; }
+    .signup__practice-cred-content {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between; }
+      .signup__practice-cred-content-form {
+        width: 46%; }
+        .signup__practice-cred-content-form .item__box .text {
+          width: 150px;
+          margin-right: 20px; }
+        .signup__practice-cred-content-form .item__box .input {
+          width: 260px;
+          position: relative; }
+      .signup__practice-cred-content-help {
+        width: 46%; }
+        .signup__practice-cred-content-help-info {
+          width: 300px; }
+  .signup__practice-personal {
+    background: #f2f2f2;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding: 20px; }
+    .signup__practice-personal-header {
+      margin-bottom: 20px; }
+      .signup__practice-personal-header .personal {
+        position: relative;
+        margin-left: 35px; }
+        .signup__practice-personal-header .personal:before {
+          position: absolute;
+          content: ' ';
+          left: -35px;
+          top: -5px;
+          background: url("../img/icons/personal.png") 50% 50% no-repeat;
+          width: 25px;
+          height: 23px; }
+    .signup__practice-personal-form {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between; }
+      .signup__practice-personal-form-left {
+        width: 46%; }
+        .signup__practice-personal-form-left .item__box .text {
+          width: 150px;
+          margin-right: 20px; }
+        .signup__practice-personal-form-left .item__box .input {
+          width: 260px;
+          position: relative; }
+      .signup__practice-personal-form-right {
+        width: 46%; }
+        .signup__practice-personal-form-right .item__box .text {
+          width: 100px;
+          margin-right: 20px; }
+        .signup__practice-personal-form-right .item__box .input {
+          width: 260px;
+          position: relative; }
+        .signup__practice-personal-form-right .item__box.zip {
+          justify-content: flex-start; }
+          .signup__practice-personal-form-right .item__box.zip .input {
+            margin-left: 43px;
+            width: 130px !important; }
+  .signup__practice-company {
+    padding: 20px; }
+    .signup__practice-company-header {
+      margin-bottom: 20px; }
+      .signup__practice-company-header .company {
+        position: relative;
+        margin-left: 35px; }
+        .signup__practice-company-header .company:before {
+          position: absolute;
+          content: ' ';
+          left: -35px;
+          top: -5px;
+          background: url("../img/icons/company.png") 50% 50% no-repeat;
+          width: 30px;
+          height: 23px; }
+    .signup__practice-company-form {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between; }
+      .signup__practice-company-form-left {
+        width: 46%; }
+        .signup__practice-company-form-left .item__box .text {
+          width: 150px;
+          margin-left: 20px; }
+        .signup__practice-company-form-left .item__box .input {
+          width: 260px;
+          position: relative; }
+      .signup__practice-company-form-right {
+        width: 46%; }
+        .signup__practice-company-form-right .item__box .text {
+          width: 150px;
+          margin-left: 20px; }
+        .signup__practice-company-form-right .item__box .input {
+          width: 260px;
+          position: relative; }
+        .signup__practice-company-form-right .item__box.textarea {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start; }
+          .signup__practice-company-form-right .item__box.textarea textarea {
+            height: 90px;
+            margin-left: 20px;
+            margin-top: 10px;
+            width: 370px; }
+  .signup__practice-help {
+    font-size: 12px;
+    color: #5d5d5d;
+    width: 360px; }
+    .signup__practice-help-red {
+      color: #f88f00;
+      margin-bottom: 20px; }
+    .signup__practice-help a {
+      color: #2b7de1;
+      text-decoration: none;
+      font-size: 12px; }
+      .signup__practice-help a:hover {
+        text-decoration: underline; }
+  .signup__practice-signature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; }
+    .signup__practice-signature-header {
+      color: #5d5d5d;
+      text-decoration: none;
+      font-size: 12px; }
+      .signup__practice-signature-header a {
+        color: #2b7de1;
+        text-decoration: none;
+        font-size: 12px; }
+        .signup__practice-signature-header a:hover {
+          text-decoration: underline; }
+    .signup__practice-signature-content {
+      margin-top: 20px; }
+      .signup__practice-signature-content-input {
+        border: 1px solid #707070;
+        width: 200px;
+        height: 70px; }
+  .signup__practice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    margin-top: -10px; }
+    .signup__practice-btn button {
+      width: 100px; }

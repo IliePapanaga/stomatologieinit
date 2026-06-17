@@ -1,0 +1,435 @@
+.sys{
+  &__content{
+    & .main__bar-item{
+      & button{
+        height: 63px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+        & .bar__icon{
+          width: 30px;
+          height: 30px;
+          margin-right: 15px;
+        }
+        & .bar__iconHover{
+          width: 30px;
+          height: 30px;
+          margin-right: 15px;
+        }
+        & p{
+          font-size: 16px;
+          text-align: left;
+          margin-top: 0;
+        }
+      }
+    }
+    & .main__board{
+      & .board{
+        &__header{
+          //background: url("../img/boardBg.png") 100% 24% no-repeat;
+         background-color: #0957a4;
+          padding-left: 15px;
+          padding-right: 15px;
+          flex-wrap: nowrap;
+          &-custom{
+           display: flex;
+           align-items: center;
+           justify-content: flex-end;
+            flex-wrap: wrap;
+            min-height: 54px;
+            &-item{
+              margin-right: 10px;
+              display: flex;
+              color: white;
+              align-items: center;
+              &-text{
+                & p{
+                  color: white;
+                  font-size: 14px;
+                  margin-right: 10px;
+                }
+              }
+              &-data{
+                &-wrapper{
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  & .board__header-custom-item-data{
+                    width: 140px;
+                      margin-right: 40px;
+                  }
+                }
+              }
+              &:last-child{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+               flex-wrap: nowrap;
+                margin-right: 20px;
+                & .btn__box{
+                  margin-right: 20px;
+                }
+              }
+              & .item__box{
+                margin-top: 5px;
+                margin-bottom: 5px;
+                & .text{
+                  color: #ffffff;
+                  width: 90px;
+                  margin-right: 10px;
+                }
+                & .input{
+                  width: 180px;
+                  & select{
+                    &:focus{
+                      border-color: #f3b74e;
+                    }
+                  }
+                }
+                & .board__input-wrapper{
+                  &:before{
+                    background: url("../img/icons/selectArrow.svg") 101% 50% no-repeat;
+                  }
+                }
+              }
+              &-check{
+                margin-left: 20px;
+                & .item__box {
+                  &:first-child{
+                    margin-bottom: 17px;
+                  }
+                  &:last-child{
+                    margin-top: 17px;
+                  }
+                  & .input {
+                    width: 10px !important;
+                    margin-right: 15px;
+                  }
+                }
+              }
+            }
+         }
+
+          &-activity{
+            //background: url("../img/boardBg.png") 100% 24% no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 54px;
+            &-item{
+              margin-right: 20px;
+             flex-direction: column;
+              &:last-child{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                & .btn__box{
+                  margin-right: 20px;
+                }
+              }
+              & .item__box{
+                margin-top: 5px;
+                margin-bottom: 0px;
+                & .text{
+                  color: #ffffff;
+                  width: 90px;
+                  margin-right: 10px;
+                }
+                & .input{
+                  width: 180px;
+                  & select{
+                    &:focus{
+                      border-color: #f3b74e;
+                    }
+                  }
+                }
+                & .board__input-wrapper{
+                  &:before{
+                    background: url("../img/icons/selectArrow.svg") 101% 50% no-repeat;
+                  }
+                }
+              }
+              &-check{
+                margin-left: 20px;
+                & .item__box {
+                  &:first-child{
+                    margin-bottom: 25px;
+                  }
+                  &:last-child{
+                    margin-top: 25px;
+                  }
+                  & .input {
+                    width: 10px !important;
+                    margin-right: 15px;
+                  }
+                }
+              }
+            }
+          }
+        }
+        &__action{
+          &-item{
+            & button{
+              padding: 7px 12px;
+              min-width: 110px;
+              & p{
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+    }
+    & .board__table{
+      & table{
+        & thead{
+          & tr{
+            & th{
+              & .row__select{
+                & div{
+                  font-size: 14px;
+                }
+                & .row__select-arrow{
+                  top: 2px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.board__date{
+  &-from {
+    position: relative;
+    width: 75px;
+    margin-right: 10px;
+    &:before {
+      position: absolute;
+      left: 2px;
+      top: -15px;
+      content: 'From:';
+      font-size: 12px;
+      color: white;
+    }
+  }
+  &-to {
+    position: relative;
+    width: 75px;
+    margin-right: 30px;
+    &:before {
+      position: absolute;
+      left: 2px;
+      top: -15px;
+      content: 'To:';
+      font-size: 12px;
+      color: white;
+    }
+  }
+}
+
+.btn__box{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  line-height: 14px;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  & .text{
+    width: 60px;
+    margin-right: 32px;
+    & p{
+      color: white;
+    }
+  }
+  & .input{
+    width: 137px;
+    position: relative;
+    margin-right: 60px;
+    &:after{
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      content: ' ';
+      right: -36px;
+      top: 6px;
+      background: url("../img/icons/globe.png") 50% 50% no-repeat;
+    }
+  }
+  &-selected{
+    & .input{
+      &:after{
+        background: url("../img/icons/pin.png") 50% 50% no-repeat;
+      }
+    }
+  }
+}
+
+button.yellow{
+  background: #f3b74e;
+  height: 38px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 16px;
+  &:hover{
+
+  }
+}
+
+button.reset{
+  width: 130px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 16px;
+  color: white;
+  border-radius: 10px;
+  border: 1px solid white;
+  background: url("../img/icons/reset.png") 10% 50% no-repeat;
+  background-color: transparent;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  &:hover{
+    background-color: #0957a4;
+    color: #f3b74e;
+  }
+}
+/*
+@media (max-width: 1841px){
+  .sys__content{
+    & .main__board{
+      & .board{
+        & .board__table{
+          max-height: 50vh !important;
+        }
+      }
+    }
+  }
+}*/
+
+
+
+@media (max-width: 1400px){
+  .sys__content{
+    .main__board{
+      .board__header-activity-item{
+        .item__box{
+          .input{
+            width: 154px;
+          }
+          & .text{
+            font-size: 12px;
+            width: 70px;
+          }
+        }
+      }
+      & .board__header-custom-item-data-wrapper{
+        & .board__header-custom-item-data{
+          width: 128px !important;
+        }
+      }
+      & .board__header-custom{
+        &-item{
+          &-text{
+            width: 70px;
+            & p{
+              font-size: 12px;
+            }
+          }
+          & .btn__box{
+            & .text{
+              width: 40px;
+              & p{
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .btn__box{
+    & .input{
+      width: 134px;
+      margin-right: 40px;
+    }
+  }
+}
+
+@media (max-width: 1200px){
+  .btn__box{
+    & .input{
+      width: 116px;
+      margin-right: 60px;
+    }
+  }
+}
+
+///////menu
+.menu {
+  cursor: pointer;
+  margin: 0 auto;
+  padding-left: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  background: #0957a4;
+  position: absolute;
+  left: -49px;
+  top: 0;
+  border-radius: 5px;
+}
+
+.menu-hide-padding{
+  left: -46px;
+}
+
+.menu-global {
+  backface-visibility: hidden;
+  position: absolute;
+  left: 0;
+  border-top: 3px solid white;
+  width: 20px;
+  transition: 0.55s;
+}
+.menu-top {
+  left: 9px;
+  top: 7px;
+}
+.menu-middle {
+  left: 9px;
+  top: 14px;
+}
+.menu-bottom {
+  left: 9px;
+  top: 21px;
+}
+.menu-top-click {
+  backface-visibility: hidden;
+  top: 15px;
+  transform: rotate(50deg);
+  transition: 0.55s 0.5s;
+  left: 10px;
+}
+.menu-middle-click {
+  opacity: 0;
+
+}
+.menu-bottom-click {
+  backface-visibility: hidden;
+  top: 15px;
+  transform: rotate(-410deg);
+  transition: 0.55s 0.5s;
+  left: 10px;
+}

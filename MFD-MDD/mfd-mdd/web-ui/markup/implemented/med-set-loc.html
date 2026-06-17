@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="css/main.css" rel="stylesheet">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/jquery.resizableColumns.min.js"></script>
+	<script src="js/flatpickr.js"></script>
+	<script src="node_modules/angular-calendar/umd/angular-calendar.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+
+<div class="wrapper" id="root">
+
+    <div class="container">
+        <div class="main">
+
+
+            <div class="main__header">
+                <div class="main__header-logo">
+                    <img src="img/logo.svg">
+                </div>
+
+                <div class="main__header-bar">
+                    <div class="main__header-logout">
+                        <div class="logout__text">Hello,</div>
+                        <div class="logout__name">Garry Norman</div>
+                        <div class="logout__img"><a>
+                            <svg class="log__icon">
+                                <use xlink:href="#Logout"></use>
+                            </svg>
+                        </a></div>
+                    </div>
+                    <div class="main__header-help">
+                        <a href="#">
+                            <img src="img/icons/help.png">
+                            <svg class="help__icon">
+                                <use xlink:href="#help"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="main__content sys__content">
+
+                <div class="main__bar">
+                    <div class="main__bar-item main__bar-item-active main__bar-item-list">
+                        <button class="main__bar-item-btn">
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#sys4"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#sys4H"></use>
+                                </svg>
+                            </div>
+                            <p>Postings In Progress</p>
+                        </button>
+
+                        <div class="main__bar-item-hide">
+                            <div class="main__bar-item-hide-item">Temporary Job</div>
+                            <div class="main__bar-item-hide-item">Permanent Job</div>
+                        </div>
+
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#sys10"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#sys10H"></use>
+                                </svg>
+                            </div>
+                            <p>Current Attendance</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#sys6"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#sys6H"></use>
+                                </svg>
+                            </div>
+                            <p>Past Hiring History</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#sys3"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#sys3H"></use>
+                                </svg>
+                            </div>
+                            <p>Payments</p>
+                        </button>
+
+                    </div>
+
+                    <div class="main__bar-item main__bar-item-list">
+                        <button class="main__bar-item-btn">
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#sys9"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#sys9H"></use>
+                                </svg>
+                            </div>
+                            <p>Settings</p>
+                        </button>
+
+                        <div class="main__bar-item-hide">
+                            <div class="main__bar-item-hide-item">General</div>
+                            <div class="main__bar-item-hide-item">Locations</div>
+                            <div class="main__bar-item-hide-item">Payment Methods</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="main__board">
+                    <div class="menu">
+                        <span class="menu-global menu-top menu-top-click"></span>
+                        <span class="menu-global menu-middle menu-middle-click"></span>
+                        <span class="menu-global menu-bottom menu-bottom-click"></span>
+                    </div>
+                    <div class="board">
+                        <div class="board__header">
+                        </div>
+
+                        <div class="board__action">
+                            <div class="board__action-item-wrapper">
+                                <div class="board__action-item">
+                                    <button>
+                                        <p>Add</p>
+                                    </button>
+                                </div>
+
+                                <div class="board__action-item">
+                                    <button>
+                                        <p>Edit</p>
+                                    </button>
+                                </div>
+
+                                <div class="board__action-item">
+                                    <button>
+                                        <p>Delete</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="board__table">
+
+                            <table>
+                                <thead>
+                                <tr>
+
+                                    <th class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check">
+                                            <label for="check"></label>
+                                        </div>
+                                    </th>
+
+                                    <th class="row">
+                                        <div class="row__select">
+                                            <div>Name</div>
+                                            <div class="row__select-arrow"></div>
+                                        </div>
+                                    </th>
+
+
+
+                                    <th class="row">
+                                        <div class="row__select">
+                                            <div>Address</div>
+                                            <div class="row__select-arrow row__select-arrow-active"></div>
+                                        </div>
+                                    </th>
+
+
+                                    <th class="row">
+                                        <div class="row__select">
+                                            <div>Contact Person</div>
+                                            <div class="row__select-arrow"></div>
+                                        </div>
+                                    </th>
+
+
+                                    <th class="row" >
+                                        <div class="row__select">
+                                            <div>Email</div>
+                                            <div class="row__select-arrow"></div>
+                                        </div>
+                                    </th>
+
+                                    <th class="row">
+                                        <div class="row__select">
+                                            <div>Phone</div>
+                                            <div class="row__select-arrow"></div>
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+
+
+                                <tbody class="posting__temporary">
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+
+                                <tr  class="row__btn row__btn-active">
+                                    <td class="row">
+                                        <div class="row__check">
+                                            <input type="checkbox" name="check" id="check1">
+                                            <label for="check1"></label>
+                                        </div>
+                                    </td>
+                                    <td><div>11.12.2017</div></td>
+                                    <td><div>1</div></td>
+                                    <td><div>Hygenist</div></td>
+                                    <td><div>2sdsd</div></td>
+                                    <td><div>Pleasanton,CA</div></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="board__pagination">
+                            <div class="board__pagination-page">
+                                <span>page</span><input class="board__pagination-page-active" placeholder="1"><span>of 10</span>
+                            </div>
+                            <div class="board__pagination-arrows">
+                                <button class="board__action-nav-item">
+                                    <img src="img/icons/boardArrow.svg">
+                                    <div><svg class="action__arrow"><use xlink:href="#right-arrow"></use></svg></div>
+                                </button>
+                                <button class="board__action-nav-item">
+                                    <img src="img/icons/boardArrow.svg">
+                                    <div><svg class="action__arrow"><use xlink:href="#right-arrow"></use></svg></div>
+                                </button>
+                                <span>Displaying 1 - 10 of 10</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer__wrapper">
+        <div class="footer">2017 Copyright © MaydayDentalStaffing.com All rights reserved</div>
+        <div class="hide__svg">
+            @@include('img/svg-sprite/symbol/svg/sprite.symbol.svg')
+        </div>
+    </footer>
+</div>
+
+
+
+</body>
+</html>

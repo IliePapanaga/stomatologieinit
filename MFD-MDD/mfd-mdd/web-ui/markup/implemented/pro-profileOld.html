@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="wrapper" id="root">
+    <div class="container">
+        <div class="main">
+
+
+            <div class="main__header">
+                <div class="main__header-logo">
+                    <img src="img/logo.svg">
+                </div>
+
+                <div class="main__header-bar">
+                    <div class="main__header-logout">
+                        <div class="logout__text">Hello,</div>
+                        <div class="logout__name">Garry Norman</div>
+                        <div class="logout__img"><a>
+                            <svg class="log__icon">
+                                <use xlink:href="#Logout"></use>
+                            </svg>
+                        </a></div>
+                    </div>
+                    <div class="main__header-help">
+                        <a href="#">
+                            <img src="img/icons/help.png">
+                            <svg class="help__icon">
+                                <use xlink:href="#help"></use>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="main__content">
+                <div class="main__bar">
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#applicants"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#applicantsH"></use>
+                                </svg>
+                            </div>
+                            <p>Applications</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#bar3"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#bar3H"></use>
+                                </svg>
+                            </div>
+                            <p>Job History</p>
+                        </button>
+                    </div>
+
+                    <div class="main__bar-item main__bar-item-active">
+                        <button>
+                            <div>
+                                <svg class="bar__icon">
+                                    <use xlink:href="#bar5"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <svg class="bar__iconHover">
+                                    <use xlink:href="#bar5H"></use>
+                                </svg>
+                            </div>
+                            <p>Settings</p>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="main__board">
+                    <div class="board">
+
+
+                        <div class="board__header">
+                            <div class="board__header-links">
+                                <div class="board__header-links-item">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#general"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#generalH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>General</p>
+                                    </button>
+                                </div>
+                                <div class="board__header-links-item">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#Specialties"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#SpecialtiesH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>Specialties</p>
+                                    </button>
+                                </div>
+
+                                <div class="board__header-links-item board__header-links-item-active">
+                                    <button>
+                                        <div>
+                                            <svg class="job__icon">
+                                                <use xlink:href="#profile"></use>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <svg class="job__iconHover">
+                                                <use xlink:href="#profileH"></use>
+                                            </svg>
+                                        </div>
+                                        <p>Profile</p>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="board__header-info setting">
+
+                            </div>
+                        </div>
+
+
+                        <div class="content pro__profile">
+
+                            <div class="pro__profile-top">
+                                <div class="pro__profile-top-left">
+
+
+                                    <div class="item__box">
+                                        <div class="text">
+                                            <p>Skills Summary*:</p>
+                                        </div>
+                                        <div class="input">
+                                            <textarea></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="item__box">
+                                        <div class="text">
+                                            <p>Education*:</p>
+                                        </div>
+                                        <div class="input board__input-wrapper">
+                                            <select required class="board__input">
+                                                <option value="" disabled selected hidden>Select</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="pro__profile-top-right">
+
+                                    <div class="item__box">
+                                        <div class="text">
+                                            <p>Highest Degree Earned*:</p>
+                                        </div>
+                                        <div class="input board__input-wrapper">
+                                            <select required class="board__input">
+                                                <option value="" disabled selected hidden>Select</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="item__box">
+                                        <div class="text">
+                                            <p>Languages*:</p>
+                                        </div>
+                                        <div class="input board__input-wrapper">
+                                            <select required class="board__input">
+                                                <option value="" disabled selected hidden>Select</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="pro__profile-bottom">
+
+                                <div class="pro__profile-bottom-left">
+
+                                    <h3>Work experience (last three jobs):</h3>
+
+
+                                    <div class="item__box-time">
+                                        <div class="item__box-time-top">
+                                            <div class="item__box-time-top-from">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-to">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-name">
+                                                <div class="text">
+                                                    <p>Company Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box-time-bottom">
+                                            <div class="text">
+                                                <p>Which practice management software are you experienced at?</p>
+                                            </div>
+                                            <div class="input">
+                                                <textarea placeholder="Your text..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="item__box-time">
+                                        <div class="item__box-time-top">
+                                            <div class="item__box-time-top-from">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-to">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-name">
+                                                <div class="text">
+                                                    <p>Company Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box-time-bottom">
+                                            <div class="text">
+                                                <p>Which practice management software are you experienced at?</p>
+                                            </div>
+                                            <div class="input">
+                                                <textarea placeholder="Your text..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="item__box-time">
+                                        <div class="item__box-time-top">
+                                            <div class="item__box-time-top-from">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-to">
+                                                <input type="text">
+                                            </div>
+                                            <div class="item__box-time-top-name">
+                                                <div class="text">
+                                                    <p>Company Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="item__box-time-bottom">
+                                            <div class="text">
+                                                <p>Which practice management software are you experienced at?</p>
+                                            </div>
+                                            <div class="input">
+                                                <textarea placeholder="Your text..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="vertical__line"></div>
+
+
+                                <div class="pro__profile-bottom-right">
+                                    <div class="pro__profile-bottom-right-item">
+                                        <h3>Professional reference:</h3>
+
+                                        <div class="pro__profile-bottom-right-item">
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>E-mail:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="email">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Phone:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="tel">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pro__profile-bottom-right-item">
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>E-mail:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="email">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Phone:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="tel">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pro__profile-bottom-right-item">
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Name:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="text">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>E-mail:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="email">
+                                                </div>
+                                            </div>
+                                            <div class="item__box">
+                                                <div class="text">
+                                                    <p>Phone:</p>
+                                                </div>
+                                                <div class="input">
+                                                    <input type="tel">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="footer__btn">
+                                <button class="blue white modal__window">Cencel</button>
+                                <button class="blue">Ok</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer__wrapper">
+        <div class="footer">2017 Copyright © MaydayDentalStaffing.com All rights reserved</div>
+    </footer>
+</div>
+
+
+</body>
+</html>

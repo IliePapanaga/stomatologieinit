@@ -1,0 +1,3 @@
+flatpickr(".date", {});
+
+

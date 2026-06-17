@@ -1,0 +1,174 @@
+@charset "UTF-8";
+.board__table.pro__applications-temporary {
+  overflow-x: scroll; }
+  .board__table.pro__applications-temporary table thead tr th {
+    overflow: hidden;
+    padding-right: 5px;
+    /*&:first-child {
+                  width: 2%;
+                }
+                &:nth-child(2) {
+                  width: 9%;
+                }
+                &:nth-child(3) {
+                  width: 9%;
+                }
+                &:nth-child(4) {
+                  width: 10%;
+                }
+                &:nth-child(5) {
+                  width: 16%;
+                }
+                &:nth-child(6) {
+                  width: 16%;
+                }
+                &:nth-child(7) {
+                  width: 14%;
+                }
+                &:nth-child(8) {
+                  width: 10% !important;
+                }
+                &:nth-child(9) {
+                  width: 20% !important;
+                }*/ }
+    .board__table.pro__applications-temporary table thead tr th .row__select div {
+      padding-right: 0; }
+    .board__table.pro__applications-temporary table thead tr th .row__select-arrow:after {
+      left: 0; }
+    .board__table.pro__applications-temporary table thead tr th .row__select-arrow-active:after {
+      left: 0; }
+
+.board__table table {
+  border-collapse: separate;
+  /* Способ отображения границы */
+  width: 100%;
+  /* Ширина таблицы */
+  border-spacing: 0px 3px;
+  /* Расстояние между ячейками */ }
+  .board__table table tbody tr td div {
+    line-height: 1; }
+
+/*@media (max-width: 1680px){
+  .board__table.board__table-three-btn{
+    max-height: 44vh !important;
+  }
+}
+
+@media(max-width: 1580px){
+  .board__table{
+    max-height: 46vh !important;
+    &.board__table-three-btn{
+      max-height: 40vh !important;
+    }
+  }
+}
+
+@media(max-width: 1580px){
+  .board__table.board__table-three-btn{
+    max-height: 45vh !important;
+  }
+}
+
+@media(max-width: 1220px){
+  .board__table{
+    max-height: 44vh !important;
+  }
+}
+
+!*@media(max-height: 890px) {
+  .board__table.pro__applications-temporary{
+    max-height: 44vh !important;
+  }
+}*!
+
+.board__table.board__table-no-btn{
+  max-height: 60vh !important;
+}
+
+@media(max-height: 810px) {
+
+}
+
+@media(max-height: 760px) {
+  .main__content{
+    height: 760px;
+  }
+
+  .board__table.board__table-no-btn{
+    max-height: 500px !important;
+    height: 500px !important;
+  }
+}
+
+
+@media (max-height: 768px){
+  .board__table{
+    min-height: 200px !important;
+    max-height: 500px !important;
+    height: 500px !important;
+  }
+}*/
+input[type="radio"] {
+  position: absolute;
+  left: -9999px; }
+
+input[type="radio"] + label {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 0 0 0px;
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1.2;
+  width: auto !important; }
+
+input[type="radio"] + label:before, input[type="radio"] + label:after {
+  position: absolute;
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  left: 0;
+  top: 0;
+  border: 1px solid #0957a4; }
+
+input[type="radio"]:checked + label:after {
+  width: 10px;
+  height: 10px;
+  background: #0957a4;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%; }
+
+.input__true {
+  border-color: #66cc66 !important;
+  background: url(../img/icons/true.png) 96% 50% no-repeat !important; }
+
+.input__false {
+  border-color: #ff0000 !important;
+  background: url("../img/icons/false.png") 96% 50% no-repeat !important; }
+
+tr td {
+  position: relative; }
+  tr td .modal__main-item-check {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    position: absolute;
+    top: 10px; }
+    tr td .modal__main-item-check .check__point {
+      padding-bottom: 0;
+      padding-top: 0; }
+    tr td .modal__main-item-check .check__line {
+      padding-top: 0;
+      padding-bottom: 0; }
+
+.board__table table tbody tr {
+  background: transparent !important; }
+
+.board__table table tbody tr {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px; }
+  .board__table table tbody tr:nth-child(2n) td {
+    background: white; }
+  .board__table table tbody tr:nth-child(2n + 1) td {
+    background: #FBFBFB; }

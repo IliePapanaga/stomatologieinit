@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="clients_report" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="0fd5191a-1817-45e9-b75e-4ef7b7578610">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MDD_VIRTUAL_BOX"/>
+	<parameter name="DATE_TO" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["3000-01-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_FROM" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1970-01-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IS_ON_JASPER_REPORT_SERVER" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[java.lang.Boolean.TRUE]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 1]]>
+	</queryString>
+	<detail>
+		<band height="80">
+			<subreport overflowType="Stretch">
+				<reportElement positionType="Float" x="0" y="0" width="572" height="80" uuid="863d882a-d823-43f7-ade5-384c3d60faa9">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="IS_ON_JASPER_REPORT_SERVER">
+					<subreportParameterExpression><![CDATA[$P{IS_ON_JASPER_REPORT_SERVER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DATE_TO">
+					<subreportParameterExpression><![CDATA[java.time.LocalDate.parse($P{DATE_TO})]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DATE_FROM">
+					<subreportParameterExpression><![CDATA[java.time.LocalDate.parse($P{DATE_FROM})]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{IS_ON_JASPER_REPORT_SERVER} ? "/mfd_mdd/reports/components/professionals/professionals_grid.jrxml" : "src/main/resources/reports/components/professionals/professionals_grid.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

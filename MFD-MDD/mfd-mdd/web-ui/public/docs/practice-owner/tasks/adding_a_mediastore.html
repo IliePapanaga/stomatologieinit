@@ -1,0 +1,79 @@
+
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html xml:lang="en-us" lang="en-us">
+<head><meta name="description" content="You can set up a media store which you can use later when adding media files to a service template. A media store is, for example, a local folder whose contents is uploaded to a certain resource. A ..."></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><meta name="copyright" content="(C) Copyright 2005"></meta><meta name="DC.rights.owner" content="(C) Copyright 2005"></meta><meta name="DC.Type" content="task"></meta><meta name="DC.Title" content="Adding a media store"></meta><meta name="abstract" content="You can set up a media store which you can use later when adding media files to a service template. A media store is, for example, a local folder whose contents is uploaded to a certain resource. A media store can contain .rar, .exe, etc. file types."></meta><meta name="description" content="You can set up a media store which you can use later when adding media files to a service template. A media store is, for example, a local folder whose contents is uploaded to a certain resource. A media store can contain .rar, .exe, etc. file types."></meta><meta name="DC.Format" content="XHTML"></meta><meta name="DC.Identifier" content="task_if4_vnc_4p"></meta><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/resources/css/commonltr.css"><!----></link><title>Adding a media store</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/resources/css/webhelp_topic.css"><!----></link><link rel="stylesheet" type="text/css" href="../oxygen-webhelp/resources/skins/skin.css"><!----></link><script type="text/javascript"><!--
+          
+          var prefix = "../index.html";
+          
+          --></script><script type="text/javascript" src="../oxygen-webhelp/resources/js/jquery-1.8.2.min.js"><!----></script><script type="text/javascript" src="../oxygen-webhelp/resources/js/jquery.cookie.js"><!----></script><script type="text/javascript" src="../oxygen-webhelp/resources/js/jquery-ui.custom.min.js"><!----></script><script type="text/javascript" src="../oxygen-webhelp/resources/js/jquery.highlight-3.js"><!----></script><script type="text/javascript" charset="utf-8" src="../oxygen-webhelp/resources/js/webhelp_topic.js"><!----></script></head>
+<body onload="highlightSearchTerm()" class="frmBody" id="task_if4_vnc_4p">
+<table class="nav"><tbody><tr><td colspan="2"><div id="printlink"><a href="javascript:window.print();" title="Print this page"></a></div><div id="permalink"><a href="#" title="Link to this page"></a></div></td></tr><tr><td width="75%"></td><td><div class="navheader"></div></td></tr></tbody></table>
+
+    <h1 class="title topictitle1">Adding a media store</h1>
+
+    
+    <div class="body taskbody"><p class="shortdesc">You can set up a media store which you can use later when adding media files to a
+        service template. A media store is, for example, a local folder whose contents is uploaded
+        to a certain resource. A media store can contain <span class="ph filepath">.rar</span>,
+            <span class="ph filepath">.exe</span>, etc. file types.</p>
+
+        <div class="section context">
+            <p class="p">For more details, see <a class="xref" href="../concepts/glossary.html#glossentry_fzf_fjb_qp">Media store</a>.</p>
+
+        </div>
+
+        <ol class="ol steps"><li class="li step stepexpand">
+                <span class="ph cmd"><span class="ph">Click <span class="ph uicontrol">Infrastructure Operations</span>.</span></span>
+            </li>
+<li class="li step stepexpand">
+                <span class="ph cmd">Click the <span class="ph uicontrol">Deployment</span> view, then the <span class="ph uicontrol">Media
+                        Stores</span> tab, and <span class="ph uicontrol">Add Media Store</span>.</span>
+            </li>
+<li class="li step stepexpand">
+                <span class="ph cmd">Enter the following:</span>
+                <div class="itemgroup info">
+                    <ul class="ul" id="task_if4_vnc_4p__ul_vsb_fff_pp">
+                        <li class="li"><span class="ph uicontrol">Name</span> - an arbitrary name.</li>
+
+                        <li class="li"><span class="ph uicontrol">Media Provider</span> - a media provider's class, for
+                            example (P3C uses media stores via plugged-in media store
+                                providers):<div class="note note"><span class="notetitle">Note:</span> You can select only one provider within a
+                                class.</div>
+<ul class="ul" id="task_if4_vnc_4p__ul_htz_rpf_pp">
+                                <li class="li"><span class="ph uicontrol">smb</span> - the Samba protocol; select this
+                                    check-box if you want a Windows client PC to establish
+                                    connection with a resource shared on a Linux network.</li>
+
+                            </ul>
+</li>
+
+                        <li class="li"><span class="ph uicontrol">Key</span> - an automatically generated ID.</li>
+
+                        <li class="li"><span class="ph uicontrol">Store Identification</span> - the path to a specific
+                            folder, e.g. if you are using Samba. To an SMB provider, it is a URI to
+                            a shared folder on a Windows file server, e.g.
+                                <span class="ph filepath">smb://fqdn_of_fileserver/Share/P3C </span>.</li>
+
+                        <li class="li"><span class="ph uicontrol">User name</span> and <span class="ph uicontrol">password</span>
+                            credentials - enter the corresponding credentials that will be used when
+                            connecting to a resource through Samba, etc., including a domain where
+                            applicable, for example:
+                                    <span class="ph filepath"><var class="keyword varname">mydomain</var>\<var class="keyword varname">mycomp</var></span>.</li>
+
+                    </ul>
+
+                </div>
+            </li>
+<li class="li step stepexpand">
+                <span class="ph cmd">Click <span class="ph uicontrol">OK</span>.</span>
+            </li>
+</ol>
+
+        <div class="section result">The media store you have added is available from: <span class="ph menucascade"><span class="ph uicontrol">Design Studio</span> &gt; <span class="ph uicontrol">Service Templates</span> &gt; <span class="ph uicontrol">Add Template</span> &gt; <span class="ph uicontrol">Media Files</span> &gt; <span class="ph uicontrol">Add Media File</span> &gt; <span class="ph uicontrol">Register Media File</span> &gt; <span class="ph uicontrol">Media store</span></span>.</div>
+
+    </div>
+
+<div class="navfooter"><!----></div><div class="footer">WebHelp output generated by<a href="http://www.oxygenxml.com" target="_blank"><span class="oXygenLogo"><img src="../oxygen-webhelp/resources/img/LogoOxygen100x22.png" alt="Oxygen"></img></span><span class="xmlauthor">XML Author</span></a></div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mdd-mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: mdd
+      MYSQL_DATABASE: mdd
+      MYSQL_USER: mdd
+      MYSQL_PASSWORD: mdd
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  mdd-app:
+    build: ../../server/deploy/fatjar
+    image: mdd-app-img
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mdd-mysql
+    volumes:
+      - ./app_logs:/app/logs
+
+volumes:
+  mysql_data:
+  mdd_app_data:
