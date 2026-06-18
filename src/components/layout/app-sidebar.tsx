@@ -71,16 +71,6 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        {!collapsed && (
-          <div className="m-2 rounded-xl border border-sidebar-border bg-sidebar-accent/40 p-3">
-            <p className="text-[11px] font-medium text-sidebar-accent-foreground">
-              Need backup staff fast?
-            </p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Trigger an SOS from the dashboard.
-            </p>
-          </div>
-        )}
         <div className="mt-auto p-2 flex justify-center border-t border-border/20 pt-3 mb-1">
           <SidebarTrigger className="h-9 w-9 bg-muted/50 hover:bg-muted" />
         </div>

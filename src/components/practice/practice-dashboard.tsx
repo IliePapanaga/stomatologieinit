@@ -5,6 +5,7 @@ import { SosButton } from "@/components/practice/sos-button";
 import { NewPostingSheet } from "@/components/practice/new-posting-sheet";
 import { RecentActivityFeed } from "@/components/practice/recent-activity-feed";
 import { UpcomingShifts } from "@/components/practice/upcoming-shifts";
+import { ActiveSosTracker } from "@/components/practice/active-sos-tracker";
 
 import { usePracticeDashboard } from "@/lib/hooks/practice";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -60,6 +61,8 @@ export function PracticeDashboard() {
           <UpcomingShifts />
         </div>
       </div>
+
+      <ActiveSosTracker />
 
       {/* Activity */}
       <RecentActivityFeed />

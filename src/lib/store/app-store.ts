@@ -8,9 +8,9 @@ import type {
   ProfessionalSpecialty,
   ProfessionalSubcategory,
   PermanentJobPosting,
-  TemporaryJobPosting,
   TemporaryKind,
   UserRole,
+  SosRequest,
 } from "@/lib/types/mdd";
 
 export type AppRole = Extract<UserRole, "PracticeOwner" | "Professional" | "SuperAdmin">;
@@ -275,8 +275,8 @@ interface AppState {
   professionalProfile: ProfessionalProfile;
   bannedPracticeIds: string[];
   appliedPostingIds: string[];
-  jobHistory: JobHistoryEntry[];
   practiceReviews: PracticeReview[];
+  activeSosRequests: SosRequest[];
 
   // auth
   findUserByEmail: (email: string) => AppUser | undefined;
@@ -305,6 +305,8 @@ interface AppState {
   addReference: (entry: Omit<WorkReference, "id">) => void;
   removeReference: (id: string) => void;
   addPracticeReview: (review: Omit<PracticeReview, "id" | "date" | "practiceId" | "author">) => void;
+  addSosRequest: (req: SosRequest) => void;
+  removeSosRequest: (id: string) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -321,6 +323,7 @@ export const useAppStore = create<AppState>()(
       appliedPostingIds: [],
       jobHistory: initialHistory,
       practiceReviews: [],
+      activeSosRequests: [],
 
       findUserByEmail: (email) =>
         get().users.find((u) => u.email.trim().toLowerCase() === email.trim().toLowerCase()),
@@ -531,6 +534,8 @@ export const useAppStore = create<AppState>()(
           set({ practiceReviews: [newRev, ...get().practiceReviews] });
         }
       },
+      addSosRequest: (req) => set({ activeSosRequests: [req, ...get().activeSosRequests] }),
+      removeSosRequest: (id) => set({ activeSosRequests: get().activeSosRequests.filter((r) => r.id !== id) }),
     }),
     {
       name: "mdd-app-store",
@@ -558,6 +563,7 @@ export const useAppStore = create<AppState>()(
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
           jobHistory: Array.isArray(state.jobHistory) ? state.jobHistory : initialHistory,
           practiceReviews: Array.isArray(state.practiceReviews) ? state.practiceReviews : [],
+          activeSosRequests: Array.isArray(state.activeSosRequests) ? state.activeSosRequests : [],
         } as AppState;
       },
       partialize: (s) => ({
@@ -570,6 +576,7 @@ export const useAppStore = create<AppState>()(
         appliedPostingIds: s.appliedPostingIds,
         jobHistory: s.jobHistory,
         practiceReviews: s.practiceReviews,
+        activeSosRequests: s.activeSosRequests,
       }),
     }
   )

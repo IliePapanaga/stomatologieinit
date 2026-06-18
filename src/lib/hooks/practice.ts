@@ -7,6 +7,7 @@ import {
   mockUpcomingShifts,
 } from "@/lib/mock";
 import type { SosRequest } from "@/lib/types/mdd";
+import { useAppStore } from "@/lib/store/app-store";
 
 const delay = <T>(value: T, ms = 220) =>
   new Promise<T>((resolve) => setTimeout(() => resolve(value), ms));
@@ -70,7 +71,8 @@ export const useCreateSosRequest = () => {
         status: "Pending",
       };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      useAppStore.getState().addSosRequest(data);
       qc.invalidateQueries({ queryKey: ["practice", "dashboard"] });
       qc.invalidateQueries({ queryKey: ["practice", "activity"] });
     },
