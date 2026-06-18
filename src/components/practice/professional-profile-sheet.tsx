@@ -52,7 +52,15 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
   const mockReviews = useMemo(() => pro ? generateMockReviews(pro.id) : [], [pro]);
   const localReviews = useMemo(() => [...proReviews, ...mockReviews], [proReviews, mockReviews]);
 
-  const hasWorked = useMemo(() => pro ? mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id) : false, [pro]);
+  const hasWorked = useMemo(() => {
+    if (!pro) return false;
+    const { jobPostings } = useAppStore.getState();
+    const hiredAnywhere = jobPostings.some(p => p.hiredCandidateIds?.includes(pro.id));
+    const inActivity = mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id);
+    // For demo purposes, assume 80% of professionals have worked for you before so you can test reviews
+    const isDemoWorker = (pro.id.charCodeAt(pro.id.length - 1) % 5) !== 0; 
+    return hiredAnywhere || inActivity || isDemoWorker;
+  }, [pro]);
   const existingReview = proReviews[0];
   const canReview = hasWorked;
 

@@ -52,8 +52,6 @@ export function Topbar() {
           </div>
         </div>
 
-        <SidebarTrigger className="h-9 w-9 border border-border/60 ml-1" />
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-9 gap-2 px-2 text-sm font-medium">

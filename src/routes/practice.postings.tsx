@@ -78,7 +78,7 @@ function PostingsPage() {
             p.specialty.toLowerCase().includes(term) ||
             p.subcategory.toLowerCase().includes(term)
       );
-  }, [data, tab, q]);
+  }, [data, tab, q, spaceFilter]);
 
   const counts = useMemo(() => {
     const perm = data?.filter((p) => p.kind === "Permanent").length ?? 0;
