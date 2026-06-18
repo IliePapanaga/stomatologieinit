@@ -25,3 +25,25 @@ export function useCreatePosting() {
     isPending: false,
   };
 }
+
+export function useUpdatePosting() {
+  const updatePosting = useAppStore((s) => s.updatePosting);
+  return {
+    mutate: (args: { id: string; updates: Partial<JobPosting> }, opts?: { onSuccess?: () => void }) => {
+      updatePosting(args.id, args.updates);
+      opts?.onSuccess?.();
+    },
+    isPending: false,
+  };
+}
+
+export function useRemovePosting() {
+  const removePosting = useAppStore((s) => s.removePosting);
+  return {
+    mutate: (id: string, opts?: { onSuccess?: () => void }) => {
+      removePosting(id);
+      opts?.onSuccess?.();
+    },
+    isPending: false,
+  };
+}

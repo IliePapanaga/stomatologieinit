@@ -31,8 +31,9 @@ import {
   type ProfessionalSubcategory,
   type TemporaryKind,
 } from "@/lib/types/mdd";
-import { useCreatePosting } from "@/lib/hooks/postings";
+import { useCreatePosting, useUpdatePosting } from "@/lib/hooks/postings";
 import { toast } from "sonner";
+import type { JobPosting, PermanentJobPosting, TemporaryJobPosting } from "@/lib/types/mdd";
 
 const specialties: ProfessionalSpecialty[] = [
   "Hygienist", "Dentist", "Assistant", "FrontOffice", "Orthodontist",
@@ -45,32 +46,44 @@ interface Props {
   trigger?: React.ReactNode;
   open?: boolean;
   onOpenChange?: (v: boolean) => void;
+  initialData?: JobPosting;
+  hideTrigger?: boolean;
 }
 
-export function NewPostingSheet({ trigger, open: openProp, onOpenChange }: Props) {
+export function NewPostingSheet({ trigger, open: openProp, onOpenChange, initialData, hideTrigger }: Props) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = openProp ?? internalOpen;
   const setOpen = onOpenChange ?? setInternalOpen;
 
-  const [kind, setKind] = useState<"Permanent" | "Temporary">("Temporary");
-  const [tempKind, setTempKind] = useState<TemporaryKind>("Simple");
-  const [specialty, setSpecialty] = useState<ProfessionalSpecialty>("Hygienist");
-  const [subcategory, setSubcategory] = useState<ProfessionalSubcategory>("RDH");
-  const [locationId, setLocationId] = useState(mockLocations[0].id);
-  const [radius, setRadius] = useState(12);
-  const [title, setTitle] = useState("");
-  const [startDate, setStartDate] = useState("2026-06-22");
-  const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("08:00");
-  const [endTime, setEndTime] = useState("16:00");
-  const [hourlyRate, setHourlyRate] = useState(38);
-  const [fullTime, setFullTime] = useState(true);
-  const [salaryMin, setSalaryMin] = useState(78000);
-  const [salaryMax, setSalaryMax] = useState(96000);
-  const [benefits, setBenefits] = useState("Health, Dental, 401k, PTO");
+  const isTemp = initialData?.kind === "Temporary";
+  const isPerm = initialData?.kind === "Permanent";
+
+  const tempInitial = isTemp ? (initialData as TemporaryJobPosting) : null;
+  const permInitial = isPerm ? (initialData as PermanentJobPosting) : null;
+
+  const [kind, setKind] = useState<"Permanent" | "Temporary">(initialData?.kind || "Temporary");
+  const [tempKind, setTempKind] = useState<TemporaryKind>(tempInitial?.temporaryKind || "Simple");
+  const [specialty, setSpecialty] = useState<ProfessionalSpecialty>(initialData?.specialty || "Hygienist");
+  const [subcategory, setSubcategory] = useState<ProfessionalSubcategory>(initialData?.subcategory || "RDH");
+  const [locationId, setLocationId] = useState(initialData?.locationId || mockLocations[0].id);
+  const [radius, setRadius] = useState(initialData?.commutingRadius || 12);
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [startDate, setStartDate] = useState(initialData?.startDate?.split("T")[0] || "2026-06-22");
+  const [endDate, setEndDate] = useState(initialData?.endDate?.split("T")[0] || "");
+  const [startTime, setStartTime] = useState(tempInitial?.days[0]?.startTime || "08:00");
+  const [endTime, setEndTime] = useState(tempInitial?.days[0]?.endTime || "16:00");
+  const [hourlyRate, setHourlyRate] = useState(tempInitial?.hourlyRate || 38);
+  const [fullTime, setFullTime] = useState(permInitial?.fullTime ?? true);
+  const [salaryMin, setSalaryMin] = useState(permInitial?.salaryRange?.min || 78000);
+  const [salaryMax, setSalaryMax] = useState(permInitial?.salaryRange?.max || 96000);
+  const [benefits, setBenefits] = useState(permInitial?.benefits?.join(", ") || "Health, Dental, 401k, PTO");
+  const [workingSpaces, setWorkingSpaces] = useState(initialData?.workingSpaces || 1);
   const [notes, setNotes] = useState("");
 
   const create = useCreatePosting();
+  const update = useUpdatePosting();
+
+  const isPending = create.isPending || update.isPending;
 
   const onSpecialtyChange = (v: string) => {
     const s = v as ProfessionalSpecialty;
@@ -79,51 +92,68 @@ export function NewPostingSheet({ trigger, open: openProp, onOpenChange }: Props
   };
 
   const submit = () => {
-    create.mutate(
-      {
-        kind,
-        title: title || `${formatSub(subcategory)} · ${kind}`,
-        specialty,
-        subcategory,
-        commutingRadius: radius,
-        locationId,
-        startDate,
-        endDate: kind === "Permanent" && endDate ? endDate : undefined,
-        temporaryKind: tempKind,
-        hourlyRate,
-        startTime,
-        endTime,
-        fullTime,
-        salaryMin,
-        salaryMax,
-        benefits: benefits.split(",").map((b) => b.trim()).filter(Boolean),
-        notes,
-      },
-      {
-        onSuccess: () => {
-          toast.success(`${kind} posting published`, {
-            description: `${formatSub(subcategory)} · ${radius} mi radius`,
-          });
-          setOpen(false);
-        },
-      }
-    );
+    const payload = {
+      kind,
+      title: title || `${formatSub(subcategory)} · ${kind}`,
+      specialty,
+      subcategory,
+      commutingRadius: radius,
+      locationId,
+      startDate,
+      endDate: kind === "Permanent" && endDate ? endDate : undefined,
+      temporaryKind: tempKind,
+      hourlyRate,
+      startTime,
+      endTime,
+      fullTime,
+      salaryMin,
+      salaryMax,
+      benefits: benefits.split(",").map((b) => b.trim()).filter(Boolean),
+      workingSpaces,
+      notes,
+    };
+
+    if (initialData) {
+      update.mutate(
+        { id: initialData.id, updates: payload },
+        {
+          onSuccess: () => {
+            toast.success("Role updated");
+            setOpen(false);
+          },
+        }
+      );
+    } else {
+      create.mutate(
+        payload as any,
+        {
+          onSuccess: () => {
+            toast.success(`${kind} role published`, {
+              description: `${formatSub(subcategory)} · ${radius} mi radius`,
+            });
+            setOpen(false);
+          },
+        }
+      );
+    }
   };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      {trigger ? (
-        <SheetTrigger asChild>{trigger}</SheetTrigger>
-      ) : (
-        <SheetTrigger asChild>
-          <Button className="bg-gradient-brand text-primary-foreground hover:opacity-95 dark:shadow-glow">
-            <Plus className="h-4 w-4" /> New posting
-          </Button>
-        </SheetTrigger>
+      {!hideTrigger && (
+        trigger ? (
+          <SheetTrigger asChild>{trigger}</SheetTrigger>
+        ) : (
+          <SheetTrigger asChild>
+            <Button className="bg-gradient-brand text-primary-foreground hover:opacity-95 dark:shadow-glow">
+              <Plus className="h-4 w-4" /> New role
+            </Button>
+          </SheetTrigger>
+        )
       )}
       <SheetContent side="right" className="w-full sm:max-w-xl flex flex-col p-0">
         <SheetHeader className="px-6 pt-6">
-          <SheetTitle className="text-xl">Create job posting</SheetTitle>
+          <SheetTitle className="text-xl">{initialData ? "Edit role" : "Create role"}</SheetTitle>
           <SheetDescription>
             Configure role, schedule, and commuting radius. Matched against the local talent pool in real time.
           </SheetDescription>
@@ -142,7 +172,7 @@ export function NewPostingSheet({ trigger, open: openProp, onOpenChange }: Props
 
             <div className="mt-6 space-y-5">
               <div className="space-y-1.5">
-                <Label>Posting title</Label>
+                <Label>Role title</Label>
                 <Input
                   placeholder="e.g. Lead Hygienist · Mission Bay"
                   value={title}
@@ -203,8 +233,13 @@ export function NewPostingSheet({ trigger, open: openProp, onOpenChange }: Props
                   step={1}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Only professionals within {radius} miles of the practice will see this posting.
+                  Only professionals within {radius} miles of the practice will see this role.
                 </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label>Working Spaces (Openings)</Label>
+                <Input type="number" min={1} max={99} value={workingSpaces} onChange={(e) => setWorkingSpaces(+e.target.value)} />
               </div>
             </div>
 
@@ -303,16 +338,16 @@ export function NewPostingSheet({ trigger, open: openProp, onOpenChange }: Props
         </div>
 
         <SheetFooter className="border-t border-border/60 bg-background/60 px-6 py-4 backdrop-blur">
-          <Button variant="outline" onClick={() => setOpen(false)} disabled={create.isPending}>
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
             Cancel
           </Button>
           <Button
             onClick={submit}
-            disabled={create.isPending}
+            disabled={isPending}
             className="bg-gradient-brand text-primary-foreground"
           >
-            {create.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-            Publish posting
+            {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+            {initialData ? "Save changes" : "Publish role"}
           </Button>
         </SheetFooter>
       </SheetContent>

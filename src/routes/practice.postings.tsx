@@ -13,11 +13,14 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { NewPostingSheet } from "@/components/practice/new-posting-sheet";
-import { usePostings } from "@/lib/hooks/postings";
+import { CandidatesSheet } from "@/components/practice/candidates-sheet";
+import { usePostings, useRemovePosting } from "@/lib/hooks/postings";
 import { mockLocations } from "@/lib/mock";
+import { Trash2 } from "lucide-react";
 import type {
   JobPosting,
   PermanentJobPosting,
@@ -48,12 +51,25 @@ function PostingsPage() {
   const { data, isLoading } = usePostings();
   const [tab, setTab] = useState<"Permanent" | "Temporary">("Permanent");
   const [q, setQ] = useState("");
+  const [spaceFilter, setSpaceFilter] = useState<"All" | "Current" | "Full" | "Past">("All");
 
   const filtered = useMemo(() => {
     if (!data) return [];
     const term = q.trim().toLowerCase();
+    const now = new Date().getTime();
+    
     return data
       .filter((p) => p.kind === tab)
+      .filter((p) => {
+        if (spaceFilter === "All") return true;
+        const endDate = p.endDate ? new Date(p.endDate).getTime() : new Date(p.startDate).getTime() + 86400000;
+        const isPast = endDate < now;
+        if (spaceFilter === "Past") return isPast;
+        if (isPast) return false; // if it's not past filter, exclude past events from Current/Full
+        if (spaceFilter === "Full") return p.workingSpaces <= 0;
+        if (spaceFilter === "Current") return p.workingSpaces > 0;
+        return true;
+      })
       .filter((p) =>
         !term
           ? true
@@ -73,7 +89,7 @@ function PostingsPage() {
     <div className="space-y-6 p-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Postings</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Roles</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Manage permanent roles and temporary shifts. Live match scores update as candidates apply.
           </p>
@@ -99,14 +115,25 @@ function PostingsPage() {
               </Badge>
             </TabsTrigger>
           </TabsList>
-          <div className="relative w-full max-w-xs">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search title, specialty…"
-              className="pl-9"
-            />
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Select value={spaceFilter} onValueChange={(v) => setSpaceFilter(v as any)}>
+              <SelectTrigger className="w-[120px]"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All statuses</SelectItem>
+                <SelectItem value="Current">Current</SelectItem>
+                <SelectItem value="Full">Full</SelectItem>
+                <SelectItem value="Past">Past</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="relative w-full sm:w-[200px]">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search title, specialty…"
+                className="pl-9"
+              />
+            </div>
           </div>
         </div>
 
@@ -176,6 +203,10 @@ function PostingsList({
 }
 
 function PostingCard({ posting }: { posting: JobPosting }) {
+  const [sheetMode, setSheetMode] = useState<"candidates" | "hired" | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const remove = useRemovePosting();
+
   const location = mockLocations.find((l) => l.id === posting.locationId);
   const isTemp = posting.kind === "Temporary";
   const matchTone =
@@ -255,14 +286,41 @@ function PostingCard({ posting }: { posting: JobPosting }) {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-2">
-        <Button size="sm" variant="outline" className="flex-1">
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <Button size="sm" variant="outline" className="flex-1 bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary" onClick={() => setSheetMode("candidates")}>
           View candidates
         </Button>
-        <Button size="sm" variant="ghost" className="text-muted-foreground">
+        <Button size="sm" variant="outline" className="flex-1 border-primary/20 hover:bg-primary/5 text-primary" onClick={() => setSheetMode("hired")}>
+          Hired ({posting.hiredCandidateIds?.length || 0})
+        </Button>
+        <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => setEditOpen(true)}>
           Edit
         </Button>
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive px-2"
+          onClick={() => {
+            if (window.confirm("Are you sure you want to delete this role?")) {
+              remove.mutate(posting.id);
+            }
+          }}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
       </div>
+
+      <CandidatesSheet
+        posting={sheetMode ? posting : null}
+        mode={sheetMode || "candidates"}
+        onOpenChange={(v) => { if (!v) setSheetMode(null); }}
+      />
+      <NewPostingSheet
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        initialData={posting}
+        hideTrigger
+      />
     </motion.article>
   );
 }

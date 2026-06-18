@@ -44,7 +44,7 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2.5 px-2 py-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
-            <Stethoscope className="h-4.5 w-4.5" strokeWidth={2.25} />
+            <span className="font-bold text-sm tracking-tighter">MDD</span>
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">

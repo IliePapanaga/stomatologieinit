@@ -16,6 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { mockProfessionals, mockPostings, mockLocations } from "@/lib/mock";
+import { ProfessionalProfileSheet } from "@/components/practice/professional-profile-sheet";
+import { Professional } from "@/lib/types/mdd";
 
 export const Route = createFileRoute("/practice/schedule")({
   component: SchedulePage,
@@ -125,6 +127,16 @@ function SchedulePage() {
   const [view, setView] = useState<"month" | "week">("month");
   const [anchor, setAnchor] = useState(() => new Date());
   const events = useMemo(() => buildEvents(anchor), [anchor]);
+  const [selectedPro, setSelectedPro] = useState<Professional | null>(null);
+  const [defaultTab, setDefaultTab] = useState<"overview" | "reviews">("overview");
+
+  const handleEventClick = (proId: string, passed: boolean) => {
+    const pro = mockProfessionals.find(p => p.id === proId);
+    if (pro) {
+      setSelectedPro(pro);
+      setDefaultTab(passed ? "reviews" : "overview");
+    }
+  };
 
   const navigate = (dir: -1 | 1) => {
     const next = new Date(anchor);
@@ -195,15 +207,26 @@ function SchedulePage() {
         </div>
 
         <CardContent className="p-0">
-          {view === "month" ? (
-            <MonthGrid anchor={anchor} events={events} />
-          ) : (
-            <WeekGrid weekStart={weekStart} events={events} />
-          )}
+          <div className="hidden md:block">
+            {view === "month" ? (
+              <MonthGrid anchor={anchor} events={events} onEventClick={handleEventClick} />
+            ) : (
+              <WeekGrid weekStart={weekStart} events={events} onEventClick={handleEventClick} />
+            )}
+          </div>
+          <div className="block md:hidden">
+            <AgendaView events={events} onEventClick={handleEventClick} />
+          </div>
         </CardContent>
       </Card>
 
-      <UpNext events={events} />
+      <UpNext events={events} onEventClick={handleEventClick} />
+
+      <ProfessionalProfileSheet 
+        pro={selectedPro} 
+        onOpenChange={(open) => !open && setSelectedPro(null)} 
+        defaultTab={defaultTab}
+      />
     </div>
   );
 }
@@ -221,7 +244,7 @@ function Legend() {
   );
 }
 
-function MonthGrid({ anchor, events }: { anchor: Date; events: CalEvent[] }) {
+function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
   const year = anchor.getFullYear();
   const month = anchor.getMonth();
   const today = new Date();
@@ -271,18 +294,22 @@ function MonthGrid({ anchor, events }: { anchor: Date; events: CalEvent[] }) {
                 </span>
               </div>
               <div className="space-y-1">
-                {dayEvents.slice(0, 3).map((e, j) => (
-                  <motion.div
-                    key={e.id}
-                    initial={{ opacity: 0, y: 2 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: j * 0.03 }}
-                    className={`flex items-center gap-1.5 truncate rounded-md border px-1.5 py-1 text-[10.5px] font-medium leading-tight transition ${eventStyles[e.kind].chip}`}
-                  >
-                    <span className="tabular-nums opacity-80">{formatTime(e.start)}</span>
-                    <span className="truncate">{e.title}</span>
-                  </motion.div>
-                ))}
+                {dayEvents.slice(0, 3).map((e, j) => {
+                  const passed = e.end.getTime() < today.getTime();
+                  return (
+                    <motion.div
+                      key={e.id}
+                      initial={{ opacity: 0, y: 2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: j * 0.03 }}
+                      className={`flex items-center gap-1.5 truncate rounded-md border px-1.5 py-1 text-[10.5px] font-medium leading-tight transition cursor-pointer ${eventStyles[e.kind].chip}`}
+                      onClick={() => onEventClick(e.professionalId, passed)}
+                    >
+                      <span className="tabular-nums opacity-80">{formatTime(e.start)}</span>
+                      <span className="truncate">{e.title}</span>
+                    </motion.div>
+                  );
+                })}
                 {dayEvents.length > 3 && (
                   <div className="px-1.5 text-[10px] text-muted-foreground">
                     +{dayEvents.length - 3} more
@@ -297,7 +324,7 @@ function MonthGrid({ anchor, events }: { anchor: Date; events: CalEvent[] }) {
   );
 }
 
-function WeekGrid({ weekStart, events }: { weekStart: Date; events: CalEvent[] }) {
+function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
   const today = new Date();
   const days: Date[] = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
@@ -369,14 +396,16 @@ function WeekGrid({ weekStart, events }: { weekStart: Date; events: CalEvent[] }
                   const endH = e.end.getHours() + e.end.getMinutes() / 60;
                   const top = (startH - HOURS[0]) * SLOT_HEIGHT;
                   const height = Math.max(28, (endH - startH) * SLOT_HEIGHT - 2);
+                  const passed = e.end.getTime() < today.getTime();
                   return (
                     <motion.div
                       key={e.id}
                       initial={{ opacity: 0, scale: 0.97 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: idx * 0.04 }}
-                      className={`absolute left-1 right-1 overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight transition ${eventStyles[e.kind].chip}`}
+                      className={`absolute left-1 right-1 overflow-hidden rounded-md border px-1.5 py-1 text-[10.5px] leading-tight transition cursor-pointer ${eventStyles[e.kind].chip}`}
                       style={{ top: `${top}px`, height: `${height}px` }}
+                      onClick={() => onEventClick(e.professionalId, passed)}
                     >
                       <div className="truncate font-medium">{e.title}</div>
                       <div className="truncate opacity-80 tabular-nums">
@@ -394,7 +423,7 @@ function WeekGrid({ weekStart, events }: { weekStart: Date; events: CalEvent[] }
   );
 }
 
-function UpNext({ events }: { events: CalEvent[] }) {
+function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
   const now = new Date();
   const upcoming = events
     .filter((e) => e.start.getTime() >= now.getTime() - 1000 * 60 * 60 * 12)
@@ -415,13 +444,15 @@ function UpNext({ events }: { events: CalEvent[] }) {
           const pro = mockProfessionals.find((p) => p.id === e.professionalId);
           const loc = mockLocations.find((l) => l.id === e.locationId);
           const tone = eventStyles[e.kind];
+          const passed = e.end.getTime() < now.getTime();
           return (
             <motion.div
               key={e.id}
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.04 }}
-              className="flex items-center gap-3 px-5 py-3"
+              className="flex items-center gap-3 px-5 py-3 cursor-pointer hover:bg-muted/40 transition"
+              onClick={() => onEventClick(e.professionalId, passed)}
             >
               <div className={`h-10 w-1 rounded-full ${tone.bar}`} />
               <Avatar className="h-9 w-9">
@@ -456,5 +487,64 @@ function UpNext({ events }: { events: CalEvent[] }) {
         })}
       </CardContent>
     </Card>
+  );
+}
+
+function AgendaView({ events, onEventClick }: { events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
+  const now = new Date();
+  
+  if (events.length === 0) {
+    return (
+      <div className="py-12 text-center text-sm text-muted-foreground">
+        No events this period.
+      </div>
+    );
+  }
+
+  return (
+    <div className="divide-y divide-border/60">
+      {events.map((e) => {
+        const pro = mockProfessionals.find((p) => p.id === e.professionalId);
+        const loc = mockLocations.find((l) => l.id === e.locationId);
+        const tone = eventStyles[e.kind];
+        const passed = e.end.getTime() < now.getTime();
+        
+        return (
+          <div
+            key={e.id}
+            className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/40 transition"
+            onClick={() => onEventClick(e.professionalId, passed)}
+          >
+            <div className={`h-10 w-1 shrink-0 rounded-full ${tone.bar}`} />
+            <Avatar className="h-9 w-9 shrink-0">
+              <AvatarFallback className="bg-gradient-brand text-xs text-primary-foreground">
+                {pro ? `${pro.firstName[0]}${pro.lastName[0]}` : "—"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2">
+                <p className="truncate text-sm font-medium">{e.title}</p>
+                <Badge variant="outline" className={`h-5 gap-1 shrink-0 px-1.5 text-[10px] ${tone.chip}`}>
+                  {tone.label}
+                </Badge>
+              </div>
+              <div className="mt-0.5 flex flex-col gap-1 text-[11px] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3 shrink-0" />
+                  {e.start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                  {" · "}
+                  {formatTime(e.start)} – {formatTime(e.end)}
+                </span>
+                {loc && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3 shrink-0" /> <span className="truncate">{loc.name}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }

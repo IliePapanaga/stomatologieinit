@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef, type ReactNode } from "react";
 
 type Theme = "light" | "dark";
 
@@ -21,13 +21,10 @@ function getInitial(): Theme {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
+  const isMounted = React.useRef(false);
 
   useEffect(() => {
-    const initial = getInitial();
-    setThemeState(initial);
-  }, []);
-
-  useEffect(() => {
+    if (!isMounted.current) return;
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
@@ -35,6 +32,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {}
   }, [theme]);
+
+  useEffect(() => {
+    isMounted.current = true;
+    const initial = getInitial();
+    setThemeState(initial);
+  }, []);
 
   return (
     <Ctx.Provider

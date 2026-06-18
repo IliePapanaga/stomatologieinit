@@ -2,15 +2,18 @@ import { motion } from "motion/react";
 import { KpiStrip } from "@/components/practice/kpi-strip";
 import { LiveRadar } from "@/components/practice/live-radar";
 import { SosButton } from "@/components/practice/sos-button";
-import { JobCreatorSheet } from "@/components/practice/job-creator-sheet";
+import { NewPostingSheet } from "@/components/practice/new-posting-sheet";
 import { RecentActivityFeed } from "@/components/practice/recent-activity-feed";
 import { UpcomingShifts } from "@/components/practice/upcoming-shifts";
 
 import { usePracticeDashboard } from "@/lib/hooks/practice";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAppStore } from "@/lib/store/app-store";
 
 export function PracticeDashboard() {
   const { data, isLoading } = usePracticeDashboard();
+
+  const currentUser = useAppStore((s) => s.currentUser);
 
   if (isLoading || !data) {
     return (
@@ -38,13 +41,13 @@ export function PracticeDashboard() {
             {data.location.name}
           </p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Good morning, {data.practice.ownerFirstName.replace("Dr. ", "")}
+            Good morning, {currentUser?.firstName || "there"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Here's what's happening across your practice today.
           </p>
         </div>
-        <JobCreatorSheet />
+        <NewPostingSheet />
       </div>
 
       <KpiStrip kpis={data.kpis} />

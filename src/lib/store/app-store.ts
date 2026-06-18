@@ -164,6 +164,16 @@ export interface WorkReference {
   relationship: string;
 }
 
+export interface PracticeReview {
+  id: string;
+  professionalId: string;
+  practiceId: string;
+  author: string;
+  rating: number;
+  text: string;
+  date: string;
+}
+
 export interface CertificateExtra extends Certificate {
   issueDate?: string;
 }
@@ -243,6 +253,7 @@ export interface CreatePostingInput {
   salaryMax?: number;
   benefits?: string[];
   notes?: string;
+  workingSpaces: number;
 }
 
 export interface CertificateUploadInput {
@@ -265,6 +276,7 @@ interface AppState {
   bannedPracticeIds: string[];
   appliedPostingIds: string[];
   jobHistory: JobHistoryEntry[];
+  practiceReviews: PracticeReview[];
 
   // auth
   findUserByEmail: (email: string) => AppUser | undefined;
@@ -276,11 +288,14 @@ interface AppState {
   impersonate: (user: AppUser) => void;
   stopImpersonation: () => void;
   addPosting: (input: CreatePostingInput) => JobPosting;
+  updatePosting: (id: string, updates: Partial<JobPosting>) => void;
+  removePosting: (id: string) => void;
 
   applyToPosting: (postingId: string) => void;
   banPractice: (practiceId: string) => void;
   unbanPractice: (practiceId: string) => void;
   updateProfile: (patch: Partial<ProfessionalProfile>) => void;
+  updateCurrentUser: (patch: Partial<AppUser>) => void;
   toggleSpecialty: (sub: ProfessionalSubcategory) => void;
   setComfortLevel: (sub: ProfessionalSubcategory, level: number) => void;
   setQuestionnaire: (key: string, value: boolean) => void;
@@ -289,6 +304,7 @@ interface AppState {
   removeSkill: (id: string) => void;
   addReference: (entry: Omit<WorkReference, "id">) => void;
   removeReference: (id: string) => void;
+  addPracticeReview: (review: Omit<PracticeReview, "id" | "date" | "practiceId" | "author">) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -304,6 +320,7 @@ export const useAppStore = create<AppState>()(
       bannedPracticeIds: [],
       appliedPostingIds: [],
       jobHistory: initialHistory,
+      practiceReviews: [],
 
       findUserByEmail: (email) =>
         get().users.find((u) => u.email.trim().toLowerCase() === email.trim().toLowerCase()),
@@ -353,6 +370,7 @@ export const useAppStore = create<AppState>()(
           applicantsCount: 0,
           matchPercentage: Math.floor(60 + Math.random() * 35),
           title: input.title,
+          workingSpaces: input.workingSpaces || 1,
         };
         const posting: JobPosting =
           input.kind === "Permanent"
@@ -380,6 +398,16 @@ export const useAppStore = create<AppState>()(
         set({ jobPostings: [posting, ...get().jobPostings] });
         return posting;
       },
+      updatePosting: (id, updates) => {
+        set({
+          jobPostings: get().jobPostings.map((p) => (p.id === id ? { ...p, ...updates } as JobPosting : p)),
+        });
+      },
+      removePosting: (id) => {
+        set({
+          jobPostings: get().jobPostings.filter((p) => p.id !== id),
+        });
+      },
 
       applyToPosting: (postingId) => {
         const list = get().appliedPostingIds;
@@ -395,6 +423,15 @@ export const useAppStore = create<AppState>()(
         set({ bannedPracticeIds: get().bannedPracticeIds.filter((p) => p !== practiceId) }),
       updateProfile: (patch) =>
         set({ professionalProfile: { ...get().professionalProfile, ...patch } }),
+      updateCurrentUser: (patch) => {
+        const u = get().currentUser;
+        if (!u) return;
+        const updated = { ...u, ...patch };
+        set({
+          currentUser: updated,
+          users: get().users.map((user) => (user.id === u.id ? updated : user)),
+        });
+      },
       toggleSpecialty: (sub) => {
         const p = get().professionalProfile;
         const has = p.specialties.includes(sub);
@@ -472,6 +509,18 @@ export const useAppStore = create<AppState>()(
           professionalProfile: { ...p, references: p.references.filter((r) => r.id !== id) },
         });
       },
+      addPracticeReview: (review) => {
+        const u = get().currentUser;
+        if (!u) return;
+        const newRev: PracticeReview = {
+          ...review,
+          id: `rev_prac_${Date.now()}`,
+          practiceId: u.tenant,
+          author: `${u.firstName} ${u.lastName} (${u.tenant})`,
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        };
+        set({ practiceReviews: [newRev, ...get().practiceReviews] });
+      },
     }),
     {
       name: "mdd-app-store",
@@ -497,6 +546,7 @@ export const useAppStore = create<AppState>()(
           bannedPracticeIds: Array.isArray(state.bannedPracticeIds) ? state.bannedPracticeIds : [],
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
           jobHistory: Array.isArray(state.jobHistory) ? state.jobHistory : initialHistory,
+          practiceReviews: Array.isArray(state.practiceReviews) ? state.practiceReviews : [],
         } as AppState;
       },
       partialize: (s) => ({
@@ -508,6 +558,7 @@ export const useAppStore = create<AppState>()(
         bannedPracticeIds: s.bannedPracticeIds,
         appliedPostingIds: s.appliedPostingIds,
         jobHistory: s.jobHistory,
+        practiceReviews: s.practiceReviews,
       }),
     }
   )

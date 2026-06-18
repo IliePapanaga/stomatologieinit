@@ -44,6 +44,7 @@ import type {
   ProfessionalSpecialty,
   ProfessionalSubcategory,
 } from "@/lib/types/mdd";
+import { ProfessionalProfileSheet } from "@/components/practice/professional-profile-sheet";
 
 export const Route = createFileRoute("/practice/staff")({
   component: StaffPage,
@@ -156,6 +157,7 @@ function StaffPage() {
   const [q, setQ] = useState("");
   const [specialty, setSpecialty] = useState<"All" | ProfessionalSpecialty>("All");
   const [status, setStatus] = useState<"All" | StaffRow["status"]>("All");
+  const [selectedPro, setSelectedPro] = useState<Professional | null>(null);
 
   const rows = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -240,16 +242,16 @@ function StaffPage() {
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
               <TableHead className="w-[34%]">Professional</TableHead>
-              <TableHead>Subcategory</TableHead>
+              <TableHead className="hidden md:table-cell">Subcategory</TableHead>
               <TableHead>Reliability</TableHead>
-              <TableHead className="text-right">Shifts</TableHead>
-              <TableHead>Last worked</TableHead>
+              <TableHead className="hidden md:table-cell text-right">Shifts</TableHead>
+              <TableHead className="hidden md:table-cell">Last worked</TableHead>
               <TableHead className="w-[1%]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.map((r, i) => (
-              <StaffRowItem key={r.pro.id} row={r} index={i} />
+              <StaffRowItem key={r.pro.id} row={r} index={i} onClick={() => setSelectedPro(r.pro)} />
             ))}
             {rows.length === 0 && (
               <TableRow>
@@ -261,6 +263,11 @@ function StaffPage() {
           </TableBody>
         </Table>
       </Card>
+
+      <ProfessionalProfileSheet 
+        pro={selectedPro} 
+        onOpenChange={(open) => !open && setSelectedPro(null)} 
+      />
     </div>
   );
 }
@@ -285,7 +292,7 @@ function SummaryCard({
   );
 }
 
-function StaffRowItem({ row, index }: { row: StaffRow; index: number }) {
+function StaffRowItem({ row, index, onClick }: { row: StaffRow; index: number; onClick: () => void }) {
   const tone = reliabilityTone(row.reliability);
   const Icon = tone.icon;
   const initials = `${row.pro.firstName[0]}${row.pro.lastName[0]}`;
@@ -295,7 +302,8 @@ function StaffRowItem({ row, index }: { row: StaffRow; index: number }) {
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.015, 0.3), duration: 0.25 }}
-      className="border-b border-border/60 transition hover:bg-muted/40"
+      className="border-b border-border/60 transition hover:bg-muted/40 cursor-pointer"
+      onClick={onClick}
     >
       <TableCell className="py-3">
         <div className="flex items-center gap-3">
@@ -330,7 +338,7 @@ function StaffRowItem({ row, index }: { row: StaffRow; index: number }) {
         </div>
       </TableCell>
 
-      <TableCell>
+      <TableCell className="hidden md:table-cell">
         <div>
           <p className="text-sm font-medium">{formatSub(row.subcategory)}</p>
           <p className="text-[11px] text-muted-foreground">{row.pro.specialty}</p>
@@ -366,8 +374,8 @@ function StaffRowItem({ row, index }: { row: StaffRow; index: number }) {
         </TooltipProvider>
       </TableCell>
 
-      <TableCell className="text-right tabular-nums text-sm">{row.shifts}</TableCell>
-      <TableCell className="text-sm text-muted-foreground">{row.lastWorked}</TableCell>
+      <TableCell className="hidden md:table-cell text-right tabular-nums text-sm">{row.shifts}</TableCell>
+      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{row.lastWorked}</TableCell>
 
       <TableCell className="text-right">
         <div className="flex items-center justify-end gap-1">

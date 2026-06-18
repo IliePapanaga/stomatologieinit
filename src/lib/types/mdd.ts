@@ -123,8 +123,10 @@ export interface BasePosting {
   startDate: ISODateTime;
   endDate?: ISODateTime;
   applicantsCount: number;
+  workingSpaces: number;
   matchPercentage: number; // 0-100, AI match score
   title?: string;
+  hiredCandidateIds?: string[];
 }
 
 export interface PermanentJobPosting extends BasePosting {
