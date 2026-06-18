@@ -40,6 +40,7 @@ export function Topbar() {
   return (
     <>
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 md:px-5">
+        <SidebarTrigger className="md:hidden h-9 w-9 border border-border/60 shrink-0" />
         <div className="flex items-center gap-2.5 mr-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
             <span className="font-bold text-[13px] leading-none ml-0.5">MDD</span>
