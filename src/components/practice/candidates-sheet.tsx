@@ -116,7 +116,7 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
                         disabled={!posting || (posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)) <= 0}
                         onClick={(e) => {
                           e.stopPropagation();
-                          const spotsLeft = posting.workingSpaces - (posting.hiredCandidateIds?.length || 0);
+                          const spotsLeft = (posting?.workingSpaces ?? 0) - (posting?.hiredCandidateIds?.length || 0);
                           if (posting && spotsLeft > 0) {
                             const hired = [...(posting.hiredCandidateIds || []), pro.id];
                             update.mutate({
