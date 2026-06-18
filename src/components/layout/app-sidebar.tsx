@@ -32,7 +32,7 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -56,7 +56,13 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground"
                     >
-                      <Link to={item.url} className="flex items-center gap-2.5">
+                      <Link 
+                        to={item.url} 
+                        className="flex items-center gap-2.5"
+                        onClick={() => {
+                          if (isMobile) setOpenMobile(false);
+                        }}
+                      >
                         <item.icon className="h-4 w-4" />
                         {!collapsed && <span className="text-sm">{item.title}</span>}
                       </Link>
