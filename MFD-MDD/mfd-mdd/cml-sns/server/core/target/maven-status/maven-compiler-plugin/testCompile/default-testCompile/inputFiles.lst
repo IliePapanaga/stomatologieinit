@@ -1,7 +1,0 @@
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/service/msg/sms/aws/AwsSmsMessageDetailsFactoryTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/SNSBaseIntegrationTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/validation/validator/EmailNotificationTemplateValidatorTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/validation/validator/NotificationTemplateUniquenessValidatorTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/validation/validator/SmsNotificationTemplateValidatorTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/validation/validator/NotificationTransportValidatorTest.java
-/Users/vpapanaga/PROJECTS/IBC/MFD-MDD/mfd-mdd/cml-sns/server/core/src/test/java/com/cl/sns/server/core/dao/MessagingTransportDaoIT.java

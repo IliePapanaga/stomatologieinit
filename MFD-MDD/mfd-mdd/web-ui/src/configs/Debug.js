@@ -1,2 +1,0 @@
-
-localStorage.setItem('App.*', 'INFO');
