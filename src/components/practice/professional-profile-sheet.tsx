@@ -52,13 +52,13 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
   const mockReviews = useMemo(() => pro ? generateMockReviews(pro.id) : [], [pro]);
   const localReviews = useMemo(() => [...proReviews, ...mockReviews], [proReviews, mockReviews]);
 
-  if (!pro) return null;
-
-  const hasWorked = useMemo(() => mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id), [pro]);
+  const hasWorked = useMemo(() => pro ? mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id) : false, [pro]);
   const alreadyReviewed = proReviews.length > 0;
   const canReview = hasWorked && !alreadyReviewed;
 
-  const initials = `${pro.firstName[0]}${pro.lastName[0]}`;
+  if (!pro) return null;
+
+  const initials = `${pro.firstName[0] || ""}${pro.lastName[0] || ""}`;
 
   const submitReview = () => {
     if (!newReview.trim()) return;

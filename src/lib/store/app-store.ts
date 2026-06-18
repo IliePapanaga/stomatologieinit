@@ -524,7 +524,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "mdd-app-store",
-      version: 3,
+      version: 4,
       storage: createJSONStorage(() => {
         if (typeof window === "undefined") {
           return {
@@ -542,6 +542,7 @@ export const useAppStore = create<AppState>()(
           currentUser: normalizeUser(state.currentUser),
           impersonator: normalizeUser(state.impersonator),
           users: mergeUsersWithSeeds(state.users),
+          jobPostings: mockPostings,
           professionalProfile: { ...initialProfile, ...(state.professionalProfile ?? {}) },
           bannedPracticeIds: Array.isArray(state.bannedPracticeIds) ? state.bannedPracticeIds : [],
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
