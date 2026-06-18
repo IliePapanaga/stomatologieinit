@@ -41,23 +41,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <div className="flex items-center gap-2.5 px-2 py-2">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
-            <span className="font-bold text-sm tracking-tighter">MDD</span>
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold tracking-tight">MDD</span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Dental Staffing
-              </span>
-            </div>
-          )}
-        </div>
-      </SidebarHeader>
-
-      <SidebarContent>
+      <SidebarContent className="pt-4">
         <SidebarGroup>
           <SidebarGroupLabel>Practice</SidebarGroupLabel>
           <SidebarGroupContent>

@@ -53,8 +53,23 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
   const localReviews = useMemo(() => [...proReviews, ...mockReviews], [proReviews, mockReviews]);
 
   const hasWorked = useMemo(() => pro ? mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id) : false, [pro]);
-  const alreadyReviewed = proReviews.length > 0;
-  const canReview = hasWorked && !alreadyReviewed;
+  const existingReview = proReviews[0];
+  const canReview = hasWorked;
+
+  const handleOpenReview = () => {
+    if (reviewOpen) {
+      setReviewOpen(false);
+    } else {
+      if (existingReview) {
+        setNewReview(existingReview.text);
+        setNewRating(existingReview.rating);
+      } else {
+        setNewReview("");
+        setNewRating(5);
+      }
+      setReviewOpen(true);
+    }
+  };
 
   if (!pro) return null;
 
@@ -177,8 +192,8 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">All Reviews</h3>
                 {canReview && (
-                  <Button size="sm" onClick={() => setReviewOpen(!reviewOpen)} className="gap-1">
-                    {reviewOpen ? "Cancel" : <><Plus className="h-4 w-4" /> Add Review</>}
+                  <Button size="sm" onClick={handleOpenReview} className="gap-1">
+                    {reviewOpen ? "Cancel" : <><Plus className="h-4 w-4" /> {existingReview ? "Edit Review" : "Add Review"}</>}
                   </Button>
                 )}
               </div>

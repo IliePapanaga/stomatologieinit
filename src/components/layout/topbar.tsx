@@ -40,7 +40,19 @@ export function Topbar() {
   return (
     <>
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 md:px-5">
-        <SidebarTrigger className="h-9 w-9" />
+        <div className="flex items-center gap-2.5 mr-2">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
+            <span className="font-bold text-[13px] leading-none ml-0.5">MDD</span>
+          </div>
+          <div className="hidden md:flex flex-col leading-tight">
+            <span className="text-sm font-semibold tracking-tight">MDD</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              Dental Staffing
+            </span>
+          </div>
+        </div>
+
+        <SidebarTrigger className="h-9 w-9 border border-border/60 ml-1" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

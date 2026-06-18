@@ -66,8 +66,9 @@ function PostingsPage() {
         const isPast = endDate < now;
         if (spaceFilter === "Past") return isPast;
         if (isPast) return false; // if it's not past filter, exclude past events from Current/Full
-        if (spaceFilter === "Full") return p.workingSpaces <= 0;
-        if (spaceFilter === "Current") return p.workingSpaces > 0;
+        const spotsLeft = p.workingSpaces - (p.hiredCandidateIds?.length || 0);
+        if (spaceFilter === "Full") return spotsLeft <= 0;
+        if (spaceFilter === "Current") return spotsLeft > 0;
         return true;
       })
       .filter((p) =>

@@ -512,14 +512,24 @@ export const useAppStore = create<AppState>()(
       addPracticeReview: (review) => {
         const u = get().currentUser;
         if (!u) return;
+        const tenant = u.tenant;
+        const existingIdx = get().practiceReviews.findIndex(r => r.professionalId === review.professionalId && r.practiceId === tenant);
+        
         const newRev: PracticeReview = {
           ...review,
-          id: `rev_prac_${Date.now()}`,
-          practiceId: u.tenant,
+          id: existingIdx >= 0 ? get().practiceReviews[existingIdx].id : `rev_prac_${Date.now()}`,
+          practiceId: tenant,
           author: `${u.firstName} ${u.lastName} (${u.tenant})`,
           date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
         };
-        set({ practiceReviews: [newRev, ...get().practiceReviews] });
+
+        if (existingIdx >= 0) {
+          const updated = [...get().practiceReviews];
+          updated[existingIdx] = newRev;
+          set({ practiceReviews: updated });
+        } else {
+          set({ practiceReviews: [newRev, ...get().practiceReviews] });
+        }
       },
     }),
     {

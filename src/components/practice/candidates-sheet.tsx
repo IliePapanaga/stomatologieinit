@@ -56,8 +56,8 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
             <div className="flex items-center justify-between">
               <SheetTitle>{mode === "candidates" ? "Candidates" : "Hired Staff"}</SheetTitle>
               {posting && mode === "candidates" && (
-                <Badge variant={posting.workingSpaces > 0 ? "outline" : "secondary"} className="bg-background">
-                  {posting.workingSpaces} spots left
+                <Badge variant={(posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)) > 0 ? "outline" : "secondary"} className="bg-background">
+                  {posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)} spots left
                 </Badge>
               )}
             </div>
@@ -113,21 +113,20 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
                       <Button 
                         size="sm" 
                         className="w-full bg-gradient-brand text-primary-foreground hover:opacity-95"
-                        disabled={!posting || posting.workingSpaces <= 0}
+                        disabled={!posting || (posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)) <= 0}
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (posting && posting.workingSpaces > 0) {
-                            const newSpaces = posting.workingSpaces - 1;
+                          const spotsLeft = posting.workingSpaces - (posting.hiredCandidateIds?.length || 0);
+                          if (posting && spotsLeft > 0) {
                             const hired = [...(posting.hiredCandidateIds || []), pro.id];
                             update.mutate({
                               id: posting.id,
                               updates: { 
-                                workingSpaces: newSpaces, 
                                 hiredCandidateIds: hired,
-                                ...(newSpaces === 0 ? { status: "Filled" } : {})
+                                ...(hired.length === posting.workingSpaces ? { status: "Filled" } : {})
                               }
                             });
-                            toast.success(`${pro.firstName} hired!`, { description: `Spots remaining: ${newSpaces}` });
+                            toast.success(`${pro.firstName} hired!`, { description: `Spots remaining: ${spotsLeft - 1}` });
                           }
                         }}
                       >
