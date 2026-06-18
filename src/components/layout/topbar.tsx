@@ -40,7 +40,6 @@ export function Topbar() {
   return (
     <>
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 md:px-5">
-        <SidebarTrigger className="md:hidden h-9 w-9 border border-border/60 shrink-0" />
         <div className="flex items-center gap-2.5 mr-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
             <span className="font-bold text-[13px] leading-none ml-0.5">MDD</span>
@@ -136,6 +135,10 @@ export function Topbar() {
           </DropdownMenu>
         </div>
       </header>
+
+      <div className="fixed bottom-4 left-4 z-[100] md:hidden">
+        <SidebarTrigger className="h-12 w-12 rounded-full border border-border/60 bg-background/90 backdrop-blur shadow-xl hover:bg-muted text-foreground flex items-center justify-center" />
+      </div>
 
       <UserProfileSheet open={profileOpen} onOpenChange={setProfileOpen} />
     </>
