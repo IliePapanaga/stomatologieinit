@@ -8,6 +8,7 @@ import type {
   ProfessionalSpecialty,
   ProfessionalSubcategory,
   PermanentJobPosting,
+  TemporaryJobPosting,
   TemporaryKind,
   UserRole,
   SosRequest,
@@ -275,6 +276,7 @@ interface AppState {
   professionalProfile: ProfessionalProfile;
   bannedPracticeIds: string[];
   appliedPostingIds: string[];
+  jobHistory: JobHistoryEntry[];
   practiceReviews: PracticeReview[];
   activeSosRequests: SosRequest[];
 
