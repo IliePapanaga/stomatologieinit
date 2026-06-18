@@ -20,7 +20,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 const navItems = [
@@ -69,12 +68,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter>
-        <div className="mt-auto p-2 flex justify-center border-t border-border/20 pt-3 mb-1">
-          <SidebarTrigger className="h-9 w-9 bg-muted/50 hover:bg-muted" />
-        </div>
-      </SidebarFooter>
     </Sidebar>
   );
 }

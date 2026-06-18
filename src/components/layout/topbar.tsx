@@ -136,7 +136,7 @@ export function Topbar() {
         </div>
       </header>
 
-      <div className="fixed bottom-4 left-4 z-[100] md:hidden">
+      <div className="fixed bottom-4 left-4 z-[100]">
         <SidebarTrigger className="h-12 w-12 rounded-full border border-border/60 bg-background/90 backdrop-blur shadow-xl hover:bg-muted text-foreground flex items-center justify-center" />
       </div>
 
