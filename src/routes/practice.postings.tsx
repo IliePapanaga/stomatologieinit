@@ -19,8 +19,9 @@ import { Button } from "@/components/ui/button";
 import { NewPostingSheet } from "@/components/practice/new-posting-sheet";
 import { CandidatesSheet } from "@/components/practice/candidates-sheet";
 import { usePostings, useRemovePosting } from "@/lib/hooks/postings";
-import { mockLocations } from "@/lib/mock";
+import { mockLocations, mockProfessionals } from "@/lib/mock";
 import { Trash2 } from "lucide-react";
+import { calculateMatchScore } from "@/lib/utils";
 import type {
   JobPosting,
   PermanentJobPosting,
@@ -210,10 +211,21 @@ function PostingCard({ posting }: { posting: JobPosting }) {
 
   const location = mockLocations.find((l) => l.id === posting.locationId);
   const isTemp = posting.kind === "Temporary";
+  const maxMatch = useMemo(() => {
+    let pool = mockProfessionals.filter(p => p.specialty === posting.specialty);
+    if (pool.length === 0) pool = mockProfessionals;
+    let max = 0;
+    for (const pro of pool) {
+      const score = calculateMatchScore(pro, posting);
+      if (score > max) max = score;
+    }
+    return max > 0 ? max : posting.matchPercentage;
+  }, [posting]);
+
   const matchTone =
-    posting.matchPercentage >= 85
+    maxMatch >= 85
       ? "text-emerald-600 dark:text-emerald-400"
-      : posting.matchPercentage >= 70
+      : maxMatch >= 70
       ? "text-primary"
       : "text-amber-600 dark:text-amber-400";
 
@@ -248,7 +260,7 @@ function PostingCard({ posting }: { posting: JobPosting }) {
         </div>
         <div className="text-right">
           <div className={`text-xl font-bold tabular-nums ${matchTone}`}>
-            {posting.matchPercentage}%
+            {maxMatch}%
           </div>
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
             match

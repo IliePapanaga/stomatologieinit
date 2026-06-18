@@ -9,6 +9,7 @@ import { mockProfessionals } from "@/lib/mock";
 import { ProfessionalProfileSheet } from "@/components/practice/professional-profile-sheet";
 import { useUpdatePosting } from "@/lib/hooks/postings";
 import { toast } from "sonner";
+import { calculateMatchScore } from "@/lib/utils";
 
 interface CandidatesSheetProps {
   posting: JobPosting | null;
@@ -69,7 +70,7 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {candidates.map((pro) => {
               const initials = `${pro.firstName[0]}${pro.lastName[0]}`;
-              const matchScore = Math.floor(75 + (pro.rating * 5) + (pro.id.charCodeAt(0) % 10)); // random-ish 75-99%
+              const matchScore = posting ? calculateMatchScore(pro, posting) : 0;
               
               return (
                 <div 
