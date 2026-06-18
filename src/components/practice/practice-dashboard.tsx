@@ -10,11 +10,18 @@ import { ActiveSosTracker } from "@/components/practice/active-sos-tracker";
 import { usePracticeDashboard } from "@/lib/hooks/practice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppStore } from "@/lib/store/app-store";
+import { Briefcase, CheckCircle2, CalendarClock, Siren } from "lucide-react";
+import type { KpiItem } from "@/components/practice/kpi-strip";
 
 export function PracticeDashboard() {
   const { data, isLoading } = usePracticeDashboard();
 
-  const currentUser = useAppStore((s) => s.currentUser);
+  const { 
+    currentUser, 
+    jobPostings, 
+    appliedPostingIds, 
+    activeSosRequests 
+  } = useAppStore();
 
   if (isLoading || !data) {
     return (
@@ -51,22 +58,54 @@ export function PracticeDashboard() {
         <NewPostingSheet />
       </div>
 
-      <KpiStrip kpis={data.kpis} />
+      <KpiStrip kpis={[
+        { 
+          key: "activePostings", 
+          label: "Active postings", 
+          value: jobPostings.filter(p => p.status === "Open").length, 
+          icon: Briefcase, tint: "primary", 
+          delta: "+2 this week",
+          href: "/practice/postings"
+        },
+        { 
+          key: "filledToday", 
+          label: "Filled today", 
+          value: jobPostings.reduce((sum, p) => sum + (p.hiredCandidateIds?.length || 0), 0), 
+          icon: CheckCircle2, tint: "success", 
+          delta: "98% match" 
+        },
+        { 
+          key: "pendingInterviews", 
+          label: "Pending interviews", 
+          value: appliedPostingIds.length || 4, // fallback to 4 for demo
+          icon: CalendarClock, tint: "warning", 
+          delta: "3 today",
+          href: "/practice/schedule"
+        },
+        { 
+          key: "sosSent", 
+          label: "Active SOS Broadcasts", 
+          value: activeSosRequests.length, 
+          icon: Siren, tint: "destructive", 
+          delta: activeSosRequests.length > 0 ? "Searching now" : "All resolved",
+        },
+      ]} />
 
-      {/* Centerpiece row: radar + SOS */}
-      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
-        <LiveRadar />
+      {/* Main layout grid */}
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] items-start">
+        {/* Left Column */}
+        <div className="flex flex-col gap-4">
+          <LiveRadar />
+          <RecentActivityFeed />
+        </div>
+        
+        {/* Right Column */}
         <div className="flex flex-col gap-4">
           <SosButton />
+          <ActiveSosTracker />
           <UpcomingShifts />
         </div>
       </div>
-
-      <ActiveSosTracker />
-
-      {/* Activity */}
-      <RecentActivityFeed />
-
     </motion.div>
   );
 }
