@@ -132,18 +132,24 @@ function AdminOverview() {
                 initial={{ opacity: 0, x: -4 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="flex items-center gap-3 px-5 py-3"
+                className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 px-4 py-3 sm:px-5"
               >
-                <Badge variant="outline" className={`h-5 px-1.5 text-[10px] ${levelStyles[e.level]}`}>
-                  {e.action}
-                </Badge>
+                <div className="flex items-center justify-between sm:justify-start">
+                  <Badge variant="outline" className={`h-5 px-1.5 text-[10px] shrink-0 ${levelStyles[e.level]}`}>
+                    {e.action}
+                  </Badge>
+                  <span className="text-[11px] tabular-nums text-muted-foreground sm:hidden">{e.at}</span>
+                </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm">
+                  <p className="text-sm leading-snug sm:truncate">
                     <span className="font-medium">{e.actor}</span>
-                    <span className="text-muted-foreground"> → {e.target}</span>
+                    <span className="text-muted-foreground block sm:inline mt-0.5 sm:mt-0">
+                      <span className="hidden sm:inline mx-1.5 opacity-50">→</span>
+                      {e.target}
+                    </span>
                   </p>
                 </div>
-                <span className="text-[11px] tabular-nums text-muted-foreground">{e.at}</span>
+                <span className="hidden sm:block text-[11px] tabular-nums text-muted-foreground shrink-0">{e.at}</span>
               </motion.div>
             ))}
           </CardContent>

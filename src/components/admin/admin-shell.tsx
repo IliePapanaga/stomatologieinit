@@ -116,18 +116,7 @@ function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
-        {!collapsed && (
-          <div className="m-2 rounded-xl border border-sidebar-border bg-sidebar-accent/40 p-3">
-            <p className="flex items-center gap-1.5 text-[11px] font-medium text-sidebar-accent-foreground">
-              <Activity className="h-3 w-3" /> All systems nominal
-            </p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Uptime 99.98% · 30d
-            </p>
-          </div>
-        )}
-      </SidebarFooter>
+      <SidebarFooter />
     </Sidebar>
   );
 }
@@ -164,7 +153,7 @@ function AdminTopbar() {
       {impersonator && (
         <Badge
           variant="outline"
-          className="gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+          className="hidden md:flex gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
         >
           <KeyRound className="h-3 w-3" /> Impersonating
         </Badge>

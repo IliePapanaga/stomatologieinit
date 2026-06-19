@@ -78,7 +78,7 @@ export function Topbar() {
         </DropdownMenu>
 
         {impersonator && (
-          <Badge variant="outline" className="ml-1 gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <Badge variant="outline" className="ml-1 hidden md:flex gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <KeyRound className="h-3 w-3" /> Impersonating
           </Badge>
         )}
@@ -91,10 +91,12 @@ export function Topbar() {
           />
         </div>
 
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-1 shrink-0">
           {impersonator && (
-            <Button size="sm" variant="outline" onClick={onStopImpersonation} className="h-8 gap-1.5">
-              <KeyRound className="h-3.5 w-3.5" /> Exit impersonation
+            <Button size="sm" variant="outline" onClick={onStopImpersonation} className="h-8 gap-1.5 px-2 md:px-3 border-amber-500/30 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <KeyRound className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Exit impersonation</span>
+              <span className="inline sm:hidden">Exit</span>
             </Button>
           )}
           <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications">
