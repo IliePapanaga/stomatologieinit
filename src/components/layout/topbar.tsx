@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Search, LogOut, KeyRound } from "lucide-react";
+import { Bell, ChevronDown, Search, LogOut, KeyRound, MapPin } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -54,11 +54,12 @@ export function Topbar() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-9 gap-2 px-2 text-sm font-medium">
-              <span className="hidden text-muted-foreground sm:inline">{mockPractice.companyName}</span>
-              <span className="hidden text-muted-foreground/40 sm:inline">/</span>
-              <span>{activeLoc.name}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+            <Button variant="ghost" className="h-9 gap-1.5 px-2 text-sm font-medium">
+              <MapPin className="h-4 w-4 text-primary shrink-0" />
+              <span className="hidden text-muted-foreground md:inline">{mockPractice.companyName}</span>
+              <span className="hidden text-muted-foreground/40 md:inline">/</span>
+              <span className="hidden sm:inline max-w-[140px] truncate">{activeLoc.name}</span>
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0 ml-0.5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
