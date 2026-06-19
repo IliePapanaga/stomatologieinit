@@ -384,7 +384,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {!canReview && (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/20 p-6 text-center text-sm text-muted-foreground">
                   <DollarSign className="mx-auto mb-2 h-5 w-5" />
-                  You can leave a review once you have completed a shift at this practice.
+                  You can leave a review once you have completed a shift at this owner.
                 </div>
               )}
 
@@ -414,7 +414,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                     <Textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      placeholder="How was your experience at this practice?"
+                      placeholder="How was your experience working at this owner?"
                       className="mt-1.5 resize-none"
                       rows={4}
                     />
@@ -457,7 +457,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {canReview && !existingReview && !editing && (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-center text-sm text-muted-foreground">
                   <Star className="mx-auto mb-2 h-5 w-5 text-amber-400" />
-                  You haven't left a review for this practice yet.
+                  You haven't left a review for this owner yet.
                   <br />
                   <button className="mt-2 text-primary underline-offset-2 hover:underline" onClick={openEdit}>
                     Write one now

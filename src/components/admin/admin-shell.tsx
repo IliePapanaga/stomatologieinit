@@ -10,6 +10,8 @@ import {
   Bell,
   Search,
   LogOut,
+  KeyRound,
+  Menu,
 } from "lucide-react";
 import { useAppStore } from "@/lib/store/app-store";
 import {
@@ -102,10 +104,10 @@ function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Practice view">
+                <SidebarMenuButton asChild tooltip="Owner view">
                   <Link to="/practice" className="flex items-center gap-2.5">
                     <ArrowLeftRight className="h-4 w-4" />
-                    {!collapsed && <span className="text-sm">Practice view</span>}
+                    {!collapsed && <span className="text-sm">Owner view</span>}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -132,15 +134,25 @@ function AdminSidebar() {
 
 function AdminTopbar() {
   const currentUser = useAppStore((s) => s.currentUser);
+  const impersonator = useAppStore((s) => s.impersonator);
   const logout = useAppStore((s) => s.logout);
+  const stopImpersonation = useAppStore((s) => s.stopImpersonation);
   const navigate = useNavigate();
+
   const onLogout = () => {
     logout();
     navigate({ to: "/login", replace: true });
   };
+
+  const onStopImpersonation = () => {
+    stopImpersonation();
+    navigate({ to: "/admin", replace: true });
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur-xl md:px-5">
-      <SidebarTrigger className="h-9 w-9" />
+      {/* SidebarTrigger hidden on mobile — handled by the FAB below */}
+      <SidebarTrigger className="hidden md:flex h-9 w-9" />
 
       <Badge
         variant="outline"
@@ -149,15 +161,31 @@ function AdminTopbar() {
         <ShieldCheck className="h-3 w-3" /> SuperAdmin
       </Badge>
 
+      {impersonator && (
+        <Badge
+          variant="outline"
+          className="gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+        >
+          <KeyRound className="h-3 w-3" /> Impersonating
+        </Badge>
+      )}
+
       <div className="relative ml-2 hidden flex-1 max-w-md md:block">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search users, practices, audit logs…"
+          placeholder="Search users, owners, audit logs…"
           className="h-9 rounded-full border-border/60 bg-muted/40 pl-9 text-sm focus-visible:bg-background"
         />
       </div>
 
       <div className="ml-auto flex items-center gap-1">
+        {impersonator && (
+          <Button size="sm" variant="outline" onClick={onStopImpersonation} className="h-8 gap-1.5 text-xs">
+            <KeyRound className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Exit impersonation</span>
+            <span className="sm:hidden">Exit</span>
+          </Button>
+        )}
         <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications">
           <Bell className="h-4 w-4" />
           <Badge className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive p-0 text-[10px] font-semibold text-destructive-foreground">
@@ -198,6 +226,21 @@ function AdminTopbar() {
   );
 }
 
+function AdminFab() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <div className="fixed bottom-4 left-3 z-[100] md:left-0 md:w-[3rem] flex justify-center transition-all duration-200 !pointer-events-auto">
+      <button
+        onClick={toggleSidebar}
+        className="h-12 w-12 md:h-9 md:w-9 rounded-full md:rounded-md border border-border/60 md:border-transparent bg-background/90 md:bg-muted/50 backdrop-blur shadow-xl md:shadow-none hover:bg-muted text-foreground flex items-center justify-center !pointer-events-auto transition-colors"
+        aria-label="Toggle sidebar"
+      >
+        <Menu className="h-5 w-5 md:h-4 md:w-4" />
+      </button>
+    </div>
+  );
+}
+
 export function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="admin-theme min-h-svh w-full">
@@ -209,6 +252,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <main className="flex-1 overflow-x-hidden">{children}</main>
           </SidebarInset>
         </div>
+        <AdminFab />
       </SidebarProvider>
     </div>
   );

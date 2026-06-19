@@ -43,7 +43,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent className="pt-4">
         <SidebarGroup>
-          <SidebarGroupLabel>Practice</SidebarGroupLabel>
+          <SidebarGroupLabel>Owner</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {

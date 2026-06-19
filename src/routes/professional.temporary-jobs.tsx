@@ -60,8 +60,10 @@ const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: strin
 function TemporaryJobsPage() {
   const postings = useAppStore((s) => s.jobPostings);
   const banned = useAppStore((s) => s.bannedPracticeIds);
+  const hidden = useAppStore((s) => s.hiddenPostingIds);
   const applied = useAppStore((s) => s.appliedPostingIds);
   const apply = useAppStore((s) => s.applyToPosting);
+  const hidePosting = useAppStore((s) => s.hidePosting);
   const banPractice = useAppStore((s) => s.banPractice);
 
   const [q, setQ] = useState("");
@@ -77,11 +79,12 @@ function TemporaryJobsPage() {
           p.kind === "Temporary" &&
           p.status === "Open" &&
           !banned.includes(p.practiceId) &&
+          !hidden.includes(p.id) &&
           (q
             ? `${p.title} ${p.specialty} ${p.subcategory}`.toLowerCase().includes(q.toLowerCase())
             : true)
       ),
-    [postings, banned, q]
+    [postings, banned, hidden, q]
   );
 
   // Sorted list — reactive, no button press needed
@@ -172,9 +175,8 @@ function TemporaryJobsPage() {
                     toast.success("Application sent", { description: p.title });
                   }}
                   onBan={() => {
-                    banPractice(p.practiceId);
-                    const name = knownPractices.find((kp) => kp.id === p.practiceId)?.name ?? "Practice";
-                    toast("Practice hidden", { description: `${name} blocked from your feed.` });
+                    hidePosting(p.id);
+                    toast("Job hidden", { description: `"${p.title}" removed from your feed.` });
                   }}
                   onInfo={() => {
                     setSelectedPracticeId(p.practiceId);

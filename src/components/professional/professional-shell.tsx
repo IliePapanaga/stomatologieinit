@@ -64,7 +64,7 @@ const nav: NavItem[] = [
     items: [
       { title: "Temporary Jobs", url: "/professional/temporary-jobs", icon: Calendar },
       { title: "Permanent Jobs", url: "/professional/permanent-jobs", icon: Building2 },
-      { title: "Banned Offices", url: "/professional/banned-offices", icon: Ban },
+      { title: "Hidden Jobs", url: "/professional/banned-offices", icon: Ban },
     ],
   },
   { title: "Job History", url: "/professional/job-history", icon: History },

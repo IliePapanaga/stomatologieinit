@@ -59,9 +59,10 @@ const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: strin
 function PermanentJobsPage() {
   const postings = useAppStore((s) => s.jobPostings);
   const banned = useAppStore((s) => s.bannedPracticeIds);
+  const hidden = useAppStore((s) => s.hiddenPostingIds);
   const applied = useAppStore((s) => s.appliedPostingIds);
   const apply = useAppStore((s) => s.applyToPosting);
-  const banPractice = useAppStore((s) => s.banPractice);
+  const hidePosting = useAppStore((s) => s.hidePosting);
 
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortMode>("smart");
@@ -76,11 +77,12 @@ function PermanentJobsPage() {
           p.kind === "Permanent" &&
           p.status === "Open" &&
           !banned.includes(p.practiceId) &&
+          !hidden.includes(p.id) &&
           (q
             ? `${p.title} ${p.specialty} ${p.subcategory}`.toLowerCase().includes(q.toLowerCase())
             : true)
       ),
-    [postings, banned, q]
+    [postings, banned, hidden, q]
   );
 
   // Sorted list — reactive, auto-applies on sort change
@@ -242,10 +244,8 @@ function PermanentJobsPage() {
                       size="sm"
                       variant="ghost"
                       onClick={() => {
-                        banPractice(p.practiceId);
-                        toast("Practice hidden", {
-                          description: `${practice?.name ?? "Practice"} blocked from your feed.`,
-                        });
+                        hidePosting(p.id);
+                        toast("Job hidden", { description: `"${p.title}" removed from your feed.` });
                       }}
                     >
                       <Ban className="h-3.5 w-3.5" />

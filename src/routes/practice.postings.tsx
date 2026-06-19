@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Briefcase,
   Clock4,
@@ -9,6 +9,9 @@ import {
   CalendarDays,
   Search,
   Sparkles,
+  DollarSign,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +37,15 @@ export const Route = createFileRoute("/practice/postings")({
   component: PostingsPage,
 });
 
+type SortMode = "match" | "date" | "applicants" | "pay";
+
+const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: string }[] = [
+  { id: "match",      label: "Best match",  icon: Sparkles,   desc: "Highest candidate match score first" },
+  { id: "applicants", label: "Applicants",  icon: Users,      desc: "Most applicants first" },
+  { id: "pay",        label: "Pay",         icon: DollarSign, desc: "Highest pay first" },
+  { id: "date",       label: "Newest",      icon: CalendarDays, desc: "Most recently created" },
+];
+
 const formatSub = (s: ProfessionalSubcategory) =>
   s.replace(/([A-Z])/g, " $1").trim();
 
@@ -53,6 +65,7 @@ function PostingsPage() {
   const [tab, setTab] = useState<"Permanent" | "Temporary">("Permanent");
   const [q, setQ] = useState("");
   const [spaceFilter, setSpaceFilter] = useState<"All" | "Current" | "Full" | "Past">("All");
+  const [sort, setSort] = useState<SortMode>("match");
 
   const filtered = useMemo(() => {
     if (!data) return [];
@@ -66,7 +79,7 @@ function PostingsPage() {
         const endDate = p.endDate ? new Date(p.endDate).getTime() : new Date(p.startDate).getTime() + 86400000;
         const isPast = endDate < now;
         if (spaceFilter === "Past") return isPast;
-        if (isPast) return false; // if it's not past filter, exclude past events from Current/Full
+        if (isPast) return false;
         const spotsLeft = p.workingSpaces - (p.hiredCandidateIds?.length || 0);
         if (spaceFilter === "Full") return spotsLeft <= 0;
         if (spaceFilter === "Current") return spotsLeft > 0;
@@ -80,6 +93,21 @@ function PostingsPage() {
             p.subcategory.toLowerCase().includes(term)
       );
   }, [data, tab, q, spaceFilter]);
+
+  const sorted = useMemo(() => {
+    const list = [...filtered];
+    switch (sort) {
+      case "match":      return list.sort((a, b) => b.matchPercentage - a.matchPercentage);
+      case "applicants": return list.sort((a, b) => b.applicantsCount - a.applicantsCount);
+      case "pay":        return list.sort((a, b) => {
+        const valA = a.kind === "Temporary" ? (a as { hourlyRate: number }).hourlyRate : (a as { salaryRange: { max: number } }).salaryRange.max;
+        const valB = b.kind === "Temporary" ? (b as { hourlyRate: number }).hourlyRate : (b as { salaryRange: { max: number } }).salaryRange.max;
+        return valB - valA;
+      });
+      case "date":       return list.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+      default:           return list;
+    }
+  }, [filtered, sort]);
 
   const counts = useMemo(() => {
     const perm = data?.filter((p) => p.kind === "Permanent").length ?? 0;
@@ -117,7 +145,7 @@ function PostingsPage() {
               </Badge>
             </TabsTrigger>
           </TabsList>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-3">
             <Select value={spaceFilter} onValueChange={(v) => setSpaceFilter(v as any)}>
               <SelectTrigger className="w-[120px]"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -139,16 +167,42 @@ function PostingsPage() {
           </div>
         </div>
 
+        {/* Sort bar */}
+        <div className="flex flex-wrap items-center gap-2 mt-2">
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Sort by</span>
+          <div className="flex flex-wrap gap-1.5">
+            {sortModes.map((m) => {
+              const active = sort === m.id;
+              return (
+                <button
+                  key={m.id}
+                  title={m.desc}
+                  onClick={() => setSort(m.id)}
+                  className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
+                    active
+                      ? "border-primary/50 bg-primary/10 text-primary shadow-sm"
+                      : "border-border/60 bg-card text-muted-foreground hover:text-foreground hover:border-border"
+                  }`}
+                >
+                  <m.icon className="h-3.5 w-3.5" />
+                  {m.label}
+                  {active && <Zap className="h-3 w-3 text-primary/70" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <TabsContent value="Permanent" className="mt-5">
           <PostingsList
-            postings={filtered as PermanentJobPosting[]}
+            postings={sorted as PermanentJobPosting[]}
             loading={isLoading}
             empty="No permanent postings yet"
           />
         </TabsContent>
         <TabsContent value="Temporary" className="mt-5">
           <PostingsList
-            postings={filtered as TemporaryJobPosting[]}
+            postings={sorted as TemporaryJobPosting[]}
             loading={isLoading}
             empty="No temporary shifts posted"
           />

@@ -125,7 +125,7 @@ export function Topbar() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={() => setProfileOpen(true)}>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Practice settings</DropdownMenuItem>
+              <DropdownMenuItem>Owner settings</DropdownMenuItem>
               <DropdownMenuItem>Billing</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={onLogout} className="text-destructive focus:text-destructive">

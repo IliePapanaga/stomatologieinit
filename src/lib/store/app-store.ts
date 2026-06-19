@@ -285,11 +285,13 @@ interface AppState {
   // Professional state
   professionalProfile: ProfessionalProfile;
   bannedPracticeIds: string[];
+  hiddenPostingIds: string[];
   appliedPostingIds: string[];
   jobHistory: JobHistoryEntry[];
   practiceReviews: PracticeReview[];
   practiceOwnerReviews: PracticeOwnerReview[];
   activeSosRequests: SosRequest[];
+  suspendedUserIds: string[];
 
   // auth
   findUserByEmail: (email: string) => AppUser | undefined;
@@ -305,8 +307,12 @@ interface AppState {
   removePosting: (id: string) => void;
 
   applyToPosting: (postingId: string) => void;
+  hidePosting: (postingId: string) => void;
+  unhidePosting: (postingId: string) => void;
   banPractice: (practiceId: string) => void;
   unbanPractice: (practiceId: string) => void;
+  suspendUser: (userId: string) => void;
+  unsuspendUser: (userId: string) => void;
   updateProfile: (patch: Partial<ProfessionalProfile>) => void;
   updateCurrentUser: (patch: Partial<AppUser>) => void;
   toggleSpecialty: (sub: ProfessionalSubcategory) => void;
@@ -334,11 +340,13 @@ export const useAppStore = create<AppState>()(
 
       professionalProfile: initialProfile,
       bannedPracticeIds: [],
+      hiddenPostingIds: [],
       appliedPostingIds: [],
       jobHistory: initialHistory,
       practiceReviews: [],
       practiceOwnerReviews: [],
       activeSosRequests: [],
+      suspendedUserIds: [],
 
       findUserByEmail: (email) =>
         get().users.find((u) => u.email.trim().toLowerCase() === email.trim().toLowerCase()),
@@ -432,6 +440,13 @@ export const useAppStore = create<AppState>()(
         if (list.includes(postingId)) return;
         set({ appliedPostingIds: [...list, postingId] });
       },
+      hidePosting: (postingId) => {
+        const list = get().hiddenPostingIds;
+        if (list.includes(postingId)) return;
+        set({ hiddenPostingIds: [...list, postingId] });
+      },
+      unhidePosting: (postingId) =>
+        set({ hiddenPostingIds: get().hiddenPostingIds.filter((id) => id !== postingId) }),
       banPractice: (practiceId) => {
         const list = get().bannedPracticeIds;
         if (list.includes(practiceId)) return;
@@ -439,6 +454,13 @@ export const useAppStore = create<AppState>()(
       },
       unbanPractice: (practiceId) =>
         set({ bannedPracticeIds: get().bannedPracticeIds.filter((p) => p !== practiceId) }),
+      suspendUser: (userId) => {
+        const list = get().suspendedUserIds;
+        if (list.includes(userId)) return;
+        set({ suspendedUserIds: [...list, userId] });
+      },
+      unsuspendUser: (userId) =>
+        set({ suspendedUserIds: get().suspendedUserIds.filter((id) => id !== userId) }),
       updateProfile: (patch) =>
         set({ professionalProfile: { ...get().professionalProfile, ...patch } }),
       updateCurrentUser: (patch) => {
@@ -575,7 +597,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "mdd-app-store",
-      version: 5,
+      version: 6,
       storage: createJSONStorage(() => {
         if (typeof window === "undefined") {
           return {
@@ -596,11 +618,13 @@ export const useAppStore = create<AppState>()(
           jobPostings: mockPostings,
           professionalProfile: { ...initialProfile, ...(state.professionalProfile ?? {}) },
           bannedPracticeIds: Array.isArray(state.bannedPracticeIds) ? state.bannedPracticeIds : [],
+          hiddenPostingIds: Array.isArray(state.hiddenPostingIds) ? state.hiddenPostingIds : [],
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
           jobHistory: Array.isArray(state.jobHistory) ? state.jobHistory : initialHistory,
           practiceReviews: Array.isArray(state.practiceReviews) ? state.practiceReviews : [],
           practiceOwnerReviews: Array.isArray(state.practiceOwnerReviews) ? state.practiceOwnerReviews : [],
           activeSosRequests: Array.isArray(state.activeSosRequests) ? state.activeSosRequests : [],
+          suspendedUserIds: Array.isArray(state.suspendedUserIds) ? state.suspendedUserIds : [],
         } as AppState;
       },
       partialize: (s) => ({
@@ -610,11 +634,13 @@ export const useAppStore = create<AppState>()(
         jobPostings: s.jobPostings,
         professionalProfile: s.professionalProfile,
         bannedPracticeIds: s.bannedPracticeIds,
+        hiddenPostingIds: s.hiddenPostingIds,
         appliedPostingIds: s.appliedPostingIds,
         jobHistory: s.jobHistory,
         practiceReviews: s.practiceReviews,
         practiceOwnerReviews: s.practiceOwnerReviews,
         activeSosRequests: s.activeSosRequests,
+        suspendedUserIds: s.suspendedUserIds,
       }),
     }
   )
