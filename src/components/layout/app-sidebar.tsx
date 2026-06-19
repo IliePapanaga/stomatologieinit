@@ -59,15 +59,17 @@ export function AppSidebar() {
                       tooltip={item.title}
                       className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground"
                     >
-                      <Link 
-                        to={item.url} 
+                      <Link
+                        to={item.url}
                         className="flex items-center gap-2.5"
                         onClick={() => {
                           if (isMobile) setOpenMobile(false);
                         }}
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-sm">{t(item.title.toLowerCase())}</span>}
+                        {!collapsed && (
+                          <span className="text-sm">{t(item.title.toLowerCase())}</span>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -80,7 +82,9 @@ export function AppSidebar() {
       <SidebarFooter className="flex flex-col gap-2 pb-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}>
+            <SidebarMenuButton
+              onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}
+            >
               <span className="text-base leading-none flex items-center justify-center w-4 shrink-0">
                 {i18n.language === "en" ? "🇪🇸" : "🇺🇸"}
               </span>

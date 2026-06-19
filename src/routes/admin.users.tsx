@@ -45,6 +45,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import type { UserRole } from "@/lib/types/mdd";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin/users")({
   component: UsersPage,
@@ -62,18 +64,126 @@ interface AdminUser {
 }
 
 const baseUsers: AdminUser[] = [
-  { id: "u_001", firstName: "Maya", lastName: "Chen", email: "maya@brightsidedental.com", role: "PracticeOwner", tenant: "Brightside Dental Group", status: "Active", lastSeen: "2m ago" },
-  { id: "u_002", firstName: "Amelia", lastName: "Brooks", email: "amelia@example.com", role: "Professional", tenant: "—", status: "Active", lastSeen: "14m ago" },
-  { id: "u_003", firstName: "Noah", lastName: "Patel", email: "noah@example.com", role: "Professional", tenant: "—", status: "Pending", lastSeen: "3h ago" },
-  { id: "u_004", firstName: "Alex", lastName: "Chen", email: "achen@mdd.health", role: "SystemAdmin", tenant: "MDD HQ", status: "Active", lastSeen: "1m ago" },
-  { id: "u_005", firstName: "Sofia", lastName: "Nguyen", email: "sofia@northpoint.dental", role: "PracticeOwner", tenant: "Northpoint Dental", status: "Active", lastSeen: "1d ago" },
-  { id: "u_006", firstName: "Liam", lastName: "Okafor", email: "liam@example.com", role: "Professional", tenant: "—", status: "Suspended", lastSeen: "9d ago" },
-  { id: "u_007", firstName: "Zara", lastName: "Reyes", email: "zara@example.com", role: "Professional", tenant: "—", status: "Active", lastSeen: "27m ago" },
-  { id: "u_008", firstName: "Ethan", lastName: "Kim", email: "ethan@summit.dental", role: "PracticeOwner", tenant: "Summit Dental Care", status: "Active", lastSeen: "4h ago" },
-  { id: "u_009", firstName: "Priya", lastName: "Nair", email: "priya@brightsidedental.com", role: "PracticeOwner", tenant: "Brightside Dental Group", status: "Active", lastSeen: "12m ago" },
-  { id: "u_010", firstName: "Sam", lastName: "Johnson", email: "sjohnson@mdd.health", role: "SuperAdmin", tenant: "MDD HQ", status: "Active", lastSeen: "just now" },
-  { id: "u_011", firstName: "Hana", lastName: "Suzuki", email: "hana@example.com", role: "Professional", tenant: "—", status: "Active", lastSeen: "2h ago" },
-  { id: "u_012", firstName: "Marcus", lastName: "Diaz", email: "marcus@coastal.dental", role: "PracticeOwner", tenant: "Coastal Smiles", status: "Pending", lastSeen: "—" },
+  {
+    id: "u_001",
+    firstName: "Maya",
+    lastName: "Chen",
+    email: "maya@brightsidedental.com",
+    role: "PracticeOwner",
+    tenant: "Brightside Dental Group",
+    status: "Active",
+    lastSeen: "2m ago",
+  },
+  {
+    id: "u_002",
+    firstName: "Amelia",
+    lastName: "Brooks",
+    email: "amelia@example.com",
+    role: "Professional",
+    tenant: "—",
+    status: "Active",
+    lastSeen: "14m ago",
+  },
+  {
+    id: "u_003",
+    firstName: "Noah",
+    lastName: "Patel",
+    email: "noah@example.com",
+    role: "Professional",
+    tenant: "—",
+    status: "Pending",
+    lastSeen: "3h ago",
+  },
+  {
+    id: "u_004",
+    firstName: "Alex",
+    lastName: "Chen",
+    email: "achen@mdd.health",
+    role: "SystemAdmin",
+    tenant: "MDD HQ",
+    status: "Active",
+    lastSeen: "1m ago",
+  },
+  {
+    id: "u_005",
+    firstName: "Sofia",
+    lastName: "Nguyen",
+    email: "sofia@northpoint.dental",
+    role: "PracticeOwner",
+    tenant: "Northpoint Dental",
+    status: "Active",
+    lastSeen: "1d ago",
+  },
+  {
+    id: "u_006",
+    firstName: "Liam",
+    lastName: "Okafor",
+    email: "liam@example.com",
+    role: "Professional",
+    tenant: "—",
+    status: "Suspended",
+    lastSeen: "9d ago",
+  },
+  {
+    id: "u_007",
+    firstName: "Zara",
+    lastName: "Reyes",
+    email: "zara@example.com",
+    role: "Professional",
+    tenant: "—",
+    status: "Active",
+    lastSeen: "27m ago",
+  },
+  {
+    id: "u_008",
+    firstName: "Ethan",
+    lastName: "Kim",
+    email: "ethan@summit.dental",
+    role: "PracticeOwner",
+    tenant: "Summit Dental Care",
+    status: "Active",
+    lastSeen: "4h ago",
+  },
+  {
+    id: "u_009",
+    firstName: "Priya",
+    lastName: "Nair",
+    email: "priya@brightsidedental.com",
+    role: "PracticeOwner",
+    tenant: "Brightside Dental Group",
+    status: "Active",
+    lastSeen: "12m ago",
+  },
+  {
+    id: "u_010",
+    firstName: "Sam",
+    lastName: "Johnson",
+    email: "sjohnson@mdd.health",
+    role: "SuperAdmin",
+    tenant: "MDD HQ",
+    status: "Active",
+    lastSeen: "just now",
+  },
+  {
+    id: "u_011",
+    firstName: "Hana",
+    lastName: "Suzuki",
+    email: "hana@example.com",
+    role: "Professional",
+    tenant: "—",
+    status: "Active",
+    lastSeen: "2h ago",
+  },
+  {
+    id: "u_012",
+    firstName: "Marcus",
+    lastName: "Diaz",
+    email: "marcus@coastal.dental",
+    role: "PracticeOwner",
+    tenant: "Coastal Smiles",
+    status: "Pending",
+    lastSeen: "—",
+  },
 ];
 
 const roleStyles: Record<UserRole, string> = {
@@ -98,10 +208,18 @@ const statusStyles: Record<AdminUser["status"], string> = {
 
 // Role label shown in UI (PracticeOwner → Owner)
 const roleLabel: Record<UserRole, string> = {
-  SuperAdmin: "SuperAdmin",
-  SystemAdmin: "SystemAdmin",
-  PracticeOwner: "Owner",
-  Professional: "Professional",
+  get SuperAdmin() {
+    return i18n.t("super_admin");
+  },
+  get SystemAdmin() {
+    return i18n.t("system_admin");
+  },
+  get PracticeOwner() {
+    return i18n.t("owner_role");
+  },
+  get Professional() {
+    return i18n.t("professional_role");
+  },
 };
 
 function UsersPage() {
@@ -116,6 +234,7 @@ function UsersPage() {
   const unsuspendUser = useAppStore((s) => s.unsuspendUser);
   const impersonateAction = useAppStore((s) => s.impersonate);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Merge store-suspended status with base users
   const mockUsers = useMemo<AdminUser[]>(
@@ -126,10 +245,10 @@ function UsersPage() {
           suspendedUserIds.includes(u.id) && u.status !== "Pending"
             ? "Suspended"
             : u.status === "Suspended" && !suspendedUserIds.includes(u.id)
-            ? u.status // keep original "Suspended" if not overridden
-            : u.status,
+              ? u.status // keep original "Suspended" if not overridden
+              : u.status,
       })),
-    [suspendedUserIds]
+    [suspendedUserIds],
   );
 
   const filtered = useMemo(() => {
@@ -150,8 +269,12 @@ function UsersPage() {
     if (!impersonateTarget) return;
     const target = impersonateTarget;
     const targetRole = target.role as AppRole;
-    if (targetRole !== "PracticeOwner" && targetRole !== "Professional" && targetRole !== "SuperAdmin") {
-      toast.error("Cannot impersonate this role yet");
+    if (
+      targetRole !== "PracticeOwner" &&
+      targetRole !== "Professional" &&
+      targetRole !== "SuperAdmin"
+    ) {
+      toast.error(t("cannot_impersonate"));
       setImpersonateTarget(null);
       return;
     }
@@ -165,8 +288,8 @@ function UsersPage() {
       avatarInitials: `${target.firstName[0]}${target.lastName[0]}`,
     };
     impersonateAction(appUser);
-    toast.success("Impersonation session started", {
-      description: `Signed in as ${target.firstName} ${target.lastName}. All actions are audited.`,
+    toast.success(t("impersonation_started"), {
+      description: `${t("signed_in_as", { name: target.firstName + " " + target.lastName })} ${t("all_actions_audited")}`,
     });
     setImpersonateTarget(null);
     navigate({ to: dashboardForRole(targetRole), replace: true });
@@ -177,10 +300,14 @@ function UsersPage() {
     const isSuspended = suspendTarget.status === "Suspended";
     if (isSuspended) {
       unsuspendUser(suspendTarget.id);
-      toast.success(`Account restored`, { description: `${suspendTarget.firstName} ${suspendTarget.lastName} is active again.` });
+      toast.success(t("account_restored"), {
+        description: `${suspendTarget.firstName} ${suspendTarget.lastName} ${t("is_active_again")}`,
+      });
     } else {
       suspendUser(suspendTarget.id);
-      toast(`Account suspended`, { description: `${suspendTarget.firstName} ${suspendTarget.lastName} can no longer log in.` });
+      toast(t("account_suspended"), {
+        description: `${suspendTarget.firstName} ${suspendTarget.lastName} ${t("can_no_longer_login")}`,
+      });
     }
     setSuspendTarget(null);
   };
@@ -189,14 +316,14 @@ function UsersPage() {
     <div className="space-y-5 p-4 md:p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">User Management</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Users</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage roles, suspend accounts, and start audited impersonation sessions.
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+            {t("user_management")}
           </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("users")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("users_desc")}</p>
         </div>
         <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Mail className="h-4 w-4" /> Invite user
+          <Mail className="h-4 w-4" /> {t("invite_user")}
         </Button>
       </header>
 
@@ -207,31 +334,38 @@ function UsersPage() {
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search name, email, tenant…"
+            placeholder={t("search_users")}
             className="pl-9"
           />
         </div>
         <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as typeof roleFilter)}>
-          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All roles</SelectItem>
-            <SelectItem value="SuperAdmin">SuperAdmin</SelectItem>
-            <SelectItem value="SystemAdmin">SystemAdmin</SelectItem>
-            <SelectItem value="PracticeOwner">Owner</SelectItem>
-            <SelectItem value="Professional">Professional</SelectItem>
+            <SelectItem value="All">{t("all_roles")}</SelectItem>
+            <SelectItem value="SuperAdmin">{t("super_admin")}</SelectItem>
+            <SelectItem value="SystemAdmin">{t("system_admin")}</SelectItem>
+            <SelectItem value="PracticeOwner">{t("owner_role")}</SelectItem>
+            <SelectItem value="Professional">{t("professional_role")}</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
-          <SelectTrigger className="w-[130px]"><SelectValue /></SelectTrigger>
+        <Select
+          value={statusFilter}
+          onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}
+        >
+          <SelectTrigger className="w-[130px]">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All status</SelectItem>
-            <SelectItem value="Active">Active</SelectItem>
-            <SelectItem value="Pending">Pending</SelectItem>
-            <SelectItem value="Suspended">Suspended</SelectItem>
+            <SelectItem value="All">{t("all_status")}</SelectItem>
+            <SelectItem value="Active">{t("active")}</SelectItem>
+            <SelectItem value="Pending">{t("pending")}</SelectItem>
+            <SelectItem value="Suspended">{t("suspended")}</SelectItem>
           </SelectContent>
         </Select>
         <span className="ml-auto text-xs text-muted-foreground">
-          {filtered.length} of {mockUsers.length} users
+          {filtered.length} {t("of")} {mockUsers.length} {t("users").toLowerCase()}
         </span>
       </div>
 
@@ -251,18 +385,23 @@ function UsersPage() {
               <Card className="p-4 space-y-3">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarFallback className={`text-xs font-semibold ${isSuspended ? "bg-rose-500/20 text-rose-600 dark:text-rose-400" : "bg-primary text-primary-foreground"}`}>
-                      {u.firstName[0]}{u.lastName[0]}
+                    <AvatarFallback
+                      className={`text-xs font-semibold ${isSuspended ? "bg-rose-500/20 text-rose-600 dark:text-rose-400" : "bg-primary text-primary-foreground"}`}
+                    >
+                      {u.firstName[0]}
+                      {u.lastName[0]}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <p className={`text-sm font-medium ${isSuspended ? "line-through text-muted-foreground" : ""}`}>
+                    <p
+                      className={`text-sm font-medium ${isSuspended ? "line-through text-muted-foreground" : ""}`}
+                    >
                       {u.firstName} {u.lastName}
                     </p>
                     <p className="text-xs text-muted-foreground truncate">{u.email}</p>
                   </div>
                   <Badge variant="outline" className={statusStyles[u.status]}>
-                    {u.status}
+                    {t(u.status.toLowerCase() as any)}
                   </Badge>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
@@ -281,7 +420,7 @@ function UsersPage() {
                     className="flex-1 gap-1.5 border-primary/40 text-primary hover:bg-primary/10"
                   >
                     <KeyRound className="h-3.5 w-3.5" />
-                    Impersonate
+                    {t("impersonate")}
                   </Button>
                   <Button
                     size="sm"
@@ -291,9 +430,13 @@ function UsersPage() {
                     className={`flex-1 gap-1.5 ${isSuspended ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10" : "border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10"}`}
                   >
                     {isSuspended ? (
-                      <><CheckCircle2 className="h-3.5 w-3.5" /> Restore</>
+                      <>
+                        <CheckCircle2 className="h-3.5 w-3.5" /> {t("restore")}
+                      </>
                     ) : (
-                      <><Ban className="h-3.5 w-3.5" /> Suspend</>
+                      <>
+                        <Ban className="h-3.5 w-3.5" /> {t("suspend")}
+                      </>
                     )}
                   </Button>
                 </div>
@@ -303,7 +446,7 @@ function UsersPage() {
         })}
         {filtered.length === 0 && (
           <div className="rounded-xl border border-dashed border-border/60 p-8 text-center text-sm text-muted-foreground">
-            No users match your filters.
+            {t("no_users_match")}
           </div>
         )}
       </div>
@@ -314,12 +457,24 @@ function UsersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/60 bg-muted/40">
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">User</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Role</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Tenant</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Last seen</th>
-                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Actions</th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("user")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("role")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("tenant")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("status")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("last_seen")}
+                </th>
+                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("actions")}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
@@ -338,12 +493,17 @@ function UsersPage() {
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
-                          <AvatarFallback className={`text-xs font-semibold ${isSuspended ? "bg-rose-500/20 text-rose-600 dark:text-rose-400" : "bg-primary text-primary-foreground"}`}>
-                            {u.firstName[0]}{u.lastName[0]}
+                          <AvatarFallback
+                            className={`text-xs font-semibold ${isSuspended ? "bg-rose-500/20 text-rose-600 dark:text-rose-400" : "bg-primary text-primary-foreground"}`}
+                          >
+                            {u.firstName[0]}
+                            {u.lastName[0]}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">
-                          <p className={`truncate text-sm font-medium ${isSuspended ? "line-through text-muted-foreground" : ""}`}>
+                          <p
+                            className={`truncate text-sm font-medium ${isSuspended ? "line-through text-muted-foreground" : ""}`}
+                          >
                             {u.firstName} {u.lastName}
                           </p>
                           <p className="truncate text-[11px] text-muted-foreground">{u.email}</p>
@@ -358,7 +518,7 @@ function UsersPage() {
                     <td className="px-5 py-3 text-sm text-muted-foreground">{u.tenant}</td>
                     <td className="px-5 py-3">
                       <Badge variant="outline" className={statusStyles[u.status]}>
-                        {u.status}
+                        {t(u.status.toLowerCase() as any)}
                       </Badge>
                     </td>
                     <td className="px-5 py-3 text-sm text-muted-foreground">{u.lastSeen}</td>
@@ -371,7 +531,7 @@ function UsersPage() {
                           onClick={() => setImpersonateTarget(u)}
                           className="h-8 gap-1.5 border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
                         >
-                          <KeyRound className="h-3.5 w-3.5" /> Impersonate
+                          <KeyRound className="h-3.5 w-3.5" /> {t("impersonate")}
                         </Button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -380,18 +540,31 @@ function UsersPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuItem><Mail className="mr-2 h-3.5 w-3.5" /> Send email</DropdownMenuItem>
-                            <DropdownMenuItem><UserCog className="mr-2 h-3.5 w-3.5" /> Edit role</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Mail className="mr-2 h-3.5 w-3.5" /> {t("send_email")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <UserCog className="mr-2 h-3.5 w-3.5" /> {t("edit_role")}
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               disabled={u.role === "SuperAdmin" || u.status === "Pending"}
                               onClick={() => setSuspendTarget(u)}
-                              className={isSuspended ? "text-emerald-600 dark:text-emerald-400 focus:text-emerald-600" : "text-destructive focus:text-destructive"}
+                              className={
+                                isSuspended
+                                  ? "text-emerald-600 dark:text-emerald-400 focus:text-emerald-600"
+                                  : "text-destructive focus:text-destructive"
+                              }
                             >
                               {isSuspended ? (
-                                <><CheckCircle2 className="mr-2 h-3.5 w-3.5" /> Restore account</>
+                                <>
+                                  <CheckCircle2 className="mr-2 h-3.5 w-3.5" />{" "}
+                                  {t("restore_account")}
+                                </>
                               ) : (
-                                <><Ban className="mr-2 h-3.5 w-3.5" /> Suspend account</>
+                                <>
+                                  <Ban className="mr-2 h-3.5 w-3.5" /> {t("suspend_account")}
+                                </>
                               )}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -404,7 +577,7 @@ function UsersPage() {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-sm text-muted-foreground">
-                    No users match your filters.
+                    {t("no_users_match")}
                   </td>
                 </tr>
               )}
@@ -414,31 +587,39 @@ function UsersPage() {
       </Card>
 
       {/* Impersonate dialog */}
-      <AlertDialog open={!!impersonateTarget} onOpenChange={(o) => !o && setImpersonateTarget(null)}>
+      <AlertDialog
+        open={!!impersonateTarget}
+        onOpenChange={(o) => !o && setImpersonateTarget(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-primary" /> Start impersonation session
+              <KeyRound className="h-4 w-4 text-primary" /> {t("start_impersonation")}
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-3">
                 <p>
-                  You're about to act as{" "}
+                  {t("acting_as")}{" "}
                   <span className="font-medium text-foreground">
                     {impersonateTarget?.firstName} {impersonateTarget?.lastName}
                   </span>{" "}
-                  ({roleLabel[impersonateTarget?.role as UserRole] ?? impersonateTarget?.role}). Every action will be recorded in the audit log.
+                  ({roleLabel[impersonateTarget?.role as UserRole] ?? impersonateTarget?.role}).{" "}
+                  {t("impersonation_notice")}
                 </p>
                 <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300">
-                  Calls <code className="font-mono">ImpersonateController.start(userId)</code> · session auto-expires in 30 min.
+                  Calls <code className="font-mono">ImpersonateController.start(userId)</code> ·
+                  session auto-expires in 30 min.
                 </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmImpersonate} className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Start session
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmImpersonate}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {t("start_session")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -448,28 +629,40 @@ function UsersPage() {
       <AlertDialog open={!!suspendTarget} onOpenChange={(o) => !o && setSuspendTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className={`flex items-center gap-2 ${suspendTarget?.status === "Suspended" ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
+            <AlertDialogTitle
+              className={`flex items-center gap-2 ${suspendTarget?.status === "Suspended" ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}
+            >
               {suspendTarget?.status === "Suspended" ? (
-                <><CheckCircle2 className="h-4 w-4" /> Restore account</>
+                <>
+                  <CheckCircle2 className="h-4 w-4" /> {t("restore_account")}
+                </>
               ) : (
-                <><Ban className="h-4 w-4" /> Suspend account</>
+                <>
+                  <Ban className="h-4 w-4" /> {t("suspend_account")}
+                </>
               )}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {suspendTarget?.status === "Suspended"
-                ? `Restore access for ${suspendTarget?.firstName} ${suspendTarget?.lastName}? They will be able to log in again immediately.`
-                : `Suspend ${suspendTarget?.firstName} ${suspendTarget?.lastName}? They will immediately lose access to the platform.`}
+                ? t("restore_user_confirm", {
+                    name: `${suspendTarget?.firstName} ${suspendTarget?.lastName}`,
+                  })
+                : t("suspend_user_confirm", {
+                    name: `${suspendTarget?.firstName} ${suspendTarget?.lastName}`,
+                  })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmSuspend}
-              className={suspendTarget?.status === "Suspended"
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "bg-destructive text-destructive-foreground hover:bg-destructive/90"}
+              className={
+                suspendTarget?.status === "Suspended"
+                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                  : "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              }
             >
-              {suspendTarget?.status === "Suspended" ? "Restore access" : "Suspend account"}
+              {suspendTarget?.status === "Suspended" ? t("restore_access") : t("suspend_account")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

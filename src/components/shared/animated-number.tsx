@@ -9,7 +9,9 @@ interface Props {
 
 export function AnimatedNumber({ value, duration = 0.9, format }: Props) {
   const mv = useMotionValue(0);
-  const rounded = useTransform(mv, (latest) => (format ? format(latest) : Math.round(latest).toString()));
+  const rounded = useTransform(mv, (latest) =>
+    format ? format(latest) : Math.round(latest).toString(),
+  );
 
   useEffect(() => {
     const controls = animate(mv, value, { duration, ease: "easeOut" });

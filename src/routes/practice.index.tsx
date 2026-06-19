@@ -6,7 +6,11 @@ export const Route = createFileRoute("/practice/")({
   head: () => ({
     meta: [
       { title: "Owner Dashboard · MDD Dental Staffing" },
-      { name: "description", content: "Real-time view of postings, nearby pros, attendance, and billing for your dental practice." },
+      {
+        name: "description",
+        content:
+          "Real-time view of postings, nearby pros, attendance, and billing for your dental practice.",
+      },
     ],
   }),
   loader: ({ context }) => {

@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePaymentMethods } from "@/lib/hooks/practice";
 import { mockPayments } from "@/lib/mock";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/practice/billing")({
   component: BillingPage,
@@ -33,23 +34,49 @@ interface JasperReport {
 }
 
 const reports: JasperReport[] = [
-  { id: "rpt_001", name: "Monthly payments_report.pdf", period: "June 2026", size: "184 KB", generatedAt: "2026-06-15" },
-  { id: "rpt_002", name: "Monthly payments_report.pdf", period: "May 2026", size: "212 KB", generatedAt: "2026-05-31" },
-  { id: "rpt_003", name: "Quarterly placements_summary.pdf", period: "Q2 2026", size: "446 KB", generatedAt: "2026-06-01" },
-  { id: "rpt_004", name: "Annual tax statement_1099.pdf", period: "FY 2025", size: "98 KB", generatedAt: "2026-01-12" },
+  {
+    id: "rpt_001",
+    name: "Monthly payments_report.pdf",
+    period: "June 2026",
+    size: "184 KB",
+    generatedAt: "2026-06-15",
+  },
+  {
+    id: "rpt_002",
+    name: "Monthly payments_report.pdf",
+    period: "May 2026",
+    size: "212 KB",
+    generatedAt: "2026-05-31",
+  },
+  {
+    id: "rpt_003",
+    name: "Quarterly placements_summary.pdf",
+    period: "Q2 2026",
+    size: "446 KB",
+    generatedAt: "2026-06-01",
+  },
+  {
+    id: "rpt_004",
+    name: "Annual tax statement_1099.pdf",
+    period: "FY 2025",
+    size: "98 KB",
+    generatedAt: "2026-01-12",
+  },
 ];
 
 function BillingPage() {
+  const { t } = useTranslation();
   return (
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Secure payment processing powered by PrimeRate. All card data is tokenized and PCI-compliant.
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("billing_desc")}</p>
         </div>
-        <Badge variant="outline" className="gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <Badge
+          variant="outline"
+          className="gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+        >
           <ShieldCheck className="h-3.5 w-3.5" />
           PCI DSS Level 1
         </Badge>
@@ -70,6 +97,7 @@ function BillingPage() {
 }
 
 function PrimeRateDropIn() {
+  const { t } = useTranslation();
   return (
     <Card className="relative overflow-hidden border-border/70 shadow-sm">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-brand" />
@@ -77,15 +105,13 @@ function PrimeRateDropIn() {
         <div>
           <CardTitle className="flex items-center gap-2 text-base">
             <Lock className="h-4 w-4 text-primary" />
-            Add payment method
+            {t("add_payment_method")}
           </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Hosted drop-in iframe · card data never touches our servers
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("add_payment_method_desc")}</p>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-          <span>Secured by PrimeRate</span>
+          <span>{t("secured_by")} PrimeRate</span>
         </div>
       </CardHeader>
       <CardContent>
@@ -95,27 +121,27 @@ function PrimeRateDropIn() {
         >
           {/* Decorative mock of the hosted iframe */}
           <div className="mx-auto max-w-md space-y-4">
-            <MockField label="Cardholder name" placeholder="Maya Chen" />
-            <MockField label="Card number" placeholder="1234 5678 9012 3456" right="VISA" />
+            <MockField label={t("cardholder_name")} placeholder="Maya Chen" />
+            <MockField label={t("card_number")} placeholder="1234 5678 9012 3456" right="VISA" />
             <div className="grid grid-cols-2 gap-3">
-              <MockField label="Expiry" placeholder="MM / YY" />
-              <MockField label="CVC" placeholder="•••" />
+              <MockField label={t("expiry")} placeholder="MM / YY" />
+              <MockField label={t("cvc")} placeholder="•••" />
             </div>
             <Button
               className="w-full bg-gradient-brand text-primary-foreground"
               onClick={() =>
-                toast.success("Tokenization request sent", {
-                  description: "PrimeRate returned a vault token. Card added.",
+                toast.success(t("tokenization_sent"), {
+                  description: t("tokenization_desc"),
                 })
               }
             >
               <Plus className="h-4 w-4" />
-              Tokenize & save to vault
+              {t("tokenize_save")}
             </Button>
           </div>
           <div className="mt-6 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
             <span className="h-px w-8 bg-border" />
-            iframe mount point · #primerate-dropin
+            {t("iframe_mount_point")} · #primerate-dropin
             <span className="h-px w-8 bg-border" />
           </div>
         </div>
@@ -124,7 +150,15 @@ function PrimeRateDropIn() {
   );
 }
 
-function MockField({ label, placeholder, right }: { label: string; placeholder: string; right?: string }) {
+function MockField({
+  label,
+  placeholder,
+  right,
+}: {
+  label: string;
+  placeholder: string;
+  right?: string;
+}) {
   return (
     <div className="space-y-1.5">
       <label className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -132,7 +166,11 @@ function MockField({ label, placeholder, right }: { label: string; placeholder: 
       </label>
       <div className="flex h-10 items-center justify-between rounded-lg border border-border/70 bg-background px-3 text-sm text-muted-foreground/70">
         <span>{placeholder}</span>
-        {right && <span className="text-[10px] font-bold tracking-wider text-muted-foreground">{right}</span>}
+        {right && (
+          <span className="text-[10px] font-bold tracking-wider text-muted-foreground">
+            {right}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -140,21 +178,26 @@ function MockField({ label, placeholder, right }: { label: string; placeholder: 
 
 function Vault() {
   const { data: methods, isLoading } = usePaymentMethods();
+  const { t } = useTranslation();
 
   return (
     <Card className="border-border/70 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
         <div>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Lock className="h-4 w-4 text-primary" /> Vault
+            <Lock className="h-4 w-4 text-primary" /> {t("vault")}
           </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">Tokenized payment methods</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("tokenized_methods")}</p>
         </div>
-        <Badge variant="secondary" className="text-[10px]">{methods?.length ?? 0} saved</Badge>
+        <Badge variant="secondary" className="text-[10px]">
+          {methods?.length ?? 0} {t("saved")}
+        </Badge>
       </CardHeader>
       <CardContent className="space-y-2">
         {isLoading
-          ? Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-16 rounded-xl" />
+            ))
           : methods?.map((pm, i) => (
               <motion.div
                 key={pm.id}
@@ -168,7 +211,11 @@ function Vault() {
                     pm.type === "ACH" ? "bg-secondary" : "bg-gradient-brand"
                   }`}
                 >
-                  {pm.type === "ACH" ? <Landmark className="h-4 w-4" /> : <CreditCard className="h-4 w-4" />}
+                  {pm.type === "ACH" ? (
+                    <Landmark className="h-4 w-4" />
+                  ) : (
+                    <CreditCard className="h-4 w-4" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">
@@ -186,14 +233,14 @@ function Vault() {
                     variant="outline"
                     className="border-emerald-500/40 bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400"
                   >
-                    <CheckCircle2 className="mr-1 h-3 w-3" /> Default
+                    <CheckCircle2 className="mr-1 h-3 w-3" /> {t("default")}
                   </Badge>
                 ) : (
                   <Button
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 opacity-0 transition group-hover:opacity-100"
-                    onClick={() => toast("Removed from vault")}
+                    onClick={() => toast(t("removed_from_vault"))}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -201,7 +248,7 @@ function Vault() {
               </motion.div>
             ))}
         <p className="pt-2 text-center text-[10px] uppercase tracking-wider text-muted-foreground/60">
-          Tokens stored at PrimeRate · never on our servers
+          {t("tokens_stored_primerate")}
         </p>
       </CardContent>
     </Card>
@@ -209,10 +256,11 @@ function Vault() {
 }
 
 function ReportsCard() {
+  const { t } = useTranslation();
   const downloadMock = (r: JasperReport) => {
     const blob = new Blob(
       [`JasperReports export\n${r.name}\nPeriod: ${r.period}\nGenerated: ${r.generatedAt}\n`],
-      { type: "application/pdf" }
+      { type: "application/pdf" },
     );
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -220,7 +268,7 @@ function ReportsCard() {
     a.download = r.name.replace(".pdf", `_${r.period.replace(/\s+/g, "_")}.pdf`);
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Report downloaded", { description: r.name });
+    toast.success(t("report_downloaded"), { description: r.name });
   };
 
   return (
@@ -228,9 +276,9 @@ function ReportsCard() {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
         <div>
           <CardTitle className="flex items-center gap-2 text-base">
-            <FileText className="h-4 w-4 text-primary" /> Reports
+            <FileText className="h-4 w-4 text-primary" /> {t("reports")}
           </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">JasperReports · auto-generated</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("reports_desc")}</p>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
@@ -261,16 +309,19 @@ function ReportsCard() {
 }
 
 function RecentPayments() {
+  const { t } = useTranslation();
   return (
     <Card className="border-border/70 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
         <div>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Receipt className="h-4 w-4 text-primary" /> Recent transactions
+            <Receipt className="h-4 w-4 text-primary" /> {t("recent_transactions")}
           </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">Last 30 days</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("last_30_days")}</p>
         </div>
-        <Button variant="ghost" size="sm" className="text-xs">View all</Button>
+        <Button variant="ghost" size="sm" className="text-xs">
+          {t("view_all")}
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="divide-y divide-border/60">
@@ -285,15 +336,25 @@ function RecentPayments() {
               <div className="flex items-center gap-3">
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-md ${
-                    p.method === "ACH" ? "bg-secondary text-secondary-foreground" : "bg-primary/10 text-primary"
+                    p.method === "ACH"
+                      ? "bg-secondary text-secondary-foreground"
+                      : "bg-primary/10 text-primary"
                   }`}
                 >
-                  {p.method === "ACH" ? <Landmark className="h-4 w-4" /> : <CreditCard className="h-4 w-4" />}
+                  {p.method === "ACH" ? (
+                    <Landmark className="h-4 w-4" />
+                  ) : (
+                    <CreditCard className="h-4 w-4" />
+                  )}
                 </div>
                 <div>
                   <p className="text-sm font-medium">{p.description}</p>
                   <p className="text-[11px] text-muted-foreground">
-                    {new Date(p.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    {new Date(p.date).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                     {" · "}
                     {p.gatewayId}
                   </p>
@@ -305,7 +366,7 @@ function RecentPayments() {
                   variant="outline"
                   className="mt-0.5 border-emerald-500/40 bg-emerald-500/10 text-[10px] text-emerald-600 dark:text-emerald-400"
                 >
-                  {p.status}
+                  {t(p.status.toLowerCase())}
                 </Badge>
               </div>
             </motion.div>

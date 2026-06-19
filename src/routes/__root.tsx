@@ -83,10 +83,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MDD · Dental Staffing Platform" },
-      { name: "description", content: "Modern dental staffing & recruitment — practice command center, live radar of nearby pros, instant SOS staffing." },
+      {
+        name: "description",
+        content:
+          "Modern dental staffing & recruitment — practice command center, live radar of nearby pros, instant SOS staffing.",
+      },
       { name: "author", content: "MDD" },
       { property: "og:title", content: "MDD · Dental Staffing Platform" },
-      { property: "og:description", content: "Practice command center, live radar of nearby pros, instant SOS staffing." },
+      {
+        property: "og:description",
+        content: "Practice command center, live radar of nearby pros, instant SOS staffing.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

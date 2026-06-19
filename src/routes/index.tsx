@@ -11,7 +11,12 @@ function RouteRedirect() {
   const currentUser = useAppStore((s) => s.currentUser);
 
   if (currentUser) {
-    return <Navigate to={dashboardForRole(currentUser.role) as "/practice" | "/professional" | "/admin"} replace />;
+    return (
+      <Navigate
+        to={dashboardForRole(currentUser.role) as "/practice" | "/professional" | "/admin"}
+        replace
+      />
+    );
   }
 
   return (
@@ -20,7 +25,9 @@ function RouteRedirect() {
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
           <Stethoscope className="h-6 w-6" />
         </div>
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-5xl">MDD Dental Staffing</h1>
+        <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-5xl">
+          MDD Dental Staffing
+        </h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
           Sign in to manage practice staffing, professional jobs, or admin operations.
         </p>

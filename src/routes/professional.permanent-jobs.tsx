@@ -23,6 +23,8 @@ import { mockLocations } from "@/lib/mock";
 import type { PermanentJobPosting } from "@/lib/types/mdd";
 import { toast } from "sonner";
 import { PracticeOwnerSheet } from "@/components/professional/practice-owner-sheet";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/permanent-jobs")({
   component: PermanentJobsPage,
@@ -41,17 +43,51 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number) {
   const dLng = ((lng2 - lng1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: string }[] = [
-  { id: "smart",    label: "Smart",    icon: Sparkles,   desc: "Weighted: match + salary + distance" },
-  { id: "distance", label: "Distance", icon: MapPin,     desc: "Closest jobs first" },
-  { id: "pay",      label: "Pay",      icon: DollarSign, desc: "Highest salary first" },
-  { id: "value",    label: "Value",    icon: TrendingUp, desc: "Best salary/mile ratio" },
+const sortModes = [
+  {
+    id: "smart" as SortMode,
+    get label() {
+      return i18n.t("smart");
+    },
+    icon: Sparkles,
+    get desc() {
+      return i18n.t("smart_perm_desc");
+    },
+  },
+  {
+    id: "distance" as SortMode,
+    get label() {
+      return i18n.t("distance");
+    },
+    icon: MapPin,
+    get desc() {
+      return i18n.t("distance_desc");
+    },
+  },
+  {
+    id: "pay" as SortMode,
+    get label() {
+      return i18n.t("pay");
+    },
+    icon: DollarSign,
+    get desc() {
+      return i18n.t("pay_perm_desc");
+    },
+  },
+  {
+    id: "value" as SortMode,
+    get label() {
+      return i18n.t("value");
+    },
+    icon: TrendingUp,
+    get desc() {
+      return i18n.t("value_perm_desc");
+    },
+  },
 ];
 
 // ─── page ────────────────────────────────────────────────────────────────────
@@ -68,6 +104,7 @@ function PermanentJobsPage() {
   const [sort, setSort] = useState<SortMode>("smart");
   const [selectedPracticeId, setSelectedPracticeId] = useState<string | null>(null);
   const [selectedPostingId, setSelectedPostingId] = useState<string | undefined>();
+  const { t } = useTranslation();
 
   // Filtered list
   const filtered = useMemo(
@@ -80,9 +117,9 @@ function PermanentJobsPage() {
           !hidden.includes(p.id) &&
           (q
             ? `${p.title} ${p.specialty} ${p.subcategory}`.toLowerCase().includes(q.toLowerCase())
-            : true)
+            : true),
       ),
-    [postings, banned, hidden, q]
+    [postings, banned, hidden, q],
   );
 
   // Sorted list — reactive, auto-applies on sort change
@@ -102,10 +139,7 @@ function PermanentJobsPage() {
 
       case "value":
         return [...withDist]
-          .sort(
-            (a, b) =>
-              b.posting.salaryRange.max / b.dist - a.posting.salaryRange.max / a.dist
-          )
+          .sort((a, b) => b.posting.salaryRange.max / b.dist - a.posting.salaryRange.max / a.dist)
           .map((x) => x.posting);
 
       case "smart":
@@ -130,18 +164,18 @@ function PermanentJobsPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">Assignments</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Permanent jobs</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Long-term placements with salary & benefits.
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+            {t("assignments")}
           </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("permanent_jobs")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("permanent_jobs_desc")}</p>
         </div>
         <div className="relative w-full max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search role…"
+            placeholder={t("search_role")}
             className="pl-9"
           />
         </div>
@@ -153,7 +187,7 @@ function PermanentJobsPage() {
       {list.length === 0 ? (
         <Card className="flex flex-col items-center gap-2 p-10 text-center text-sm text-muted-foreground">
           <Sparkles className="h-6 w-6 text-primary" />
-          No permanent jobs match your filters.
+          {t("no_perm_jobs")}
         </Card>
       ) : (
         <div className="space-y-3">
@@ -177,27 +211,32 @@ function PermanentJobsPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-sm font-semibold">{p.title}</h3>
-                      <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">
+                      <Badge
+                        variant="outline"
+                        className="border-primary/40 bg-primary/10 text-primary"
+                      >
                         {p.subcategory}
                       </Badge>
                       <Badge
                         variant="outline"
                         className="border-indigo-500/40 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
                       >
-                        {p.fullTime ? "Full-time" : "Part-time"}
+                        {p.fullTime ? t("full_time") : t("part_time")}
                       </Badge>
                     </div>
                     <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1.5">
                         <MapPin className="h-3 w-3" />
                         {practice?.name} · {loc?.address.city}
-                        {dist && ` · ${dist.toFixed(1)} mi`}
+                        {dist && ` · ${dist.toFixed(1)} ${t("mi_away").replace(" away", "")}`}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <CalendarRange className="h-3 w-3" />
-                        Start {new Date(p.startDate).toLocaleDateString()}
+                        {t("start_date")} {new Date(p.startDate).toLocaleDateString()}
                       </span>
-                      <span>Benefits: {p.benefits.slice(0, 3).join(" · ") || "—"}</span>
+                      <span>
+                        {t("benefits")}: {p.benefits.slice(0, 3).join(" · ") || "—"}
+                      </span>
                     </div>
                     {/* Sort highlight */}
                     {sort !== "smart" && dist && (
@@ -207,11 +246,16 @@ function PermanentJobsPage() {
                     )}
                   </div>
                   <div className="text-right">
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Salary</p>
-                    <p className="text-sm font-semibold">
-                      ${(p.salaryRange.min / 1000).toFixed(0)}k – ${(p.salaryRange.max / 1000).toFixed(0)}k
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t("salary")}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-primary">{p.matchPercentage}% match</p>
+                    <p className="text-sm font-semibold">
+                      ${(p.salaryRange.min / 1000).toFixed(0)}k – $
+                      {(p.salaryRange.max / 1000).toFixed(0)}k
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-primary">
+                      {p.matchPercentage}% {t("match")}
+                    </p>
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -220,19 +264,21 @@ function PermanentJobsPage() {
                       variant={isApplied ? "outline" : "default"}
                       onClick={() => {
                         apply(p.id);
-                        toast.success("Application sent", { description: p.title });
+                        toast.success(t("application_sent"), { description: p.title });
                       }}
                     >
                       {isApplied ? (
-                        <><Check className="h-3.5 w-3.5" /> Applied</>
+                        <>
+                          <Check className="h-3.5 w-3.5" /> {t("applied_btn")}
+                        </>
                       ) : (
-                        "Apply"
+                        t("apply_btn")
                       )}
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
-                      title="Owner info"
+                      title={t("owner_info_tooltip")}
                       onClick={() => {
                         setSelectedPracticeId(p.practiceId);
                         setSelectedPostingId(p.id);
@@ -243,9 +289,12 @@ function PermanentJobsPage() {
                     <Button
                       size="sm"
                       variant="ghost"
+                      title={t("ban_practice_tooltip")}
                       onClick={() => {
                         hidePosting(p.id);
-                        toast("Job hidden", { description: `"${p.title}" removed from your feed.` });
+                        toast(t("job_hidden"), {
+                          description: `"${p.title}" ${t("removed_from_feed")}`,
+                        });
                       }}
                     >
                       <Ban className="h-3.5 w-3.5" />
@@ -275,9 +324,12 @@ function PermanentJobsPage() {
 // ─── sort bar ────────────────────────────────────────────────────────────────
 
 function SortBar({ value, onChange }: { value: SortMode; onChange: (m: SortMode) => void }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Sort by</span>
+      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        {t("sort_by")}
+      </span>
       <div className="flex flex-wrap gap-1.5">
         {sortModes.map((m) => {
           const active = value === m.id;
@@ -312,19 +364,20 @@ function SortHighlight({
   posting: PermanentJobPosting;
   dist: number;
 }) {
+  const { t } = useTranslation();
   const map: Partial<Record<SortMode, { label: string; val: string; color: string }>> = {
     distance: {
-      label: "Distance",
+      label: t("distance"),
       val: `${dist.toFixed(1)} mi`,
       color: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border-indigo-500/30",
     },
     pay: {
-      label: "Max salary",
+      label: t("max_salary"),
       val: `$${(posting.salaryRange.max / 1000).toFixed(0)}k/yr`,
       color: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
     },
     value: {
-      label: "Value",
+      label: t("value"),
       val: `$${(posting.salaryRange.max / dist).toFixed(0)}k/mi`,
       color: "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/30",
     },

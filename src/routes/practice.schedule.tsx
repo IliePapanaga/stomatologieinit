@@ -18,6 +18,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { mockProfessionals, mockPostings, mockLocations } from "@/lib/mock";
 import { ProfessionalProfileSheet } from "@/components/practice/professional-profile-sheet";
 import { Professional } from "@/lib/types/mdd";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/practice/schedule")({
   component: SchedulePage,
@@ -40,13 +42,17 @@ const eventStyles: Record<EventKind, { dot: string; chip: string; bar: string; l
     dot: "bg-primary",
     chip: "bg-primary/10 text-primary border-primary/30 hover:bg-primary/15",
     bar: "bg-primary",
-    label: "Temporary shift",
+    get label() {
+      return i18n.t("temporary_shift");
+    },
   },
   Interview: {
     dot: "bg-amber-500",
     chip: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/15",
     bar: "bg-amber-500",
-    label: "Interview",
+    get label() {
+      return i18n.t("interview");
+    },
   },
 };
 
@@ -105,12 +111,11 @@ function buildEvents(monthAnchor: Date): CalEvent[] {
   return events.sort((a, b) => a.start.getTime() - b.start.getTime());
 }
 
-const monthLabel = (d: Date) =>
-  d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const monthLabel = (d: Date) => d.toLocaleDateString(i18n.language, { month: "long", year: "numeric" });
 const weekRangeLabel = (start: Date, end: Date) => {
   const sameMonth = start.getMonth() === end.getMonth();
-  const startTxt = start.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  const endTxt = end.toLocaleDateString("en-US", {
+  const startTxt = start.toLocaleDateString(i18n.language, { month: "short", day: "numeric" });
+  const endTxt = end.toLocaleDateString(i18n.language, {
     month: sameMonth ? undefined : "short",
     day: "numeric",
     year: "numeric",
@@ -118,10 +123,12 @@ const weekRangeLabel = (start: Date, end: Date) => {
   return `${startTxt} – ${endTxt}`;
 };
 const sameDay = (a: Date, b: Date) =>
-  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();
 
 const formatTime = (d: Date) =>
-  d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  d.toLocaleTimeString(i18n.language, { hour: "numeric", minute: "2-digit" });
 
 function SchedulePage() {
   const [view, setView] = useState<"month" | "week">("month");
@@ -129,9 +136,10 @@ function SchedulePage() {
   const events = useMemo(() => buildEvents(anchor), [anchor]);
   const [selectedPro, setSelectedPro] = useState<Professional | null>(null);
   const [defaultTab, setDefaultTab] = useState<"overview" | "reviews">("overview");
+  const { t } = useTranslation();
 
   const handleEventClick = (proId: string, passed: boolean) => {
-    const pro = mockProfessionals.find(p => p.id === proId);
+    const pro = mockProfessionals.find((p) => p.id === proId);
     if (pro) {
       setSelectedPro(pro);
       setDefaultTab(passed ? "reviews" : "overview");
@@ -167,14 +175,14 @@ function SchedulePage() {
     <div className="space-y-5 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Schedule</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Upcoming shifts and interviews across all locations.
-          </p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("schedule_title")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("schedule_desc")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <Legend />
-          <Button variant="outline" onClick={() => setAnchor(new Date())}>Today</Button>
+          <Button variant="outline" onClick={() => setAnchor(new Date())}>
+            {t("today")}
+          </Button>
         </div>
       </header>
 
@@ -194,13 +202,21 @@ function SchedulePage() {
 
           <div className="flex items-center gap-3">
             <div className="hidden gap-3 text-xs text-muted-foreground sm:flex">
-              <span><b className="text-foreground">{shiftsCount}</b> shifts</span>
-              <span><b className="text-foreground">{intvCount}</b> interviews</span>
+              <span>
+                <b className="text-foreground">{shiftsCount}</b> {t("shifts")}
+              </span>
+              <span>
+                <b className="text-foreground">{intvCount}</b> {t("interviews")}
+              </span>
             </div>
             <Tabs value={view} onValueChange={(v) => setView(v as "month" | "week")}>
               <TabsList className="h-8">
-                <TabsTrigger value="month" className="text-xs">Month</TabsTrigger>
-                <TabsTrigger value="week" className="text-xs">Week</TabsTrigger>
+                <TabsTrigger value="month" className="text-xs">
+                  {t("month")}
+                </TabsTrigger>
+                <TabsTrigger value="week" className="text-xs">
+                  {t("week")}
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -222,9 +238,9 @@ function SchedulePage() {
 
       <UpNext events={events} onEventClick={handleEventClick} />
 
-      <ProfessionalProfileSheet 
-        pro={selectedPro} 
-        onOpenChange={(open) => !open && setSelectedPro(null)} 
+      <ProfessionalProfileSheet
+        pro={selectedPro}
+        onOpenChange={(open) => !open && setSelectedPro(null)}
         defaultTab={defaultTab}
       />
     </div>
@@ -232,19 +248,28 @@ function SchedulePage() {
 }
 
 function Legend() {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-3 text-xs text-muted-foreground">
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-primary" /> Shifts
+        <span className="h-2 w-2 rounded-full bg-primary" /> {t("shifts")}
       </span>
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-amber-500" /> Interviews
+        <span className="h-2 w-2 rounded-full bg-amber-500" /> {t("interviews")}
       </span>
     </div>
   );
 }
 
-function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
+function MonthGrid({
+  anchor,
+  events,
+  onEventClick,
+}: {
+  anchor: Date;
+  events: CalEvent[];
+  onEventClick: (proId: string, passed: boolean) => void;
+}) {
   const year = anchor.getFullYear();
   const month = anchor.getMonth();
   const today = new Date();
@@ -264,8 +289,10 @@ function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: Cal
   return (
     <div>
       <div className="grid grid-cols-7 border-b border-border/60 bg-muted/30 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-          <div key={d} className="px-3 py-2 text-center">{d}</div>
+        {["mon", "tue", "wed", "thu", "fri", "sat", "sun"].map((d) => (
+          <div key={d} className="px-3 py-2 text-center">
+            {i18n.t(d)}
+          </div>
         ))}
       </div>
       <div className="grid grid-cols-7 auto-rows-[minmax(110px,auto)]">
@@ -286,8 +313,8 @@ function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: Cal
                     isToday
                       ? "bg-primary font-semibold text-primary-foreground"
                       : inMonth
-                      ? "text-foreground"
-                      : "text-muted-foreground/60"
+                        ? "text-foreground"
+                        : "text-muted-foreground/60"
                   }`}
                 >
                   {d.getDate()}
@@ -312,7 +339,7 @@ function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: Cal
                 })}
                 {dayEvents.length > 3 && (
                   <div className="px-1.5 text-[10px] text-muted-foreground">
-                    +{dayEvents.length - 3} more
+                    +{dayEvents.length - 3} {i18n.t("more")}
                   </div>
                 )}
               </div>
@@ -324,7 +351,15 @@ function MonthGrid({ anchor, events, onEventClick }: { anchor: Date; events: Cal
   );
 }
 
-function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
+function WeekGrid({
+  weekStart,
+  events,
+  onEventClick,
+}: {
+  weekStart: Date;
+  events: CalEvent[];
+  onEventClick: (proId: string, passed: boolean) => void;
+}) {
   const today = new Date();
   const days: Date[] = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
@@ -345,7 +380,7 @@ function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events
             return (
               <div key={d.toISOString()} className="px-2 py-2 text-center">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {d.toLocaleDateString("en-US", { weekday: "short" })}
+                  {d.toLocaleDateString(i18n.language, { weekday: "short" })}
                 </div>
                 <div
                   className={`mx-auto mt-0.5 inline-flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm tabular-nums ${
@@ -372,7 +407,8 @@ function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events
                 className="absolute right-2 -translate-y-1/2 text-[10px] text-muted-foreground"
                 style={{ top: `${i * SLOT_HEIGHT}px` }}
               >
-                {h <= 12 ? h : h - 12}{h < 12 ? "a" : "p"}
+                {h <= 12 ? h : h - 12}
+                {h < 12 ? "a" : "p"}
               </div>
             ))}
           </div>
@@ -380,7 +416,7 @@ function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events
           {/* Day columns */}
           {days.map((d) => {
             const dayEvents = events.filter(
-              (e) => sameDay(e.start, d) && e.start.getHours() >= HOURS[0]
+              (e) => sameDay(e.start, d) && e.start.getHours() >= HOURS[0],
             );
             return (
               <div key={d.toISOString()} className="relative border-l border-border/50">
@@ -423,8 +459,15 @@ function WeekGrid({ weekStart, events, onEventClick }: { weekStart: Date; events
   );
 }
 
-function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
+function UpNext({
+  events,
+  onEventClick,
+}: {
+  events: CalEvent[];
+  onEventClick: (proId: string, passed: boolean) => void;
+}) {
   const now = new Date();
+  const { t } = useTranslation();
   const upcoming = events
     .filter((e) => e.start.getTime() >= now.getTime() - 1000 * 60 * 60 * 12)
     .slice(0, 6);
@@ -435,9 +478,9 @@ function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (p
     <Card className="border-border/70 shadow-sm">
       <div className="flex items-center justify-between border-b border-border/60 px-5 py-3">
         <h3 className="flex items-center gap-2 text-sm font-semibold">
-          <CalendarDays className="h-4 w-4 text-primary" /> Up next
+          <CalendarDays className="h-4 w-4 text-primary" /> {t("up_next")}
         </h3>
-        <span className="text-xs text-muted-foreground">Next 6 events</span>
+        <span className="text-xs text-muted-foreground">{t("next_events")}</span>
       </div>
       <CardContent className="divide-y divide-border/60 p-0">
         {upcoming.map((e, i) => {
@@ -463,7 +506,11 @@ function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (p
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className={`h-5 gap-1 px-1.5 text-[10px] ${tone.chip}`}>
-                    {e.kind === "Shift" ? <Briefcase className="h-3 w-3" /> : <UserCheck className="h-3 w-3" />}
+                    {e.kind === "Shift" ? (
+                      <Briefcase className="h-3 w-3" />
+                    ) : (
+                      <UserCheck className="h-3 w-3" />
+                    )}
                     {tone.label}
                   </Badge>
                   <p className="truncate text-sm font-medium">{e.title}</p>
@@ -471,7 +518,11 @@ function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (p
                 <div className="mt-0.5 flex items-center gap-3 text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {e.start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                    {e.start.toLocaleDateString(i18n.language, {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}
                     {" · "}
                     {formatTime(e.start)} – {formatTime(e.end)}
                   </span>
@@ -490,14 +541,19 @@ function UpNext({ events, onEventClick }: { events: CalEvent[]; onEventClick: (p
   );
 }
 
-function AgendaView({ events, onEventClick }: { events: CalEvent[]; onEventClick: (proId: string, passed: boolean) => void }) {
+function AgendaView({
+  events,
+  onEventClick,
+}: {
+  events: CalEvent[];
+  onEventClick: (proId: string, passed: boolean) => void;
+}) {
   const now = new Date();
-  
+  const { t } = useTranslation();
+
   if (events.length === 0) {
     return (
-      <div className="py-12 text-center text-sm text-muted-foreground">
-        No events this period.
-      </div>
+      <div className="py-12 text-center text-sm text-muted-foreground">{t("no_events_period")}</div>
     );
   }
 
@@ -508,7 +564,7 @@ function AgendaView({ events, onEventClick }: { events: CalEvent[]; onEventClick
         const loc = mockLocations.find((l) => l.id === e.locationId);
         const tone = eventStyles[e.kind];
         const passed = e.end.getTime() < now.getTime();
-        
+
         return (
           <div
             key={e.id}
@@ -524,20 +580,28 @@ function AgendaView({ events, onEventClick }: { events: CalEvent[]; onEventClick
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
                 <p className="truncate text-sm font-medium">{e.title}</p>
-                <Badge variant="outline" className={`h-5 gap-1 shrink-0 px-1.5 text-[10px] ${tone.chip}`}>
+                <Badge
+                  variant="outline"
+                  className={`h-5 gap-1 shrink-0 px-1.5 text-[10px] ${tone.chip}`}
+                >
                   {tone.label}
                 </Badge>
               </div>
               <div className="mt-0.5 flex flex-col gap-1 text-[11px] text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3 shrink-0" />
-                  {e.start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                  {e.start.toLocaleDateString(i18n.language, {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
                   {" · "}
                   {formatTime(e.start)} – {formatTime(e.end)}
                 </span>
                 {loc && (
                   <span className="flex items-center gap-1">
-                    <MapPin className="h-3 w-3 shrink-0" /> <span className="truncate">{loc.name}</span>
+                    <MapPin className="h-3 w-3 shrink-0" />{" "}
+                    <span className="truncate">{loc.name}</span>
                   </span>
                 )}
               </div>

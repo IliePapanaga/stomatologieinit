@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, useNavigate, useRouter, Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Stethoscope,
@@ -40,6 +42,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<AppRole>("PracticeOwner");
+  const { t } = useTranslation();
 
   const findUserByEmail = useAppStore((s) => s.findUserByEmail);
   const loginWithPassword = useAppStore((s) => s.loginWithPassword);
@@ -99,13 +102,13 @@ function LoginPage() {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/30">
             <Sparkles className="h-5 w-5" />
           </div>
-          <h1 className="mt-4 text-2xl font-semibold tracking-tight">Welcome to MDD</h1>
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight">{t("welcome_to_mdd")}</h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {step === "email" && "Enter your email to continue"}
-            {step === "password" && "Welcome back — enter your password"}
-            {step === "role" && "Looks new here. Pick your role."}
-            {step === "signup-practice" && "Tell us about your practice"}
-            {step === "signup-pro" && "Create your professional account"}
+            {step === "email" && t("enter_email")}
+            {step === "password" && t("welcome_back_enter_password")}
+            {step === "role" && t("pick_role")}
+            {step === "signup-practice" && t("tell_us_about")}
+            {step === "signup-pro" && t("create_pro_account")}
           </p>
         </div>
 
@@ -134,7 +137,7 @@ function LoginPage() {
                   </div>
                 </Field>
                 <Button onClick={onContinueEmail} disabled={loading} className="w-full">
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Continue"}
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : t("continue")}
                   {!loading && <ArrowRight className="h-4 w-4" />}
                 </Button>
                 <DemoHints
@@ -194,7 +197,7 @@ function LoginPage() {
               >
                 <RoleCard
                   icon={Building2}
-                  title="Practice Owner"
+                  title="Owner"
                   tagline="Post jobs, manage staff & schedule shifts."
                   onClick={() => onPickRole("PracticeOwner")}
                 />
@@ -215,7 +218,7 @@ function LoginPage() {
                 email={email}
                 onBack={() => setStep("role")}
                 onDone={(u) => {
-                  toast.success(`Practice "${u.tenant}" created`);
+                  toast.success(`Owner "${u.tenant}" created`);
                   goDashboard(u);
                 }}
                 add={addUser}
@@ -237,12 +240,22 @@ function LoginPage() {
         </Card>
 
         <p className="mt-4 text-center text-[11px] text-muted-foreground">
-          Demo environment · state persists across reloads.{" "}
+          {t("demo_env_notice")}{" "}
           <Link to="/" className="underline">
-            Back to home
+            {t("back_to_home")}
           </Link>
         </p>
       </motion.div>
+
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}
+        className="absolute bottom-4 left-4 z-50 flex items-center gap-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+      >
+        <span className="text-lg">{i18n.language === "en" ? "🇪🇸" : "🇺🇸"}</span>
+        <span>{i18n.language === "en" ? "Español" : "English"}</span>
+      </Button>
     </div>
   );
 }
@@ -315,7 +328,7 @@ function PracticeSignupForm({
       addr.length > 1
         ? ADDRESS_SUGGESTIONS.filter((a) => a.toLowerCase().includes(addr.toLowerCase()))
         : ADDRESS_SUGGESTIONS,
-    [addr]
+    [addr],
   );
 
   const submit = () => {
@@ -346,10 +359,14 @@ function PracticeSignupForm({
       exit={{ opacity: 0, x: -8 }}
       className="space-y-3"
     >
-      <Field label="Organization / Practice name">
-        <Input value={org} onChange={(e) => setOrg(e.target.value)} placeholder="Brightside Dental" />
+      <Field label="Organization / Owner name">
+        <Input
+          value={org}
+          onChange={(e) => setOrg(e.target.value)}
+          placeholder="Brightside Dental"
+        />
       </Field>
-      <Field label="Practice address">
+      <Field label="Owner address">
         <div className="relative">
           <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -520,7 +537,7 @@ function ProSignupForm({
 
 function DemoHints({ onPick }: { onPick: (email: string) => void }) {
   const demos = [
-    { label: "Practice", email: "maya@brightsidedental.com" },
+    { label: "Owner", email: "maya@brightsidedental.com" },
     { label: "Professional", email: "amelia.brooks@mdd.health" },
     { label: "Admin", email: "sam@mdd.health" },
   ];

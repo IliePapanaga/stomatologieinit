@@ -67,14 +67,7 @@ export const subcategoriesBySpecialty: Record<ProfessionalSpecialty, Professiona
   Orthodontist: ["GeneralDentist", "Pediatric"],
 };
 
-export type CertificateType =
-  | "CPR"
-  | "DAC"
-  | "XRAY"
-  | "DDS_DMD"
-  | "DEA"
-  | "LIABILITY"
-  | "NPI";
+export type CertificateType = "CPR" | "DAC" | "XRAY" | "DDS_DMD" | "DEA" | "LIABILITY" | "NPI";
 
 export type CertificateStatus = "Valid" | "Expired" | "Pending" | "Rejected" | "Missing";
 

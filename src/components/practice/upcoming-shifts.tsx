@@ -4,16 +4,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useUpcomingShifts } from "@/lib/hooks/practice";
+import { useTranslation } from "react-i18next";
 
 export function UpcomingShifts() {
   const { data: shifts = [] } = useUpcomingShifts();
+  const { t } = useTranslation();
   return (
     <Card className="shadow-soft border-border/60">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-base flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-primary" /> Upcoming shifts
+          <CalendarDays className="h-4 w-4 text-primary" /> {t("upcoming_shifts")}
         </CardTitle>
-        <Badge variant="secondary" className="text-[10px]">{shifts.length} scheduled</Badge>
+        <Badge variant="secondary" className="text-[10px]">
+          {shifts.length} {t("scheduled")}
+        </Badge>
       </CardHeader>
       <CardContent className="space-y-2">
         {shifts.map((s, i) => {
@@ -36,7 +40,7 @@ export function UpcomingShifts() {
                 <p className="truncate text-sm font-medium">
                   {s.professional.firstName} {s.professional.lastName}
                 </p>
-                <p className="text-xs text-muted-foreground">{s.specialty}</p>
+                <p className="text-xs text-muted-foreground">{t(`${s.specialty.toLowerCase()}_label`)}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs font-medium tabular-nums">{day.date.slice(5)}</p>

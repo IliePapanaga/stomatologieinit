@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/lib/store/app-store";
 import { mockLocations } from "@/lib/mock";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/")({
   component: OverviewPage,
@@ -43,11 +44,8 @@ function OverviewPage() {
   }, [profile]);
 
   const upcoming = useMemo(
-    () =>
-      postings
-        .filter((p) => applied.includes(p.id) && p.kind === "Temporary")
-        .slice(0, 3),
-    [postings, applied]
+    () => postings.filter((p) => applied.includes(p.id) && p.kind === "Temporary").slice(0, 3),
+    [postings, applied],
   );
 
   const totalEarnings = history.reduce((s, h) => s + h.earnings, 0);
@@ -58,17 +56,17 @@ function OverviewPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">{t("overview")}</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+            {t("overview")}
+          </p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">
             {t("good_morning", { name: profile.firstName || "" }).trim()}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("whats_happening_pro")}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("whats_happening_pro")}</p>
         </div>
         <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Link to="/professional/temporary-jobs">
-            <Briefcase className="h-4 w-4" /> Browse jobs
+            <Briefcase className="h-4 w-4" /> {t("browse_jobs")}
           </Link>
         </Button>
       </header>
@@ -82,24 +80,24 @@ function OverviewPage() {
         >
           <Card className="flex h-full flex-col items-center gap-4 p-6">
             <p className="self-start text-xs uppercase tracking-wider text-muted-foreground">
-              Profile completion
+              {t("profile_completion")}
             </p>
             <CompletionRing value={completion} />
             <div className="space-y-1.5 self-stretch text-xs">
               <CompletionRow
                 ok={profile.specialties.length > 0}
-                label="Specialties selected"
+                label={t("specialties_selected")}
               />
               <CompletionRow
                 ok={profile.certificates.filter((c) => c.status === "Valid").length >= 3}
-                label="3+ valid certificates"
+                label={t("three_plus_valid_certs")}
               />
-              <CompletionRow ok={profile.skills.length >= 2} label="Experience added" />
-              <CompletionRow ok={Boolean(profile.bio)} label="Bio written" />
+              <CompletionRow ok={profile.skills.length >= 2} label={t("experience_added")} />
+              <CompletionRow ok={Boolean(profile.bio)} label={t("bio_written")} />
             </div>
             <Button asChild variant="outline" size="sm" className="self-stretch">
               <Link to="/professional/profile">
-                Complete profile <ArrowRight className="h-3.5 w-3.5" />
+                {t("complete_profile")} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </Button>
           </Card>
@@ -114,27 +112,23 @@ function OverviewPage() {
             tint="emerald"
           />
           <KpiCard
-            label="Jobs applied"
+            label={t("jobs_applied")}
             value={applied.length.toString()}
             sub={`${upcoming.length} ${t("upcoming")}`}
             icon={Briefcase}
             tint="primary"
           />
           <KpiCard
-            label="Check-in rate"
-            value={
-              history.length === 0
-                ? "—"
-                : `${Math.round((checkIns / history.length) * 100)}%`
-            }
-            sub={`${history.length} past shifts`}
+            label={t("check_in_rate")}
+            value={history.length === 0 ? "—" : `${Math.round((checkIns / history.length) * 100)}%`}
+            sub={`${history.length} ${t("past_shifts")}`}
             icon={CheckCircle2}
             tint="indigo"
           />
           <KpiCard
-            label="Banned offices"
+            label={t("banned_offices")}
             value={banned.length.toString()}
-            sub="Hidden from feed"
+            sub={t("hidden_from_feed")}
             icon={AlertCircle}
             tint="rose"
           />
@@ -144,10 +138,10 @@ function OverviewPage() {
       <Card className="p-5">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold">{t("upcoming")} {t("shifts")}</p>
-            <p className="text-xs text-muted-foreground">
-              Temporary jobs you've applied for.
+            <p className="text-sm font-semibold">
+              {t("upcoming")} {t("shifts")}
             </p>
+            <p className="text-xs text-muted-foreground">{t("temp_jobs_applied")}</p>
           </div>
           <Button asChild variant="ghost" size="sm">
             <Link to="/professional/temporary-jobs">{t("view_all")}</Link>
@@ -156,22 +150,16 @@ function OverviewPage() {
         {upcoming.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border/70 p-6 text-center text-sm text-muted-foreground">
             <Sparkles className="mx-auto mb-2 h-5 w-5 text-primary" />
-            No upcoming shifts yet — apply to a temporary job to get started.
+            {t("no_upcoming_shifts")}
           </div>
         ) : (
           <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
             {upcoming.map((p) => {
               const loc = mockLocations.find((l) => l.id === p.locationId);
               return (
-                <div
-                  key={p.id}
-                  className="rounded-xl border border-border/70 bg-card p-3.5"
-                >
-                  <Badge
-                    variant="outline"
-                    className="border-primary/40 bg-primary/10 text-primary"
-                  >
-                    {p.kind === "Temporary" ? `$${p.hourlyRate}/hr` : "Permanent"}
+                <div key={p.id} className="rounded-xl border border-border/70 bg-card p-3.5">
+                  <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">
+                    {p.kind === "Temporary" ? `$${p.hourlyRate}/hr` : t("permanent")}
                   </Badge>
                   <p className="mt-2 text-sm font-semibold">{p.title}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
@@ -221,7 +209,7 @@ function CompletionRing({ value }: { value: number }) {
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-3xl font-semibold">{value}%</span>
         <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-          Complete
+          {i18n.t("complete_ring")}
         </span>
       </div>
     </div>
@@ -260,7 +248,9 @@ function KpiCard({
   };
   return (
     <Card className="flex items-start gap-3 p-4">
-      <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${tints[tint]}`}>
+      <div
+        className={`flex h-10 w-10 items-center justify-center rounded-xl border ${tints[tint]}`}
+      >
         <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0">

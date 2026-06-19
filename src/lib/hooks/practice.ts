@@ -43,7 +43,8 @@ export const paymentMethodsQuery = () =>
   });
 
 export const usePracticeDashboard = () => useQuery(dashboardQuery());
-export const useNearbyProfessionals = (radius?: number) => useQuery(nearbyProfessionalsQuery(radius));
+export const useNearbyProfessionals = (radius?: number) =>
+  useQuery(nearbyProfessionalsQuery(radius));
 export const useRecentActivity = () => useQuery(recentActivityQuery());
 export const useUpcomingShifts = () => useQuery(upcomingShiftsQuery());
 export const usePaymentMethods = () => useQuery(paymentMethodsQuery());

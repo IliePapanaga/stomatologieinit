@@ -19,12 +19,7 @@ export function PracticeDashboard() {
   const { data, isLoading } = usePracticeDashboard();
   const { t } = useTranslation();
 
-  const { 
-    currentUser, 
-    jobPostings, 
-    appliedPostingIds, 
-    activeSosRequests 
-  } = useAppStore();
+  const { currentUser, jobPostings, appliedPostingIds, activeSosRequests } = useAppStore();
 
   if (isLoading || !data) {
     return (
@@ -59,38 +54,44 @@ export function PracticeDashboard() {
         <NewPostingSheet />
       </div>
 
-      <KpiStrip kpis={[
-        { 
-          key: "activePostings", 
-          label: t("active_postings"), 
-          value: jobPostings.filter(p => p.status === "Open").length, 
-          icon: Briefcase, tint: "primary", 
-          delta: t("this_week", { count: "+2" }),
-          href: "/practice/postings"
-        },
-        { 
-          key: "filledToday", 
-          label: t("filled_today"), 
-          value: jobPostings.reduce((sum, p) => sum + (p.hiredCandidateIds?.length || 0), 0), 
-          icon: CheckCircle2, tint: "success", 
-          delta: `98% ${t("match")}` 
-        },
-        { 
-          key: "pendingInterviews", 
-          label: t("pending_interviews"), 
-          value: appliedPostingIds.length || 4, // fallback to 4 for demo
-          icon: CalendarClock, tint: "warning", 
-          delta: t("today", { count: "3" }),
-          href: "/practice/schedule"
-        },
-        { 
-          key: "sosSent", 
-          label: t("active_sos"), 
-          value: activeSosRequests.length, 
-          icon: AlertCircle, tint: "destructive", 
-          delta: activeSosRequests.length > 0 ? t("searching_now") : t("all_resolved"),
-        },
-      ]} />
+      <KpiStrip
+        kpis={[
+          {
+            key: "activePostings",
+            label: t("active_postings"),
+            value: jobPostings.filter((p) => p.status === "Open").length,
+            icon: Briefcase,
+            tint: "primary",
+            delta: t("this_week", { count: "+2" }),
+            href: "/practice/postings",
+          },
+          {
+            key: "filledToday",
+            label: t("filled_today"),
+            value: jobPostings.reduce((sum, p) => sum + (p.hiredCandidateIds?.length || 0), 0),
+            icon: CheckCircle2,
+            tint: "success",
+            delta: `98% ${t("match")}`,
+          },
+          {
+            key: "pendingInterviews",
+            label: t("pending_interviews"),
+            value: appliedPostingIds.length || 4, // fallback to 4 for demo
+            icon: CalendarClock,
+            tint: "warning",
+            delta: t("today_count", { count: "3" }),
+            href: "/practice/schedule",
+          },
+          {
+            key: "sosSent",
+            label: t("active_sos"),
+            value: activeSosRequests.length,
+            icon: AlertCircle,
+            tint: "destructive",
+            delta: activeSosRequests.length > 0 ? t("searching_now") : t("all_resolved"),
+          },
+        ]}
+      />
 
       {/* Main layout grid */}
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] items-start">
@@ -99,7 +100,7 @@ export function PracticeDashboard() {
           <LiveRadar />
           <RecentActivityFeed />
         </div>
-        
+
         {/* Right Column */}
         <div className="flex flex-col gap-4">
           <SosButton />

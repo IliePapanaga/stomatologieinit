@@ -94,7 +94,8 @@ export const normalizeUser = (user: unknown): AppUser | null => {
     password: value.password,
     role: value.role,
     tenant: value.tenant || (value.role === "PracticeOwner" ? "Practice" : "Independent"),
-    avatarInitials: value.avatarInitials || `${firstName[0] ?? "M"}${lastName[0] ?? "D"}`.toUpperCase(),
+    avatarInitials:
+      value.avatarInitials || `${firstName[0] ?? "M"}${lastName[0] ?? "D"}`.toUpperCase(),
     practiceAddress: value.practiceAddress,
     employeesCount: value.employeesCount,
   };
@@ -220,30 +221,134 @@ const initialProfile: ProfessionalProfile = {
   comfortLevels: { RDH: 9, EFDA: 7 },
   questionnaire: { dentrix: true, eaglesoft: false, opendental: true },
   certificates: [
-    { id: "c1", professionalId: "u_pro_demo", type: "CPR", status: "Valid", expirationDate: "2027-04-12", licenseNumber: "CPR-99127" },
-    { id: "c2", professionalId: "u_pro_demo", type: "XRAY", status: "Valid", expirationDate: "2026-09-30", licenseNumber: "XR-44231" },
-    { id: "c5", professionalId: "u_pro_demo", type: "NPI", status: "Valid", licenseNumber: "1497823014" },
-    { id: "c4", professionalId: "u_pro_demo", type: "LIABILITY", status: "Expired", expirationDate: "2025-12-01" },
+    {
+      id: "c1",
+      professionalId: "u_pro_demo",
+      type: "CPR",
+      status: "Valid",
+      expirationDate: "2027-04-12",
+      licenseNumber: "CPR-99127",
+    },
+    {
+      id: "c2",
+      professionalId: "u_pro_demo",
+      type: "XRAY",
+      status: "Valid",
+      expirationDate: "2026-09-30",
+      licenseNumber: "XR-44231",
+    },
+    {
+      id: "c5",
+      professionalId: "u_pro_demo",
+      type: "NPI",
+      status: "Valid",
+      licenseNumber: "1497823014",
+    },
+    {
+      id: "c4",
+      professionalId: "u_pro_demo",
+      type: "LIABILITY",
+      status: "Expired",
+      expirationDate: "2025-12-01",
+    },
     { id: "c6", professionalId: "u_pro_demo", type: "DEA", status: "Missing" },
     { id: "c7", professionalId: "u_pro_demo", type: "DDS_DMD", status: "Missing" },
-    { id: "c8", professionalId: "u_pro_demo", type: "DAC", status: "Valid", expirationDate: "2028-01-22", licenseNumber: "DAC-77019" },
+    {
+      id: "c8",
+      professionalId: "u_pro_demo",
+      type: "DAC",
+      status: "Valid",
+      expirationDate: "2028-01-22",
+      licenseNumber: "DAC-77019",
+    },
   ],
   skills: [
-    { id: "s1", title: "Sr. Hygienist", organization: "Pacific Smiles", years: 3, startDate: "2022-03-01", endDate: "2025-04-30", description: "Adult perio & SRP focus." },
-    { id: "s2", title: "Hygienist", organization: "Bay Pediatric Dental", years: 2, startDate: "2020-01-01", endDate: "2022-02-28", description: "Pediatric prophy, fluoride, sealants." },
+    {
+      id: "s1",
+      title: "Sr. Hygienist",
+      organization: "Pacific Smiles",
+      years: 3,
+      startDate: "2022-03-01",
+      endDate: "2025-04-30",
+      description: "Adult perio & SRP focus.",
+    },
+    {
+      id: "s2",
+      title: "Hygienist",
+      organization: "Bay Pediatric Dental",
+      years: 2,
+      startDate: "2020-01-01",
+      endDate: "2022-02-28",
+      description: "Pediatric prophy, fluoride, sealants.",
+    },
     { id: "s3", title: "Dental Assistant", organization: "Mission Family Dental", years: 1 },
   ],
   references: [
-    { id: "r1", name: "Dr. Karen Wu", phone: "+1 415 555 0177", relationship: "Former supervisor at Pacific Smiles" },
+    {
+      id: "r1",
+      name: "Dr. Karen Wu",
+      phone: "+1 415 555 0177",
+      relationship: "Former supervisor at Pacific Smiles",
+    },
   ],
 };
 
 const initialHistory: JobHistoryEntry[] = [
-  { id: "h1", postingId: "post_h1", practiceId: "prc_001", practiceName: "Brightside Dental Group", date: "2026-06-10", hours: 8, earnings: 304, status: "Checked-In", role: "Hygienist · Temp" },
-  { id: "h2", postingId: "post_h2", practiceId: "prc_002", practiceName: "Northpoint Dental", date: "2026-06-05", hours: 6, earnings: 228, status: "Completed", role: "Hygienist · Temp" },
-  { id: "h3", postingId: "post_h3", practiceId: "prc_003", practiceName: "Summit Dental Care", date: "2026-05-28", hours: 0, earnings: 0, status: "No-Show", role: "EFDA · Temp" },
-  { id: "h4", postingId: "post_h4", practiceId: "prc_001", practiceName: "Brightside Dental Group", date: "2026-05-22", hours: 8, earnings: 312, status: "Completed", role: "Hygienist · Temp" },
-  { id: "h5", postingId: "post_h5", practiceId: "prc_004", practiceName: "Coastal Smiles", date: "2026-05-15", hours: 7, earnings: 266, status: "Completed", role: "Hygienist · Temp" },
+  {
+    id: "h1",
+    postingId: "post_h1",
+    practiceId: "prc_001",
+    practiceName: "Brightside Dental Group",
+    date: "2026-06-10",
+    hours: 8,
+    earnings: 304,
+    status: "Checked-In",
+    role: "Hygienist · Temp",
+  },
+  {
+    id: "h2",
+    postingId: "post_h2",
+    practiceId: "prc_002",
+    practiceName: "Northpoint Dental",
+    date: "2026-06-05",
+    hours: 6,
+    earnings: 228,
+    status: "Completed",
+    role: "Hygienist · Temp",
+  },
+  {
+    id: "h3",
+    postingId: "post_h3",
+    practiceId: "prc_003",
+    practiceName: "Summit Dental Care",
+    date: "2026-05-28",
+    hours: 0,
+    earnings: 0,
+    status: "No-Show",
+    role: "EFDA · Temp",
+  },
+  {
+    id: "h4",
+    postingId: "post_h4",
+    practiceId: "prc_001",
+    practiceName: "Brightside Dental Group",
+    date: "2026-05-22",
+    hours: 8,
+    earnings: 312,
+    status: "Completed",
+    role: "Hygienist · Temp",
+  },
+  {
+    id: "h5",
+    postingId: "post_h5",
+    practiceId: "prc_004",
+    practiceName: "Coastal Smiles",
+    date: "2026-05-15",
+    hours: 7,
+    earnings: 266,
+    status: "Completed",
+    role: "Hygienist · Temp",
+  },
 ];
 
 export interface CreatePostingInput {
@@ -285,6 +390,7 @@ interface AppState {
   // Professional state
   professionalProfile: ProfessionalProfile;
   bannedPracticeIds: string[];
+  bannedProfessionalIds: string[];
   hiddenPostingIds: string[];
   appliedPostingIds: string[];
   jobHistory: JobHistoryEntry[];
@@ -311,6 +417,8 @@ interface AppState {
   unhidePosting: (postingId: string) => void;
   banPractice: (practiceId: string) => void;
   unbanPractice: (practiceId: string) => void;
+  banProfessional: (professionalId: string) => void;
+  unbanProfessional: (professionalId: string) => void;
   suspendUser: (userId: string) => void;
   unsuspendUser: (userId: string) => void;
   updateProfile: (patch: Partial<ProfessionalProfile>) => void;
@@ -323,8 +431,12 @@ interface AppState {
   removeSkill: (id: string) => void;
   addReference: (entry: Omit<WorkReference, "id">) => void;
   removeReference: (id: string) => void;
-  addPracticeReview: (review: Omit<PracticeReview, "id" | "date" | "practiceId" | "author">) => void;
-  addPracticeOwnerReview: (review: Omit<PracticeOwnerReview, "id" | "date" | "professionalId">) => void;
+  addPracticeReview: (
+    review: Omit<PracticeReview, "id" | "date" | "practiceId" | "author">,
+  ) => void;
+  addPracticeOwnerReview: (
+    review: Omit<PracticeOwnerReview, "id" | "date" | "professionalId">,
+  ) => void;
   addSosRequest: (req: SosRequest) => void;
   removeSosRequest: (id: string) => void;
 }
@@ -340,6 +452,7 @@ export const useAppStore = create<AppState>()(
 
       professionalProfile: initialProfile,
       bannedPracticeIds: [],
+      bannedProfessionalIds: [],
       hiddenPostingIds: [],
       appliedPostingIds: [],
       jobHistory: initialHistory,
@@ -426,7 +539,9 @@ export const useAppStore = create<AppState>()(
       },
       updatePosting: (id, updates) => {
         set({
-          jobPostings: get().jobPostings.map((p) => (p.id === id ? { ...p, ...updates } as JobPosting : p)),
+          jobPostings: get().jobPostings.map((p) =>
+            p.id === id ? ({ ...p, ...updates } as JobPosting) : p,
+          ),
         });
       },
       removePosting: (id) => {
@@ -454,6 +569,13 @@ export const useAppStore = create<AppState>()(
       },
       unbanPractice: (practiceId) =>
         set({ bannedPracticeIds: get().bannedPracticeIds.filter((p) => p !== practiceId) }),
+      banProfessional: (professionalId) => {
+        const list = get().bannedProfessionalIds;
+        if (list.includes(professionalId)) return;
+        set({ bannedProfessionalIds: [...list, professionalId] });
+      },
+      unbanProfessional: (professionalId) =>
+        set({ bannedProfessionalIds: get().bannedProfessionalIds.filter((p) => p !== professionalId) }),
       suspendUser: (userId) => {
         const list = get().suspendedUserIds;
         if (list.includes(userId)) return;
@@ -553,14 +675,20 @@ export const useAppStore = create<AppState>()(
         const u = get().currentUser;
         if (!u) return;
         const tenant = u.tenant;
-        const existingIdx = get().practiceReviews.findIndex(r => r.professionalId === review.professionalId && r.practiceId === tenant);
-        
+        const existingIdx = get().practiceReviews.findIndex(
+          (r) => r.professionalId === review.professionalId && r.practiceId === tenant,
+        );
+
         const newRev: PracticeReview = {
           ...review,
           id: existingIdx >= 0 ? get().practiceReviews[existingIdx].id : `rev_prac_${Date.now()}`,
           practiceId: tenant,
           author: `${u.firstName} ${u.lastName} (${u.tenant})`,
-          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          date: new Date().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
         };
 
         if (existingIdx >= 0) {
@@ -576,13 +704,17 @@ export const useAppStore = create<AppState>()(
         if (!u) return;
         const reviews = get().practiceOwnerReviews;
         const existingIdx = reviews.findIndex(
-          (r) => r.practiceId === review.practiceId && r.professionalId === u.id
+          (r) => r.practiceId === review.practiceId && r.professionalId === u.id,
         );
         const newRev: PracticeOwnerReview = {
           ...review,
           id: existingIdx >= 0 ? reviews[existingIdx].id : `poreview_${Date.now()}`,
           professionalId: u.id,
-          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          date: new Date().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
         };
         if (existingIdx >= 0) {
           const updated = [...reviews];
@@ -593,7 +725,8 @@ export const useAppStore = create<AppState>()(
         }
       },
       addSosRequest: (req) => set({ activeSosRequests: [req, ...get().activeSosRequests] }),
-      removeSosRequest: (id) => set({ activeSosRequests: get().activeSosRequests.filter((r) => r.id !== id) }),
+      removeSosRequest: (id) =>
+        set({ activeSosRequests: get().activeSosRequests.filter((r) => r.id !== id) }),
     }),
     {
       name: "mdd-app-store",
@@ -622,7 +755,9 @@ export const useAppStore = create<AppState>()(
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
           jobHistory: Array.isArray(state.jobHistory) ? state.jobHistory : initialHistory,
           practiceReviews: Array.isArray(state.practiceReviews) ? state.practiceReviews : [],
-          practiceOwnerReviews: Array.isArray(state.practiceOwnerReviews) ? state.practiceOwnerReviews : [],
+          practiceOwnerReviews: Array.isArray(state.practiceOwnerReviews)
+            ? state.practiceOwnerReviews
+            : [],
           activeSosRequests: Array.isArray(state.activeSosRequests) ? state.activeSosRequests : [],
           suspendedUserIds: Array.isArray(state.suspendedUserIds) ? state.suspendedUserIds : [],
         } as AppState;
@@ -642,6 +777,6 @@ export const useAppStore = create<AppState>()(
         activeSosRequests: s.activeSosRequests,
         suspendedUserIds: s.suspendedUserIds,
       }),
-    }
-  )
+    },
+  ),
 );

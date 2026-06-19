@@ -1,5 +1,11 @@
 import { useState, useMemo } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,7 +23,11 @@ interface CandidatesSheetProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: CandidatesSheetProps) {
+export function CandidatesSheet({
+  posting,
+  mode = "candidates",
+  onOpenChange,
+}: CandidatesSheetProps) {
   const [selectedPro, setSelectedPro] = useState<Professional | null>(null);
   const update = useUpdatePosting();
 
@@ -26,26 +36,26 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
     if (!posting) return [];
     const seed = posting.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
     // Filter pros that match specialty if possible, else take all
-    let pool = mockProfessionals.filter(p => p.specialty === posting.specialty);
+    let pool = mockProfessionals.filter((p) => p.specialty === posting.specialty);
     if (pool.length === 0) pool = mockProfessionals;
-    
+
     // Pick exactly 3 to 6 candidates
     const count = (seed % 4) + 3;
     const shuffled = [...pool].sort((a, b) => {
       const aSeed = a.id.charCodeAt(a.id.length - 1);
       const bSeed = b.id.charCodeAt(b.id.length - 1);
-      return (aSeed + seed) % 2 - (bSeed + seed) % 2;
+      return ((aSeed + seed) % 2) - ((bSeed + seed) % 2);
     });
-    
+
     const allGeneratedCandidates = shuffled.slice(0, count);
     const hiredSet = new Set(posting.hiredCandidateIds || []);
-    
+
     if (mode === "hired") {
       // Return ALL hired pros (even if they weren't in the auto-generated list, though they usually are)
-      return mockProfessionals.filter(p => hiredSet.has(p.id));
+      return mockProfessionals.filter((p) => hiredSet.has(p.id));
     } else {
       // Exclude hired pros from candidates
-      return allGeneratedCandidates.filter(p => !hiredSet.has(p.id));
+      return allGeneratedCandidates.filter((p) => !hiredSet.has(p.id));
     }
   }, [posting, mode]);
 
@@ -57,13 +67,21 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
             <div className="flex items-center justify-between">
               <SheetTitle>{mode === "candidates" ? "Candidates" : "Hired Staff"}</SheetTitle>
               {posting && mode === "candidates" && (
-                <Badge variant={(posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)) > 0 ? "outline" : "secondary"} className="bg-background">
+                <Badge
+                  variant={
+                    posting.workingSpaces - (posting.hiredCandidateIds?.length || 0) > 0
+                      ? "outline"
+                      : "secondary"
+                  }
+                  className="bg-background"
+                >
                   {posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)} spots left
                 </Badge>
               )}
             </div>
             <SheetDescription>
-              Professionals who have {mode === "candidates" ? "applied to" : "been hired for"}: <span className="font-semibold text-foreground">{posting?.title || "this role"}</span>
+              Professionals who have {mode === "candidates" ? "applied to" : "been hired for"}:{" "}
+              <span className="font-semibold text-foreground">{posting?.title || "this role"}</span>
             </SheetDescription>
           </SheetHeader>
 
@@ -71,10 +89,10 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
             {candidates.map((pro) => {
               const initials = `${pro.firstName[0]}${pro.lastName[0]}`;
               const matchScore = posting ? calculateMatchScore(pro, posting) : 0;
-              
+
               return (
-                <div 
-                  key={pro.id} 
+                <div
+                  key={pro.id}
                   className="group cursor-pointer rounded-xl border border-border/60 bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm"
                   onClick={() => setSelectedPro(pro)}
                 >
@@ -89,10 +107,14 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
                         <h4 className="font-semibold truncate">
                           {pro.firstName} {pro.lastName}
                         </h4>
-                        <span className="text-sm font-bold text-emerald-600">{Math.min(99, matchScore)}% Match</span>
+                        <span className="text-sm font-bold text-emerald-600">
+                          {Math.min(99, matchScore)}% Match
+                        </span>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5 truncate">{pro.specialty}</p>
-                      
+                      <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                        {pro.specialty}
+                      </p>
+
                       <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
                         <span className="flex items-center gap-1 bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded-sm">
                           <Star className="h-3 w-3 fill-amber-500" />
@@ -111,23 +133,32 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
                   </div>
                   {mode === "candidates" && (
                     <div className="mt-4 flex items-center gap-2">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         className="w-full bg-gradient-brand text-primary-foreground hover:opacity-95"
-                        disabled={!posting || (posting.workingSpaces - (posting.hiredCandidateIds?.length || 0)) <= 0}
+                        disabled={
+                          !posting ||
+                          posting.workingSpaces - (posting.hiredCandidateIds?.length || 0) <= 0
+                        }
                         onClick={(e) => {
                           e.stopPropagation();
-                          const spotsLeft = (posting?.workingSpaces ?? 0) - (posting?.hiredCandidateIds?.length || 0);
+                          const spotsLeft =
+                            (posting?.workingSpaces ?? 0) -
+                            (posting?.hiredCandidateIds?.length || 0);
                           if (posting && spotsLeft > 0) {
                             const hired = [...(posting.hiredCandidateIds || []), pro.id];
                             update.mutate({
                               id: posting.id,
-                              updates: { 
+                              updates: {
                                 hiredCandidateIds: hired,
-                                ...(hired.length === posting.workingSpaces ? { status: "Filled" } : {})
-                              }
+                                ...(hired.length === posting.workingSpaces
+                                  ? { status: "Filled" }
+                                  : {}),
+                              },
                             });
-                            toast.success(`${pro.firstName} hired!`, { description: `Spots remaining: ${spotsLeft - 1}` });
+                            toast.success(`${pro.firstName} hired!`, {
+                              description: `Spots remaining: ${spotsLeft - 1}`,
+                            });
                           }
                         }}
                       >
@@ -138,19 +169,23 @@ export function CandidatesSheet({ posting, mode = "candidates", onOpenChange }: 
                 </div>
               );
             })}
-            
+
             {candidates.length === 0 && (
               <div className="p-8 text-center text-muted-foreground">
-                <p>{mode === "candidates" ? "No candidates available." : "No one has been hired yet."}</p>
+                <p>
+                  {mode === "candidates"
+                    ? "No candidates available."
+                    : "No one has been hired yet."}
+                </p>
               </div>
             )}
           </div>
         </SheetContent>
       </Sheet>
 
-      <ProfessionalProfileSheet 
-        pro={selectedPro} 
-        onOpenChange={(open) => !open && setSelectedPro(null)} 
+      <ProfessionalProfileSheet
+        pro={selectedPro}
+        onOpenChange={(open) => !open && setSelectedPro(null)}
       />
     </>
   );

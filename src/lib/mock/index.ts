@@ -57,14 +57,58 @@ const specialties: ProfessionalSpecialty[] = [
 ];
 
 const firstNames = [
-  "Amelia", "Noah", "Sofia", "Liam", "Zara", "Ethan", "Maya", "Kai", "Leah", "Marcus",
-  "Priya", "Jordan", "Ava", "Diego", "Hana", "Theo", "Isla", "Rohan", "Nora", "Sam",
-  "Imani", "Lucas", "Yara", "Mateo", "Eden",
+  "Amelia",
+  "Noah",
+  "Sofia",
+  "Liam",
+  "Zara",
+  "Ethan",
+  "Maya",
+  "Kai",
+  "Leah",
+  "Marcus",
+  "Priya",
+  "Jordan",
+  "Ava",
+  "Diego",
+  "Hana",
+  "Theo",
+  "Isla",
+  "Rohan",
+  "Nora",
+  "Sam",
+  "Imani",
+  "Lucas",
+  "Yara",
+  "Mateo",
+  "Eden",
 ];
 const lastNames = [
-  "Brooks", "Patel", "Nguyen", "Okafor", "Reyes", "Kim", "Diaz", "Chen", "Park", "Singh",
-  "Cohen", "Rivera", "Murphy", "Hassan", "Suzuki", "Lopez", "Adler", "Iqbal", "Walsh", "Tran",
-  "Bauer", "Costa", "Ito", "Khan", "Russo",
+  "Brooks",
+  "Patel",
+  "Nguyen",
+  "Okafor",
+  "Reyes",
+  "Kim",
+  "Diaz",
+  "Chen",
+  "Park",
+  "Singh",
+  "Cohen",
+  "Rivera",
+  "Murphy",
+  "Hassan",
+  "Suzuki",
+  "Lopez",
+  "Adler",
+  "Iqbal",
+  "Walsh",
+  "Tran",
+  "Bauer",
+  "Costa",
+  "Ito",
+  "Khan",
+  "Russo",
 ];
 
 function seeded(n: number) {
@@ -95,14 +139,26 @@ function makeProfessional(i: number): Professional {
     lat: 37.77 + Math.cos(angle) * r * 0.1,
     lng: -122.42 + Math.sin(angle) * r * 0.1,
     certificates: [
-      { id: `cert_${i}_cpr`, professionalId: `pro_${String(i).padStart(3, "0")}`, type: "CPR", status: i % 11 === 0 ? "Expired" : "Valid" },
-      { id: `cert_${i}_xray`, professionalId: `pro_${String(i).padStart(3, "0")}`, type: "XRAY", status: "Valid" },
+      {
+        id: `cert_${i}_cpr`,
+        professionalId: `pro_${String(i).padStart(3, "0")}`,
+        type: "CPR",
+        status: i % 11 === 0 ? "Expired" : "Valid",
+      },
+      {
+        id: `cert_${i}_xray`,
+        professionalId: `pro_${String(i).padStart(3, "0")}`,
+        type: "XRAY",
+        status: "Valid",
+      },
     ],
     online: i % 3 !== 0,
   };
 }
 
-export const mockProfessionals: Professional[] = Array.from({ length: 25 }, (_, i) => makeProfessional(i));
+export const mockProfessionals: Professional[] = Array.from({ length: 25 }, (_, i) =>
+  makeProfessional(i),
+);
 
 export const mockPostings: JobPosting[] = [
   {
@@ -142,7 +198,14 @@ export const mockPostings: JobPosting[] = [
     kind: "Temporary",
     temporaryKind: "Simple",
     hourlyRate: 38,
-    days: [{ date: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0], startTime: "08:00", endTime: "16:00", breakMinutes: 30 }],
+    days: [
+      {
+        date: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
+        startTime: "08:00",
+        endTime: "16:00",
+        breakMinutes: 30,
+      },
+    ],
   },
   {
     id: "post_003",
@@ -162,9 +225,24 @@ export const mockPostings: JobPosting[] = [
     temporaryKind: "Weekly",
     hourlyRate: 95,
     days: [
-      { date: new Date(Date.now() - 86400000 * 3).toISOString().split('T')[0], startTime: "09:00", endTime: "17:00", breakMinutes: 45 },
-      { date: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0], startTime: "09:00", endTime: "17:00", breakMinutes: 45 },
-      { date: new Date(Date.now() - 86400000 * 1).toISOString().split('T')[0], startTime: "09:00", endTime: "17:00", breakMinutes: 45 },
+      {
+        date: new Date(Date.now() - 86400000 * 3).toISOString().split("T")[0],
+        startTime: "09:00",
+        endTime: "17:00",
+        breakMinutes: 45,
+      },
+      {
+        date: new Date(Date.now() - 86400000 * 2).toISOString().split("T")[0],
+        startTime: "09:00",
+        endTime: "17:00",
+        breakMinutes: 45,
+      },
+      {
+        date: new Date(Date.now() - 86400000 * 1).toISOString().split("T")[0],
+        startTime: "09:00",
+        endTime: "17:00",
+        breakMinutes: 45,
+      },
     ],
   },
   {
@@ -205,8 +283,18 @@ export const mockPostings: JobPosting[] = [
     temporaryKind: "Complex",
     hourlyRate: 52,
     days: [
-      { date: new Date(Date.now() + 86400000 * 5).toISOString().split('T')[0], startTime: "07:30", endTime: "13:00", breakMinutes: 15 },
-      { date: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0], startTime: "12:00", endTime: "19:00", breakMinutes: 30 },
+      {
+        date: new Date(Date.now() + 86400000 * 5).toISOString().split("T")[0],
+        startTime: "07:30",
+        endTime: "13:00",
+        breakMinutes: 15,
+      },
+      {
+        date: new Date(Date.now() + 86400000 * 7).toISOString().split("T")[0],
+        startTime: "12:00",
+        endTime: "19:00",
+        breakMinutes: 30,
+      },
     ],
   },
   {
@@ -274,7 +362,10 @@ export const mockActivity: ActivityEvent[] = [
   },
 ];
 
-export const mockUpcomingShifts: (WorkSchedule & { professional: Professional; specialty: ProfessionalSpecialty })[] = [
+export const mockUpcomingShifts: (WorkSchedule & {
+  professional: Professional;
+  specialty: ProfessionalSpecialty;
+})[] = [
   {
     id: "ws_001",
     postingId: "post_002",
@@ -299,14 +390,57 @@ export const mockUpcomingShifts: (WorkSchedule & { professional: Professional; s
 ];
 
 export const mockPaymentMethods: PaymentMethodCard[] = [
-  { id: "pm_001", brand: "Visa", last4: "4242", expMonth: 11, expYear: 2028, holderName: "Maya Chen", isDefault: true, type: "CC" },
-  { id: "pm_002", brand: "Mastercard", last4: "8821", expMonth: 7, expYear: 2027, holderName: "Brightside Dental", isDefault: false, type: "CC" },
-  { id: "pm_003", brand: "ACH", last4: "0033", holderName: "Brightside Dental LLC", isDefault: false, type: "ACH" },
+  {
+    id: "pm_001",
+    brand: "Visa",
+    last4: "4242",
+    expMonth: 11,
+    expYear: 2028,
+    holderName: "Maya Chen",
+    isDefault: true,
+    type: "CC",
+  },
+  {
+    id: "pm_002",
+    brand: "Mastercard",
+    last4: "8821",
+    expMonth: 7,
+    expYear: 2027,
+    holderName: "Brightside Dental",
+    isDefault: false,
+    type: "CC",
+  },
+  {
+    id: "pm_003",
+    brand: "ACH",
+    last4: "0033",
+    holderName: "Brightside Dental LLC",
+    isDefault: false,
+    type: "ACH",
+  },
 ];
 
 export const mockPayments: Payment[] = [
-  { id: "pay_001", practiceId: mockPractice.id, amount: 1240, status: "Succeeded", method: "CC", gatewayId: "prg_aa12", date: new Date(Date.now() - 86400000 * 2).toISOString(), description: "Posting fees · June batch" },
-  { id: "pay_002", practiceId: mockPractice.id, amount: 380, status: "Succeeded", method: "ACH", gatewayId: "prg_ab32", date: new Date(Date.now() - 86400000 * 9).toISOString(), description: "Temporary placement · pro_011" },
+  {
+    id: "pay_001",
+    practiceId: mockPractice.id,
+    amount: 1240,
+    status: "Succeeded",
+    method: "CC",
+    gatewayId: "prg_aa12",
+    date: new Date(Date.now() - 86400000 * 2).toISOString(),
+    description: "Posting fees · June batch",
+  },
+  {
+    id: "pay_002",
+    practiceId: mockPractice.id,
+    amount: 380,
+    status: "Succeeded",
+    method: "ACH",
+    gatewayId: "prg_ab32",
+    date: new Date(Date.now() - 86400000 * 9).toISOString(),
+    description: "Temporary placement · pro_011",
+  },
 ];
 
 export const mockDashboard: PracticeDashboardData = {

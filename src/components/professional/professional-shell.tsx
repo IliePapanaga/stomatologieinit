@@ -58,26 +58,26 @@ type NavItem = NavLeaf | NavGroup;
 const isGroup = (n: NavItem): n is NavGroup => "items" in n;
 
 const nav: NavItem[] = [
-  { title: "Overview", url: "/professional", icon: LayoutDashboard, exact: true },
-  { title: "Schedule", url: "/professional/schedule", icon: CalendarDays },
+  { title: "overview", url: "/professional", icon: LayoutDashboard, exact: true },
+  { title: "schedule", url: "/professional/schedule", icon: CalendarDays },
   {
-    title: "Assignments",
+    title: "assignments",
     icon: Briefcase,
     items: [
-      { title: "Temporary Jobs", url: "/professional/temporary-jobs", icon: Calendar },
-      { title: "Permanent Jobs", url: "/professional/permanent-jobs", icon: Building2 },
-      { title: "Hidden Jobs", url: "/professional/banned-offices", icon: Ban },
+      { title: "temporary_jobs", url: "/professional/temporary-jobs", icon: Calendar },
+      { title: "permanent_jobs", url: "/professional/permanent-jobs", icon: Building2 },
+      { title: "hidden_jobs", url: "/professional/banned-offices", icon: Ban },
     ],
   },
-  { title: "Job History", url: "/professional/job-history", icon: History },
+  { title: "job_history", url: "/professional/job-history", icon: History },
   {
-    title: "My Account",
+    title: "my_account",
     icon: UserCog,
     items: [
-      { title: "My Profile", url: "/professional/profile", icon: User },
-      { title: "Specialties", url: "/professional/specialties", icon: Sparkles },
-      { title: "Certificates", url: "/professional/certificates", icon: FileCheck2 },
-      { title: "Skills & Experience", url: "/professional/skills", icon: Stethoscope },
+      { title: "edit_profile", url: "/professional/profile", icon: User },
+      { title: "specialties", url: "/professional/specialties", icon: Sparkles },
+      { title: "certificates_title", url: "/professional/certificates", icon: FileCheck2 },
+      { title: "skills_exp", url: "/professional/skills", icon: Stethoscope },
     ],
   },
 ];
@@ -94,11 +94,7 @@ function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }
       <>
         {group.items.map((sub) => (
           <SidebarMenuItem key={sub.url}>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname === sub.url}
-              tooltip={sub.title}
-            >
+            <SidebarMenuButton asChild isActive={pathname === sub.url} tooltip={t(sub.title)}>
               <Link to={sub.url} className="flex items-center gap-2.5">
                 <sub.icon className="h-4 w-4" />
               </Link>
@@ -113,9 +109,9 @@ function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }
     <Collapsible open={open || anyActive} onOpenChange={setOpen} asChild>
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={group.title} isActive={anyActive}>
+          <SidebarMenuButton tooltip={t(group.title)} isActive={anyActive}>
             <group.icon className="h-4 w-4" />
-            <span className="text-sm">{t(group.title.toLowerCase().replace(" ", "_"))}</span>
+            <span className="text-sm">{t(group.title)}</span>
             <ChevronDown
               className={`ml-auto h-4 w-4 transition-transform ${open || anyActive ? "rotate-180" : ""}`}
             />
@@ -128,7 +124,7 @@ function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }
                 <SidebarMenuSubButton asChild isActive={pathname === sub.url}>
                   <Link to={sub.url} className="flex items-center gap-2">
                     <sub.icon className="h-3.5 w-3.5" />
-                    <span>{t(sub.title.toLowerCase().replace(" ", "_"))}</span>
+                    <span>{t(sub.title)}</span>
                   </Link>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
@@ -157,7 +153,7 @@ function ProSidebar() {
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-semibold tracking-tight">MDD · Pro</span>
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Talent Console
+                {t("talent_console")}
               </span>
             </div>
           )}
@@ -176,15 +172,15 @@ function ProSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={item.exact ? pathname === item.url : pathname.startsWith(item.url)}
-                      tooltip={item.title}
+                      tooltip={t(item.title)}
                     >
                       <Link to={item.url} className="flex items-center gap-2.5">
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-sm">{t(item.title.toLowerCase().replace(" ", "_"))}</span>}
+                        {!collapsed && <span className="text-sm">{t(item.title)}</span>}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                )
+                ),
               )}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -193,7 +189,9 @@ function ProSidebar() {
       <SidebarFooter className="flex flex-col gap-2 pb-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}>
+            <SidebarMenuButton
+              onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}
+            >
               <span className="text-base leading-none flex items-center justify-center w-4 shrink-0">
                 {i18n.language === "en" ? "🇪🇸" : "🇺🇸"}
               </span>
@@ -215,6 +213,7 @@ function ProTopbar() {
   const logout = useAppStore((s) => s.logout);
   const stopImpersonation = useAppStore((s) => s.stopImpersonation);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onLogout = () => {
     logout();
@@ -229,20 +228,20 @@ function ProTopbar() {
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur-xl md:px-5">
       <SidebarTrigger className="h-9 w-9" />
       <Badge variant="outline" className="gap-1.5 border-primary/40 bg-primary/10 text-primary">
-        <Stethoscope className="h-3 w-3" /> Professional
+        <Stethoscope className="h-3 w-3" /> {t("professional")}
       </Badge>
       {impersonator && (
         <Badge
           variant="outline"
           className="gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
         >
-          <KeyRound className="h-3 w-3" /> Impersonating · {impersonator.firstName}
+          <KeyRound className="h-3 w-3" /> {t("impersonating")} · {impersonator.firstName}
         </Badge>
       )}
       <div className="ml-auto flex items-center gap-2">
         {impersonator && (
           <Button variant="ghost" size="sm" onClick={onStop} className="h-8">
-            Exit impersonation
+            {t("exit_impersonation")}
           </Button>
         )}
         <ThemeToggle />
@@ -263,13 +262,16 @@ function ProTopbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuLabel>Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("account")}</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to="/professional/profile">Edit profile</Link>
+              <Link to="/professional/profile">{t("edit_profile")}</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout} className="text-destructive focus:text-destructive">
-              <LogOut className="h-4 w-4" /> Sign out
+            <DropdownMenuItem
+              onClick={onLogout}
+              className="text-destructive focus:text-destructive"
+            >
+              <LogOut className="h-4 w-4" /> {t("sign_out")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

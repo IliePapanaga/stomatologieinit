@@ -49,7 +49,9 @@ export function KpiStrip({ kpis }: Props) {
                       </p>
                       <p className="mt-1 text-[11px] text-muted-foreground">{item.delta}</p>
                     </div>
-                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tintClasses[item.tint]}`}>
+                    <div
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tintClasses[item.tint]}`}
+                    >
                       <item.icon className="h-4 w-4" />
                     </div>
                   </div>
@@ -69,7 +71,9 @@ export function KpiStrip({ kpis }: Props) {
                     </p>
                     <p className="mt-1 text-[11px] text-muted-foreground">{item.delta}</p>
                   </div>
-                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tintClasses[item.tint]}`}>
+                  <div
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tintClasses[item.tint]}`}
+                  >
                     <item.icon className="h-4 w-4" />
                   </div>
                 </div>

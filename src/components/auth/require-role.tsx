@@ -1,6 +1,11 @@
 import { ClientOnly, Navigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useAppStore, dashboardForRole, readStoredCurrentUser, type AppRole } from "@/lib/store/app-store";
+import {
+  useAppStore,
+  dashboardForRole,
+  readStoredCurrentUser,
+  type AppRole,
+} from "@/lib/store/app-store";
 
 interface Props {
   role: AppRole;
@@ -23,8 +28,12 @@ function RoleGate({ role, children }: Props) {
     return <Navigate to="/login" replace />;
   }
   if (effectiveUser.role !== role) {
-    return <Navigate to={dashboardForRole(effectiveUser.role) as "/practice" | "/professional" | "/admin"} replace />;
+    return (
+      <Navigate
+        to={dashboardForRole(effectiveUser.role) as "/practice" | "/professional" | "/admin"}
+        replace
+      />
+    );
   }
   return <>{children}</>;
 }
-

@@ -27,7 +27,11 @@ import type { ProfessionalSpecialty, TemporaryKind } from "@/lib/types/mdd";
 import { toast } from "sonner";
 
 const specialties: ProfessionalSpecialty[] = [
-  "Hygienist", "Dentist", "Assistant", "FrontOffice", "Orthodontist",
+  "Hygienist",
+  "Dentist",
+  "Assistant",
+  "FrontOffice",
+  "Orthodontist",
 ];
 
 export function JobCreatorSheet() {
@@ -37,7 +41,8 @@ export function JobCreatorSheet() {
 
   const submit = () => {
     toast.success(`${kind} posting drafted`, {
-      description: kind === "Temporary" ? `${tempKind} schedule queued for review` : "Saved to drafts",
+      description:
+        kind === "Temporary" ? `${tempKind} schedule queued for review` : "Saved to drafts",
     });
     setOpen(false);
   };
@@ -58,28 +63,48 @@ export function JobCreatorSheet() {
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-4 pb-4">
-          <Tabs value={kind} onValueChange={(v) => setKind(v as "Permanent" | "Temporary")} className="mt-4">
+          <Tabs
+            value={kind}
+            onValueChange={(v) => setKind(v as "Permanent" | "Temporary")}
+            className="mt-4"
+          >
             <TabsList className="grid grid-cols-2">
-              <TabsTrigger value="Temporary" className="gap-2"><Clock4 className="h-3.5 w-3.5" /> Temporary</TabsTrigger>
-              <TabsTrigger value="Permanent" className="gap-2"><Briefcase className="h-3.5 w-3.5" /> Permanent</TabsTrigger>
+              <TabsTrigger value="Temporary" className="gap-2">
+                <Clock4 className="h-3.5 w-3.5" /> Temporary
+              </TabsTrigger>
+              <TabsTrigger value="Permanent" className="gap-2">
+                <Briefcase className="h-3.5 w-3.5" /> Permanent
+              </TabsTrigger>
             </TabsList>
 
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label>Specialty</Label>
                 <Select defaultValue="Hygienist">
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
-                    {specialties.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    {specialties.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {s}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
                 <Label>Location</Label>
                 <Select defaultValue={mockLocations[0].id}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
-                    {mockLocations.map((l) => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}
+                    {mockLocations.map((l) => (
+                      <SelectItem key={l.id} value={l.id}>
+                        {l.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -157,7 +182,9 @@ export function JobCreatorSheet() {
         </div>
 
         <SheetFooter className="px-4 pb-4">
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
           <Button onClick={submit} className="bg-gradient-brand text-primary-foreground">
             Publish posting
           </Button>

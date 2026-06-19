@@ -24,6 +24,8 @@ import { mockLocations } from "@/lib/mock";
 import type { TemporaryJobPosting } from "@/lib/types/mdd";
 import { toast } from "sonner";
 import { PracticeOwnerSheet } from "@/components/professional/practice-owner-sheet";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/temporary-jobs")({
   component: TemporaryJobsPage,
@@ -42,17 +44,51 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number) {
   const dLng = ((lng2 - lng1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: string }[] = [
-  { id: "smart",    label: "Smart",    icon: Sparkles,   desc: "Weighted: match + pay + distance" },
-  { id: "distance", label: "Distance", icon: MapPin,     desc: "Closest jobs first" },
-  { id: "pay",      label: "Pay",      icon: DollarSign, desc: "Highest hourly rate first" },
-  { id: "value",    label: "Value",    icon: TrendingUp, desc: "Best $/mile ratio" },
+const sortModes = [
+  {
+    id: "smart" as SortMode,
+    get label() {
+      return i18n.t("smart");
+    },
+    icon: Sparkles,
+    get desc() {
+      return i18n.t("smart_desc");
+    },
+  },
+  {
+    id: "distance" as SortMode,
+    get label() {
+      return i18n.t("distance");
+    },
+    icon: MapPin,
+    get desc() {
+      return i18n.t("distance_desc");
+    },
+  },
+  {
+    id: "pay" as SortMode,
+    get label() {
+      return i18n.t("pay");
+    },
+    icon: DollarSign,
+    get desc() {
+      return i18n.t("pay_desc");
+    },
+  },
+  {
+    id: "value" as SortMode,
+    get label() {
+      return i18n.t("value");
+    },
+    icon: TrendingUp,
+    get desc() {
+      return i18n.t("value_desc");
+    },
+  },
 ];
 
 // ─── page ────────────────────────────────────────────────────────────────────
@@ -70,6 +106,7 @@ function TemporaryJobsPage() {
   const [sort, setSort] = useState<SortMode>("smart");
   const [selectedPracticeId, setSelectedPracticeId] = useState<string | null>(null);
   const [selectedPostingId, setSelectedPostingId] = useState<string | undefined>();
+  const { t } = useTranslation();
 
   // Filtered list
   const filtered = useMemo(
@@ -82,9 +119,9 @@ function TemporaryJobsPage() {
           !hidden.includes(p.id) &&
           (q
             ? `${p.title} ${p.specialty} ${p.subcategory}`.toLowerCase().includes(q.toLowerCase())
-            : true)
+            : true),
       ),
-    [postings, banned, hidden, q]
+    [postings, banned, hidden, q],
   );
 
   // Sorted list — reactive, no button press needed
@@ -129,18 +166,18 @@ function TemporaryJobsPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">Assignments</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Temporary jobs</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Short-term shifts near you. Apply with one click.
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+            {t("assignments")}
           </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("temporary_jobs")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("temporary_jobs_desc")}</p>
         </div>
         <div className="relative w-full max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search role, title…"
+            placeholder={t("search_role_title")}
             className="pl-9"
           />
         </div>
@@ -152,7 +189,7 @@ function TemporaryJobsPage() {
       {list.length === 0 ? (
         <Card className="flex flex-col items-center gap-2 p-10 text-center text-sm text-muted-foreground">
           <Sparkles className="h-6 w-6 text-primary" />
-          No temporary jobs match right now. Check back soon.
+          {t("no_temp_jobs")}
         </Card>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -172,11 +209,13 @@ function TemporaryJobsPage() {
                   sortMode={sort}
                   onApply={() => {
                     apply(p.id);
-                    toast.success("Application sent", { description: p.title });
+                    toast.success(t("application_sent"), { description: p.title });
                   }}
                   onBan={() => {
                     hidePosting(p.id);
-                    toast("Job hidden", { description: `"${p.title}" removed from your feed.` });
+                    toast(t("job_hidden"), {
+                      description: `"${p.title}" ${t("removed_from_feed")}`,
+                    });
                   }}
                   onInfo={() => {
                     setSelectedPracticeId(p.practiceId);
@@ -192,7 +231,12 @@ function TemporaryJobsPage() {
       <PracticeOwnerSheet
         practiceId={selectedPracticeId}
         highlightPostingId={selectedPostingId}
-        onOpenChange={(open) => { if (!open) { setSelectedPracticeId(null); setSelectedPostingId(undefined); } }}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedPracticeId(null);
+            setSelectedPostingId(undefined);
+          }
+        }}
       />
     </div>
   );
@@ -201,9 +245,12 @@ function TemporaryJobsPage() {
 // ─── sort bar ────────────────────────────────────────────────────────────────
 
 function SortBar({ value, onChange }: { value: SortMode; onChange: (m: SortMode) => void }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Sort by</span>
+      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        {t("sort_by")}
+      </span>
       <div className="flex flex-wrap gap-1.5">
         {sortModes.map((m) => {
           const active = value === m.id;
@@ -256,6 +303,7 @@ function TempCard({
   }, 0);
   const dist = loc ? haversine(PRO_LAT, PRO_LNG, loc.lat, loc.lng) : null;
   const value = dist && dist > 0 ? (posting.hourlyRate / dist).toFixed(1) : null;
+  const { t } = useTranslation();
 
   return (
     <Card className="group relative flex h-full flex-col overflow-hidden p-0">
@@ -265,10 +313,12 @@ function TempCard({
             {posting.subcategory}
           </Badge>
           <h3 className="mt-2 truncate text-sm font-semibold">{posting.title}</h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">{practice?.name ?? "Owner"}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {practice?.name ?? t("owner_fallback")}
+          </p>
         </div>
         <div className="text-right">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Match</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{t("match")}</p>
           <p className="text-base font-semibold text-primary">{posting.matchPercentage}%</p>
         </div>
       </div>
@@ -285,16 +335,16 @@ function TempCard({
         />
         <Row
           icon={Clock}
-          text={`${firstDay.startTime} – ${firstDay.endTime} · ${posting.days.length} day${posting.days.length > 1 ? "s" : ""}`}
+          text={`${firstDay.startTime} – ${firstDay.endTime} · ${posting.days.length} ${posting.days.length > 1 ? t("days") : t("day")}`}
         />
         <Row
           icon={DollarSign}
-          text={`$${posting.hourlyRate}/hr · ~$${Math.round(posting.hourlyRate * totalHours)} total`}
+          text={`$${posting.hourlyRate}/hr · ~$${Math.round(posting.hourlyRate * totalHours)} ${t("total")}`}
         />
         {dist && (
           <Row
             icon={MapPin}
-            text={`${dist.toFixed(1)} mi away${value ? ` · $${value}/mile` : ""}`}
+            text={`${dist.toFixed(1)} ${t("mi_away")}${value ? ` · $${value}/${t("mile")}` : ""}`}
           />
         )}
       </div>
@@ -315,15 +365,19 @@ function TempCard({
           variant={applied ? "outline" : "default"}
         >
           {applied ? (
-            <><Check className="h-3.5 w-3.5" /> Applied</>
+            <>
+              <Check className="h-3.5 w-3.5" /> {t("applied_btn")}
+            </>
           ) : (
-            <><Briefcase className="h-3.5 w-3.5" /> Accept shift</>
+            <>
+              <Briefcase className="h-3.5 w-3.5" /> {t("accept_shift")}
+            </>
           )}
         </Button>
-        <Button size="sm" variant="ghost" onClick={onInfo} title="Owner info">
+        <Button size="sm" variant="ghost" onClick={onInfo} title={t("owner_info_tooltip")}>
           <Info className="h-3.5 w-3.5" />
         </Button>
-        <Button size="sm" variant="ghost" onClick={onBan} title="Ban practice">
+        <Button size="sm" variant="ghost" onClick={onBan} title={t("ban_practice_tooltip")}>
           <Ban className="h-3.5 w-3.5" />
         </Button>
       </div>
@@ -342,19 +396,20 @@ function SortHighlight({
   dist: number | null;
   value: string | null;
 }) {
+  const { t } = useTranslation();
   const map: Partial<Record<SortMode, { label: string; val: string; color: string }>> = {
     distance: {
-      label: "Distance",
+      label: t("distance"),
       val: dist ? `${dist.toFixed(1)} mi` : "—",
       color: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border-indigo-500/30",
     },
     pay: {
-      label: "Hourly rate",
+      label: t("hourly_rate"),
       val: `$${posting.hourlyRate}/hr`,
       color: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
     },
     value: {
-      label: "Value",
+      label: t("value"),
       val: value ? `$${value}/mi` : "—",
       color: "text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/30",
     },
@@ -362,7 +417,9 @@ function SortHighlight({
   const info = map[mode];
   if (!info) return null;
   return (
-    <div className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium ${info.color}`}>
+    <div
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium ${info.color}`}
+    >
       <TrendingUp className="h-3 w-3" />
       {info.label}: <span className="font-bold">{info.val}</span>
     </div>

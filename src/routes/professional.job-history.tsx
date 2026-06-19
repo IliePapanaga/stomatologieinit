@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { PracticeOwnerSheet } from "@/components/professional/practice-owner-sheet";
 import { knownPractices } from "@/lib/store/app-store";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/job-history")({
   component: HistoryPage,
@@ -37,24 +39,29 @@ function HistoryPage() {
   const history = useAppStore((s) => s.jobHistory);
   const totalEarnings = history.reduce((s, h) => s + h.earnings, 0);
   const totalHours = history.reduce((s, h) => s + h.hours, 0);
+  const { t } = useTranslation();
 
   const [selectedPracticeId, setSelectedPracticeId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6 p-6">
       <header>
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">Job History</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Your past shifts</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Full timeline of completed jobs and earnings. Click any row for owner details.
+        <p className="text-xs font-medium uppercase tracking-wider text-primary">
+          {t("job_history")}
         </p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("your_past_shifts")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("job_history_desc")}</p>
       </header>
 
       {/* Stats */}
       <div className="grid gap-3 sm:grid-cols-3">
-        <Stat label="Total earned" value={`$${totalEarnings.toLocaleString()}`} icon={DollarSign} />
-        <Stat label="Hours worked" value={`${totalHours} hrs`} icon={Clock3} />
-        <Stat label="Shifts" value={history.length.toString()} icon={CheckCircle2} />
+        <Stat
+          label={t("total_earned")}
+          value={`$${totalEarnings.toLocaleString()}`}
+          icon={DollarSign}
+        />
+        <Stat label={t("hours_worked")} value={`${totalHours} ${t("hrs")}`} icon={Clock3} />
+        <Stat label={t("shifts")} value={history.length.toString()} icon={CheckCircle2} />
       </div>
 
       {/* Cards (mobile-first) */}
@@ -76,17 +83,26 @@ function HistoryPage() {
                     <p className="text-xs text-muted-foreground mt-0.5">{h.practiceName}</p>
                   </div>
                   <Badge variant="outline" className={`shrink-0 gap-1 ${statusStyles[h.status]}`}>
-                    <Icon className="h-3 w-3" /> {h.status}
+                    <Icon className="h-3 w-3" />{" "}
+                    {h.status === "Checked-In"
+                      ? t("checked_in")
+                      : h.status === "Completed"
+                        ? t("completed")
+                        : t("no_show")}
                   </Badge>
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <CalendarDays className="h-3.5 w-3.5" />
-                    {new Date(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    {new Date(h.date).toLocaleDateString(i18n.language, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock3 className="h-3.5 w-3.5" />
-                    {h.hours} hrs
+                    {h.hours} {t("hrs")}
                   </span>
                   <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
                     <DollarSign className="h-3.5 w-3.5" />${h.earnings}
@@ -100,7 +116,8 @@ function HistoryPage() {
                     onClick={() => setSelectedPracticeId(h.practiceId)}
                   >
                     <Info className="h-3.5 w-3.5" />
-                    View owner info{practice ? ` · ${practice.name}` : ""}
+                    {t("view_owner_info")}
+                    {practice ? ` · ${practice.name}` : ""}
                   </Button>
                 )}
               </Card>
@@ -115,13 +132,27 @@ function HistoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/60 bg-muted/40">
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Date</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Owner</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Role</th>
-                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Hours</th>
-                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Earnings</th>
-                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</th>
-                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Info</th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("date")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("owner")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("role")}
+                </th>
+                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("hours")}
+                </th>
+                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("earnings")}
+                </th>
+                <th className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("status")}
+                </th>
+                <th className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {t("info")}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
@@ -136,7 +167,11 @@ function HistoryPage() {
                     className="hover:bg-muted/30 transition-colors"
                   >
                     <td className="whitespace-nowrap px-5 py-3 text-muted-foreground">
-                      {new Date(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      {new Date(h.date).toLocaleDateString(i18n.language, {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
@@ -153,7 +188,12 @@ function HistoryPage() {
                     </td>
                     <td className="px-5 py-3">
                       <Badge variant="outline" className={`gap-1 ${statusStyles[h.status]}`}>
-                        <Icon className="h-3 w-3" /> {h.status}
+                        <Icon className="h-3 w-3" />{" "}
+                        {h.status === "Checked-In"
+                          ? t("checked_in")
+                          : h.status === "Completed"
+                            ? t("completed")
+                            : t("no_show")}
                       </Badge>
                     </td>
                     <td className="px-5 py-3 text-right">
@@ -163,7 +203,7 @@ function HistoryPage() {
                           variant="ghost"
                           className="h-7 w-7 p-0"
                           onClick={() => setSelectedPracticeId(h.practiceId)}
-                          title="View owner info"
+                          title={t("view_owner_info")}
                         >
                           <Info className="h-4 w-4" />
                         </Button>
@@ -179,13 +219,23 @@ function HistoryPage() {
 
       <PracticeOwnerSheet
         practiceId={selectedPracticeId}
-        onOpenChange={(open) => { if (!open) setSelectedPracticeId(null); }}
+        onOpenChange={(open) => {
+          if (!open) setSelectedPracticeId(null);
+        }}
       />
     </div>
   );
 }
 
-function Stat({ label, value, icon: Icon }: { label: string; value: string; icon: typeof DollarSign }) {
+function Stat({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  icon: typeof DollarSign;
+}) {
   return (
     <Card className="flex items-center gap-3 p-4">
       <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary">

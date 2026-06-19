@@ -21,6 +21,8 @@ import { mockLocations, mockPostings } from "@/lib/mock";
 import type { TemporaryJobPosting } from "@/lib/types/mdd";
 import { PracticeOwnerSheet } from "@/components/professional/practice-owner-sheet";
 import { knownPractices } from "@/lib/store/app-store";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/schedule")({
   component: ProfessionalSchedulePage,
@@ -47,8 +49,7 @@ const sameDay = (a: Date, b: Date) =>
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
 
-const monthLabel = (d: Date) =>
-  d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+const monthLabel = (d: Date) => d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 const weekRangeLabel = (start: Date, end: Date) => {
   const sameMonth = start.getMonth() === end.getMonth();
@@ -95,7 +96,13 @@ function seed(n: number) {
 function buildProEvents(
   appliedPostings: TemporaryJobPosting[],
   monthAnchor: Date,
-  historyDates: { date: string; practiceId: string; role: string; hours: number; earnings: number }[]
+  historyDates: {
+    date: string;
+    practiceId: string;
+    role: string;
+    hours: number;
+    earnings: number;
+  }[],
 ): ProCalEvent[] {
   const year = monthAnchor.getFullYear();
   const month = monthAnchor.getMonth();
@@ -185,6 +192,7 @@ function ProfessionalSchedulePage() {
   const [anchor, setAnchor] = useState(() => new Date());
   const [selectedPracticeId, setSelectedPracticeId] = useState<string | null>(null);
   const [selectedPostingId, setSelectedPostingId] = useState<string | undefined>(undefined);
+  const { t } = useTranslation();
 
   const jobPostings = useAppStore((s) => s.jobPostings);
   const appliedIds = useAppStore((s) => s.appliedPostingIds);
@@ -194,15 +202,14 @@ function ProfessionalSchedulePage() {
   const appliedPostings = useMemo<TemporaryJobPosting[]>(
     () =>
       [...jobPostings, ...mockPostings].filter(
-        (p): p is TemporaryJobPosting =>
-          p.kind === "Temporary" && appliedIds.includes(p.id)
+        (p): p is TemporaryJobPosting => p.kind === "Temporary" && appliedIds.includes(p.id),
       ),
-    [jobPostings, appliedIds]
+    [jobPostings, appliedIds],
   );
 
   const events = useMemo(
     () => buildProEvents(appliedPostings, anchor, jobHistory),
-    [appliedPostings, anchor, jobHistory]
+    [appliedPostings, anchor, jobHistory],
   );
 
   const handleEventClick = (evt: ProCalEvent) => {
@@ -232,23 +239,25 @@ function ProfessionalSchedulePage() {
     return d;
   }, [weekStart]);
 
-  const upcomingCount = events.filter((e) => e.status === "upcoming" || e.status === "today").length;
+  const upcomingCount = events.filter(
+    (e) => e.status === "upcoming" || e.status === "today",
+  ).length;
   const pastCount = events.filter((e) => e.status === "past").length;
 
   return (
     <div className="space-y-5 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">Work Schedule</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">My Schedule</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Your upcoming shifts and past work history.
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+            {t("work_schedule")}
           </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("my_schedule_title")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("schedule_desc")}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Legend />
           <Button variant="outline" onClick={() => setAnchor(new Date())}>
-            Today
+            {t("today")}
           </Button>
         </div>
       </header>
@@ -269,16 +278,20 @@ function ProfessionalSchedulePage() {
           <div className="flex items-center gap-3">
             <div className="hidden gap-3 text-xs text-muted-foreground sm:flex">
               <span>
-                <b className="text-foreground">{upcomingCount}</b> upcoming
+                <b className="text-foreground">{upcomingCount}</b> {t("upcoming")}
               </span>
               <span>
-                <b className="text-foreground">{pastCount}</b> past
+                <b className="text-foreground">{pastCount}</b> {t("past")}
               </span>
             </div>
             <Tabs value={view} onValueChange={(v) => setView(v as "month" | "week")}>
               <TabsList className="h-8">
-                <TabsTrigger value="month" className="text-xs">Month</TabsTrigger>
-                <TabsTrigger value="week" className="text-xs">Week</TabsTrigger>
+                <TabsTrigger value="month" className="text-xs">
+                  {t("month")}
+                </TabsTrigger>
+                <TabsTrigger value="week" className="text-xs">
+                  {t("week")}
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -303,7 +316,12 @@ function ProfessionalSchedulePage() {
       <PracticeOwnerSheet
         practiceId={selectedPracticeId}
         highlightPostingId={selectedPostingId}
-        onOpenChange={(open) => { if (!open) { setSelectedPracticeId(null); setSelectedPostingId(undefined); } }}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedPracticeId(null);
+            setSelectedPostingId(undefined);
+          }
+        }}
       />
     </div>
   );
@@ -312,16 +330,17 @@ function ProfessionalSchedulePage() {
 // ─── legend ─────────────────────────────────────────────────────────────────
 
 function Legend() {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-3 text-xs text-muted-foreground">
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-primary" /> Upcoming
+        <span className="h-2 w-2 rounded-full bg-primary" /> {t("upcoming")}
       </span>
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-emerald-500" /> Today
+        <span className="h-2 w-2 rounded-full bg-emerald-500" /> {t("today")}
       </span>
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-muted-foreground/40" /> Past
+        <span className="h-2 w-2 rounded-full bg-muted-foreground/40" /> {t("past")}
       </span>
     </div>
   );
@@ -355,7 +374,9 @@ function MonthGrid({
     <div>
       <div className="grid grid-cols-7 border-b border-border/60 bg-muted/30 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-          <div key={d} className="px-3 py-2 text-center">{d}</div>
+          <div key={d} className="px-3 py-2 text-center">
+            {d}
+          </div>
         ))}
       </div>
       <div className="grid grid-cols-7 auto-rows-[minmax(100px,auto)]">
@@ -375,8 +396,8 @@ function MonthGrid({
                   isToday
                     ? "bg-primary font-semibold text-primary-foreground"
                     : inMonth
-                    ? "text-foreground"
-                    : "text-muted-foreground/50"
+                      ? "text-foreground"
+                      : "text-muted-foreground/50"
                 }`}
               >
                 {d.getDate()}
@@ -466,12 +487,15 @@ function WeekGrid({
                 className="absolute right-2 -translate-y-1/2 text-[10px] text-muted-foreground"
                 style={{ top: `${i * SLOT_HEIGHT}px` }}
               >
-                {h <= 12 ? h : h - 12}{h < 12 ? "a" : "p"}
+                {h <= 12 ? h : h - 12}
+                {h < 12 ? "a" : "p"}
               </div>
             ))}
           </div>
           {days.map((d) => {
-            const dayEvents = events.filter((e) => sameDay(e.start, d) && e.start.getHours() >= HOURS[0]);
+            const dayEvents = events.filter(
+              (e) => sameDay(e.start, d) && e.start.getHours() >= HOURS[0],
+            );
             return (
               <div key={d.toISOString()} className="relative border-l border-border/50">
                 {HOURS.map((_, i) => (
@@ -522,11 +546,10 @@ function AgendaView({
   events: ProCalEvent[];
   onEventClick: (e: ProCalEvent) => void;
 }) {
+  const { t } = useTranslation();
   if (events.length === 0) {
     return (
-      <div className="py-12 text-center text-sm text-muted-foreground">
-        No shifts this period.
-      </div>
+      <div className="py-12 text-center text-sm text-muted-foreground">{t("no_shifts_period")}</div>
     );
   }
   return (
@@ -548,13 +571,21 @@ function AgendaView({
               <div className="flex items-center justify-between gap-2">
                 <p className="truncate text-sm font-medium">{e.title}</p>
                 <Badge variant="outline" className={`shrink-0 h-5 px-1.5 text-[10px] ${s.chip}`}>
-                  {e.status}
+                  {e.status === "upcoming"
+                    ? t("upcoming")
+                    : e.status === "today"
+                      ? t("today")
+                      : t("completed")}
                 </Badge>
               </div>
               <div className="mt-0.5 flex flex-col gap-0.5 text-[11px] text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3 shrink-0" />
-                  {e.start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                  {e.start.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
                   {" · "}
                   {formatTime(e.start)} – {formatTime(e.end)}
                 </span>
@@ -589,15 +620,18 @@ function UpNextSection({
     .filter((e) => e.start.getTime() >= now.getTime() - 1000 * 60 * 60 * 12)
     .slice(0, 6);
 
+  const { t } = useTranslation();
   if (upcoming.length === 0) return null;
 
   return (
     <Card className="border-border/70 shadow-sm">
       <div className="flex items-center justify-between border-b border-border/60 px-5 py-3">
         <h3 className="flex items-center gap-2 text-sm font-semibold">
-          <CalendarDays className="h-4 w-4 text-primary" /> Coming up
+          <CalendarDays className="h-4 w-4 text-primary" /> {t("coming_up")}
         </h3>
-        <span className="text-xs text-muted-foreground">Next {upcoming.length} shifts</span>
+        <span className="text-xs text-muted-foreground">
+          {t("next_shifts", { count: upcoming.length })}
+        </span>
       </div>
       <CardContent className="divide-y divide-border/60 p-0">
         {upcoming.map((e, i) => {
@@ -625,14 +659,22 @@ function UpNextSection({
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className={`h-5 gap-1 px-1.5 text-[10px] ${s.chip}`}>
                     <Briefcase className="h-3 w-3" />
-                    {e.status === "today" ? "Today" : e.status === "upcoming" ? "Upcoming" : "Completed"}
+                    {e.status === "today"
+                      ? t("today")
+                      : e.status === "upcoming"
+                        ? t("upcoming")
+                        : t("completed")}
                   </Badge>
                   <p className="truncate text-sm font-medium">{e.title}</p>
                 </div>
                 <div className="mt-0.5 flex items-center gap-3 text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {e.start.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                    {e.start.toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}
                     {" · "}
                     {formatTime(e.start)} – {formatTime(e.end)}
                   </span>
@@ -649,9 +691,7 @@ function UpNextSection({
                   <DollarSign className="h-3.5 w-3.5" />
                   {earnings}
                 </div>
-                <div className="text-[10px] text-muted-foreground">
-                  ~{totalHours.toFixed(0)}h
-                </div>
+                <div className="text-[10px] text-muted-foreground">~{totalHours.toFixed(0)}h</div>
               </div>
             </motion.div>
           );

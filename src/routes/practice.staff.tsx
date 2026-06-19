@@ -45,6 +45,8 @@ import type {
   ProfessionalSubcategory,
 } from "@/lib/types/mdd";
 import { ProfessionalProfileSheet } from "@/components/practice/professional-profile-sheet";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/practice/staff")({
   component: StaffPage,
@@ -119,27 +121,27 @@ function buildRows(): StaffRow[] {
 function reliabilityTone(score: number) {
   if (score >= 92)
     return {
-      label: "Excellent",
+      get label() { return i18n.t("excellent"); },
       icon: ShieldCheck,
       cls: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       bar: "bg-emerald-500",
     };
   if (score >= 78)
     return {
-      label: "Trusted",
+      get label() { return i18n.t("trusted"); },
       icon: Shield,
       cls: "border-primary/40 bg-primary/10 text-primary",
       bar: "bg-primary",
     };
   if (score >= 60)
     return {
-      label: "Watch",
+      get label() { return i18n.t("watch"); },
       icon: Shield,
       cls: "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
       bar: "bg-amber-500",
     };
   return {
-    label: "At risk",
+    get label() { return i18n.t("at_risk"); },
     icon: ShieldAlert,
     cls: "border-rose-500/40 bg-rose-500/10 text-rose-600 dark:text-rose-400",
     bar: "bg-rose-500",
@@ -158,6 +160,7 @@ function StaffPage() {
   const [specialty, setSpecialty] = useState<"All" | ProfessionalSpecialty>("All");
   const [status, setStatus] = useState<"All" | StaffRow["status"]>("All");
   const [selectedPro, setSelectedPro] = useState<Professional | null>(null);
+  const { t } = useTranslation();
 
   const rows = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -185,22 +188,22 @@ function StaffPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Staff</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("staff_title")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Professionals matched to your practice. Reliability is scored from check-ins, no-shows, and late alerts.
+            {t("staff_desc")}
           </p>
         </div>
         <Button variant="outline" className="gap-2">
-          <Users className="h-4 w-4" /> Invite professional
+          <Users className="h-4 w-4" /> {t("invite_pro")}
         </Button>
       </header>
 
       {/* Summary strip */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard label="Total staff" value={summary.total} />
-        <SummaryCard label="Currently active" value={summary.active} tone="emerald" />
-        <SummaryCard label="Avg reliability" value={`${summary.avg}%`} tone="primary" />
-        <SummaryCard label="Top tier (≥ 92)" value={summary.top} tone="primary" />
+        <SummaryCard label={t("total_staff")} value={summary.total} />
+        <SummaryCard label={t("currently_active")} value={summary.active} tone="emerald" />
+        <SummaryCard label={t("avg_reliability")} value={`${summary.avg}%`} tone="primary" />
+        <SummaryCard label={t("top_tier")} value={summary.top} tone="primary" />
       </div>
 
       {/* Filters */}
@@ -210,14 +213,14 @@ function StaffPage() {
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search name, specialty…"
+            placeholder={t("search_name")}
             className="pl-9"
           />
         </div>
         <Select value={specialty} onValueChange={(v) => setSpecialty(v as typeof specialty)}>
           <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All specialties</SelectItem>
+            <SelectItem value="All">{t("all_specialties")}</SelectItem>
             {(["Hygienist", "Dentist", "Assistant", "FrontOffice", "Orthodontist"] as ProfessionalSpecialty[]).map((s) => (
               <SelectItem key={s} value={s}>{s}</SelectItem>
             ))}
@@ -226,14 +229,14 @@ function StaffPage() {
         <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
           <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="All">All status</SelectItem>
-            <SelectItem value="Active">Active</SelectItem>
-            <SelectItem value="Bench">Bench</SelectItem>
-            <SelectItem value="New">New</SelectItem>
+            <SelectItem value="All">{t("all_status")}</SelectItem>
+            <SelectItem value="Active">{t("active_status")}</SelectItem>
+            <SelectItem value="Bench">{t("bench")}</SelectItem>
+            <SelectItem value="New">{t("new")}</SelectItem>
           </SelectContent>
         </Select>
         <span className="ml-auto text-xs text-muted-foreground">
-          {rows.length} of {allRows.length} professionals
+          {rows.length} {t("of")} {allRows.length} {t("professionals")}
         </span>
       </div>
 
@@ -241,11 +244,11 @@ function StaffPage() {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
-              <TableHead className="w-[34%]">Professional</TableHead>
-              <TableHead className="hidden md:table-cell">Subcategory</TableHead>
-              <TableHead>Reliability</TableHead>
-              <TableHead className="hidden md:table-cell text-right">Shifts</TableHead>
-              <TableHead className="hidden md:table-cell">Last worked</TableHead>
+              <TableHead className="w-[34%]">{t("professional")}</TableHead>
+              <TableHead className="hidden md:table-cell">{t("subcategory")}</TableHead>
+              <TableHead>{t("reliability")}</TableHead>
+              <TableHead className="hidden md:table-cell text-right">{t("shifts")}</TableHead>
+              <TableHead className="hidden md:table-cell">{t("last_worked")}</TableHead>
               <TableHead className="w-[1%]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -256,7 +259,7 @@ function StaffPage() {
             {rows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="py-12 text-center text-sm text-muted-foreground">
-                  No professionals match your filters.
+                  {t("no_pros_match")}
                 </TableCell>
               </TableRow>
             )}
@@ -296,6 +299,7 @@ function StaffRowItem({ row, index, onClick }: { row: StaffRow; index: number; o
   const tone = reliabilityTone(row.reliability);
   const Icon = tone.icon;
   const initials = `${row.pro.firstName[0]}${row.pro.lastName[0]}`;
+  const { t } = useTranslation();
 
   return (
     <motion.tr
@@ -331,7 +335,7 @@ function StaffRowItem({ row, index, onClick }: { row: StaffRow; index: number; o
                 variant="outline"
                 className={`h-4 px-1.5 text-[9px] font-medium ${statusStyles[row.status]}`}
               >
-                {row.status}
+                {row.status === "Active" ? t("active_status") : row.status === "Bench" ? t("bench") : t("new")}
               </Badge>
             </div>
           </div>
@@ -367,7 +371,7 @@ function StaffRowItem({ row, index, onClick }: { row: StaffRow; index: number; o
             </TooltipTrigger>
             <TooltipContent side="top" className="text-xs">
               <div className="space-y-0.5">
-                <p>{row.checkIns} check-ins · {row.noShows} no-shows · {row.lateAlerts} late</p>
+                <p>{row.checkIns} {t("check_ins")} · {row.noShows} {t("no_shows")} · {row.lateAlerts} {t("late")}</p>
               </div>
             </TooltipContent>
           </Tooltip>

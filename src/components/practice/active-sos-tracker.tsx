@@ -16,8 +16,8 @@ export function ActiveSosTracker() {
       <div className="grid gap-3 sm:grid-cols-2">
         <AnimatePresence>
           {activeSosRequests.map((sos) => {
-            const loc = mockLocations.find(l => l.id === sos.locationId);
-            
+            const loc = mockLocations.find((l) => l.id === sos.locationId);
+
             return (
               <motion.div
                 key={sos.id}
@@ -33,19 +33,30 @@ export function ActiveSosTracker() {
                     </span>
                     <span className="font-semibold">{sos.specialty} needed</span>
                   </div>
-                  <Badge variant="outline" className="border-destructive/30 text-destructive bg-destructive/10 text-[10px]">
+                  <Badge
+                    variant="outline"
+                    className="border-destructive/30 text-destructive bg-destructive/10 text-[10px]"
+                  >
                     {sos.status}
                   </Badge>
                 </div>
-                
+
                 <div className="mt-3 space-y-1.5 text-xs text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>{loc?.name || "Unknown"} ({sos.radius} mi radius)</span>
+                    <span>
+                      {loc?.name || "Unknown"} ({sos.radius} mi radius)
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-3.5 w-3.5" />
-                    <span>Broadcasted {new Date(sos.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>
+                      Broadcasted{" "}
+                      {new Date(sos.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="h-3.5 w-3.5" />
@@ -54,9 +65,9 @@ export function ActiveSosTracker() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
+                  <Button
+                    size="sm"
+                    variant="ghost"
                     className="h-7 text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     onClick={() => removeSosRequest(sos.id)}
                   >

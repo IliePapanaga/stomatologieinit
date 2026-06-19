@@ -26,22 +26,46 @@ import {
 import { useAppStore } from "@/lib/store/app-store";
 import type { CertificateStatus, CertificateType } from "@/lib/types/mdd";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/certificates")({
   component: CertificatesPage,
 });
 
-const labelOf: Record<CertificateType, string> = {
-  CPR: "CPR Certification",
-  DAC: "Dental Assistant Cert.",
-  XRAY: "Radiology (X-Ray) License",
-  DDS_DMD: "State License (DDS / DMD)",
-  DEA: "DEA Registration",
-  LIABILITY: "Liability Insurance",
-  NPI: "NPI Number",
+const labelOf = {
+  get CPR() {
+    return i18n.t("cpr_cert");
+  },
+  get DAC() {
+    return i18n.t("dac_cert");
+  },
+  get XRAY() {
+    return i18n.t("xray_cert");
+  },
+  get DDS_DMD() {
+    return i18n.t("dds_cert");
+  },
+  get DEA() {
+    return i18n.t("dea_cert");
+  },
+  get LIABILITY() {
+    return i18n.t("liability_cert");
+  },
+  get NPI() {
+    return i18n.t("npi_cert");
+  },
 };
 
-const uploadOptions: CertificateType[] = ["CPR", "NPI", "LIABILITY", "DDS_DMD", "XRAY", "DAC", "DEA"];
+const uploadOptions: CertificateType[] = [
+  "CPR",
+  "NPI",
+  "LIABILITY",
+  "DDS_DMD",
+  "XRAY",
+  "DAC",
+  "DEA",
+];
 
 const statusStyles: Record<CertificateStatus, string> = {
   Valid: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
@@ -65,6 +89,7 @@ function CertificatesPage() {
   const [expirationDate, setExpirationDate] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");
   const [fileName, setFileName] = useState<string>("");
+  const { t } = useTranslation();
 
   const certs = profile.certificates;
   const valid = certs.filter((c) => c.status === "Valid").length;
@@ -73,11 +98,17 @@ function CertificatesPage() {
 
   const submit = () => {
     if (!fileName) {
-      toast.error("Attach a file to upload");
+      toast.error(t("attach_file_error"));
       return;
     }
-    upload({ type, fileName, issueDate, expirationDate, licenseNumber: licenseNumber || undefined });
-    toast.success("Certificate uploaded", { description: `${labelOf[type]} marked Valid.` });
+    upload({
+      type,
+      fileName,
+      issueDate,
+      expirationDate,
+      licenseNumber: licenseNumber || undefined,
+    });
+    toast.success(t("cert_uploaded"), { description: `${labelOf[type]} ${t("marked_valid")}` });
     setIssueDate("");
     setExpirationDate("");
     setLicenseNumber("");
@@ -98,21 +129,21 @@ function CertificatesPage() {
   return (
     <div className="space-y-6 p-6">
       <header>
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">My Account</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Certificates</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Upload certifications & licenses. Owners see verified status.
+        <p className="text-xs font-medium uppercase tracking-wider text-primary">
+          {t("my_account")}
         </p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("certificates_title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("certificates_desc")}</p>
       </header>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <SummaryCard label="Valid" value={valid} tint="emerald" icon={ShieldCheck} />
-        <SummaryCard label="Expired" value={expired} tint="rose" icon={FileWarning} />
-        <SummaryCard label="Pending" value={pending} tint="amber" icon={FileClock} />
+        <SummaryCard label={t("valid")} value={valid} tint="emerald" icon={ShieldCheck} />
+        <SummaryCard label={t("expired")} value={expired} tint="rose" icon={FileWarning} />
+        <SummaryCard label={t("pending")} value={pending} tint="amber" icon={FileClock} />
       </div>
 
       <Card className="space-y-4 p-5">
-        <p className="text-sm font-semibold">Upload a certificate</p>
+        <p className="text-sm font-semibold">{t("upload_certificate")}</p>
 
         <div
           onDragOver={(e) => {
@@ -129,7 +160,7 @@ function CertificatesPage() {
             <Upload className="h-4 w-4" />
           </div>
           <p className="text-sm font-medium">
-            {fileName ? `Selected: ${fileName}` : "Drop file here or browse"}
+            {fileName ? `${t("selected")} ${fileName}` : t("drop_file")}
           </p>
           <p className="text-[11px] text-muted-foreground">PDF, JPG, PNG · up to 10 MB</p>
           <input
@@ -139,13 +170,18 @@ function CertificatesPage() {
             className="hidden"
             onChange={(e) => handleFiles(e.target.files)}
           />
-          <Button size="sm" variant="outline" className="mt-2" onClick={() => fileRef.current?.click()}>
-            <Upload className="h-3.5 w-3.5" /> Browse files
+          <Button
+            size="sm"
+            variant="outline"
+            className="mt-2"
+            onClick={() => fileRef.current?.click()}
+          >
+            <Upload className="h-3.5 w-3.5" /> {t("browse_files")}
           </Button>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Certificate type">
+          <Field label={t("certificate_type")}>
             <Select value={type} onValueChange={(v) => setType(v as CertificateType)}>
               <SelectTrigger>
                 <SelectValue />
@@ -159,14 +195,14 @@ function CertificatesPage() {
               </SelectContent>
             </Select>
           </Field>
-          <Field label="License / NPI #">
+          <Field label={t("license_npi")}>
             <Input
               value={licenseNumber}
               onChange={(e) => setLicenseNumber(e.target.value)}
-              placeholder="optional"
+              placeholder={t("optional")}
             />
           </Field>
-          <Field label="Issue date">
+          <Field label={t("issue_date")}>
             <div className="relative">
               <CalendarIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -177,7 +213,7 @@ function CertificatesPage() {
               />
             </div>
           </Field>
-          <Field label="Expiration date">
+          <Field label={t("expiration_date")}>
             <div className="relative">
               <CalendarIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -192,13 +228,13 @@ function CertificatesPage() {
 
         <div className="flex justify-end">
           <Button onClick={submit}>
-            <Plus className="h-4 w-4" /> Save certificate
+            <Plus className="h-4 w-4" /> {t("save_certificate")}
           </Button>
         </div>
       </Card>
 
       <div>
-        <p className="mb-3 text-sm font-semibold">Saved certificates</p>
+        <p className="mb-3 text-sm font-semibold">{t("saved_certificates")}</p>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {certs.map((c, i) => {
             const Icon = statusIcon(c.status);
@@ -218,19 +254,21 @@ function CertificatesPage() {
                       <div>
                         <p className="text-sm font-semibold">{labelOf[c.type]}</p>
                         <p className="text-[11px] text-muted-foreground">
-                          {c.licenseNumber ? `# ${c.licenseNumber}` : c.fileUrl ?? "Awaiting upload"}
+                          {c.licenseNumber
+                            ? `# ${c.licenseNumber}`
+                            : (c.fileUrl ?? t("awaiting_upload"))}
                         </p>
                       </div>
                     </div>
                     <Badge variant="outline" className={`gap-1 ${statusStyles[c.status]}`}>
-                      <Icon className="h-3 w-3" /> {c.status}
+                      <Icon className="h-3 w-3" /> {t(c.status.toLowerCase() as any)}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between gap-2 px-4 pb-3 text-[11px] text-muted-foreground">
                     <span>
                       {c.expirationDate
-                        ? `Expires ${new Date(c.expirationDate).toLocaleDateString()}`
-                        : "No expiration"}
+                        ? `${t("expires")} ${new Date(c.expirationDate).toLocaleDateString()}`
+                        : t("no_expiration")}
                     </span>
                     <Button
                       size="sm"
@@ -241,7 +279,8 @@ function CertificatesPage() {
                         fileRef.current?.click();
                       }}
                     >
-                      <Upload className="h-3 w-3" /> {c.status === "Valid" ? "Replace" : "Upload"}
+                      <Upload className="h-3 w-3" />{" "}
+                      {c.status === "Valid" ? t("replace") : t("upload")}
                     </Button>
                   </div>
                 </Card>
@@ -281,7 +320,9 @@ function SummaryCard({
   };
   return (
     <Card className="flex items-center gap-4 p-4">
-      <div className={`flex h-11 w-11 items-center justify-center rounded-xl border ${tints[tint]}`}>
+      <div
+        className={`flex h-11 w-11 items-center justify-center rounded-xl border ${tints[tint]}`}
+      >
         <Icon className="h-5 w-5" />
       </div>
       <div>

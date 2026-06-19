@@ -23,6 +23,7 @@ import { useAppStore, knownPractices, type PracticeOwnerReview } from "@/lib/sto
 import { mockLocations, mockPostings } from "@/lib/mock";
 import type { JobPosting } from "@/lib/types/mdd";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 // ---------- helpers ---------------------------------------------------------
 
@@ -60,13 +61,13 @@ function getPracticeInfo(practiceId: string) {
   const lng = loc?.lng ?? fallback.lng;
 
   return {
-    name: known?.name ?? "Practice",
+    name: known?.name ?? "Owner",
     city: known?.city ?? "San Francisco, CA",
     address,
     lat,
     lng,
     phone: loc?.phone ?? `+1 415 555 0${100 + (seed % 100)}`,
-    contact: loc ? `${loc.contactFirstName} ${loc.contactLastName}` : "Practice Manager",
+    contact: loc ? `${loc.contactFirstName} ${loc.contactLastName}` : "Owner Manager",
     distanceMiles: haversine(PRO_LAT, PRO_LNG, lat, lng).toFixed(1),
     hours: ["Mon – Fri  8 am – 5 pm", "Sat  9 am – 2 pm", "Sun  Closed"][seed % 3],
     googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
@@ -107,6 +108,10 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
   const addPracticeOwnerReview = useAppStore((s) => s.addPracticeOwnerReview);
   const jobHistory = useAppStore((s) => s.jobHistory);
   const currentUser = useAppStore((s) => s.currentUser);
+  const bannedPracticeIds = useAppStore((s) => s.bannedPracticeIds);
+  const banPractice = useAppStore((s) => s.banPractice);
+  const unbanPractice = useAppStore((s) => s.unbanPractice);
+  const { t } = useTranslation();
 
   // Memoised data
   const info = useMemo(
@@ -148,16 +153,29 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
   const submitReview = () => {
     if (!text.trim() || !practiceId) return;
     addPracticeOwnerReview({ practiceId, rating, text });
-    toast.success(existingReview ? "Review updated" : "Review submitted");
+    toast.success(existingReview ? t("review_updated") : t("review_submitted"));
     setEditing(false);
+  };
+
+  const isBanned = practiceId ? bannedPracticeIds.includes(practiceId) : false;
+
+  const handleToggleBan = () => {
+    if (!practiceId) return;
+    if (isBanned) {
+      unbanPractice(practiceId);
+      toast.success(t("unban_owner"));
+    } else {
+      banPractice(practiceId);
+      toast.success(t("ban_owner"));
+    }
   };
 
   if (!practiceId || !info) return null;
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: "overview", label: "Overview" },
-    { id: "postings", label: `Postings (${otherPostings.length})` },
-    { id: "review", label: "Review" },
+    { id: "overview", label: t("overview") },
+    { id: "postings", label: `${t("postings")} (${otherPostings.length})` },
+    { id: "review", label: t("review") },
   ];
 
   return (
@@ -166,7 +184,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
         {/* ── Header ─────────────────────────────────────────────────────── */}
         <SheetHeader className="sr-only">
           <SheetTitle>{info.name}</SheetTitle>
-          <SheetDescription>Practice details and review</SheetDescription>
+          <SheetDescription>{t("owner_details_and_review")}</SheetDescription>
         </SheetHeader>
 
         <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 pt-12">
@@ -175,17 +193,29 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               <Building2 className="h-8 w-8" />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-bold tracking-tight">{info.name}</h2>
-              <p className="text-sm text-muted-foreground mt-0.5">{info.city}</p>
+              <div className="flex justify-between items-start gap-2">
+                <div>
+                  <h2 className="text-xl font-bold tracking-tight">{info.name}</h2>
+                  <p className="text-sm text-muted-foreground mt-0.5">{info.city}</p>
+                </div>
+                <Button 
+                  variant={isBanned ? "destructive" : "outline"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={handleToggleBan}
+                >
+                  {isBanned ? t("unban_owner") : t("ban_owner")}
+                </Button>
+              </div>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge variant="outline" className="gap-1 bg-background/60">
                   <MapPin className="h-3 w-3 text-primary" />
-                  {info.distanceMiles} mi away
+                  {info.distanceMiles} {t("mi_away")}
                 </Badge>
                 {existingReview && (
                   <Badge variant="outline" className="gap-1 bg-amber-500/10 text-amber-600 border-amber-500/30">
                     <Star className="h-3 w-3 fill-amber-500" />
-                    Your review: {existingReview.rating}/5
+                    {t("your_review_rating", { rating: existingReview.rating })}
                   </Badge>
                 )}
               </div>
@@ -219,7 +249,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {/* Address + quick info */}
               <section className="space-y-3">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Location
+                  {t("location")}
                 </h3>
                 <div className="rounded-xl border border-border/60 bg-card divide-y divide-border/60">
                   <InfoRow icon={MapPin}>
@@ -235,7 +265,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               <section className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Map
+                    {t("map")}
                   </h3>
                   <Button
                     variant="ghost"
@@ -244,7 +274,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                     onClick={() => window.open(info.googleMapsUrl, "_blank")}
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
-                    Open in Google Maps
+                    {t("open_in_google_maps")}
                   </Button>
                 </div>
                 <div className="overflow-hidden rounded-xl border border-border/60">
@@ -263,7 +293,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {/* Photos */}
               <section className="space-y-3">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                  <Camera className="h-3.5 w-3.5" /> Photos
+                  <Camera className="h-3.5 w-3.5" /> {t("photos")}
                 </h3>
                 <div className="grid grid-cols-3 gap-2">
                   {roomLabels.map((label, i) => (
@@ -282,16 +312,15 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
             </>
           )}
 
-          {/* ═══ OTHER POSTINGS ═══ */}
           {tab === "postings" && (
             <section className="space-y-3">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Open positions at {info.name}
+                {t("open_positions_at")} {info.name}
               </h3>
               {otherPostings.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border/60 p-8 text-center text-sm text-muted-foreground">
                   <Briefcase className="mx-auto mb-2 h-5 w-5 text-primary" />
-                  No open positions right now.
+                  {t("no_open_positions")}
                 </div>
               ) : (
                 <div className="space-y-2.5">
@@ -313,7 +342,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                               <p className="text-sm font-semibold truncate">{p.title ?? p.subcategory}</p>
                               {isHighlighted && (
                                 <Badge className="h-4 px-1.5 text-[10px] bg-primary/15 text-primary border-0">
-                                  This shift
+                                  {t("this_shift")}
                                 </Badge>
                               )}
                             </div>
@@ -346,7 +375,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                           </span>
                           <span className="flex items-center gap-1">
                             <CheckCircle2 className="h-3 w-3 text-primary" />
-                            {p.matchPercentage}% match
+                            {p.matchPercentage}% {t("match")}
                           </span>
                         </div>
                       </div>
@@ -356,25 +385,24 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               )}
             </section>
           )}
-
           {/* ═══ REVIEW ═══ */}
           {tab === "review" && (
             <section className="space-y-5">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Your review
+                  {t("your_review_title")}
                 </h3>
                 {canReview && !editing && (
                   <Button size="sm" onClick={openEdit} className="gap-1.5">
                     {existingReview ? (
                       <>
                         <Star className="h-3.5 w-3.5" />
-                        Edit review
+                        {t("edit_review")}
                       </>
                     ) : (
                       <>
                         <Plus className="h-3.5 w-3.5" />
-                        Leave a review
+                        {t("leave_review")}
                       </>
                     )}
                   </Button>
@@ -384,14 +412,14 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {!canReview && (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/20 p-6 text-center text-sm text-muted-foreground">
                   <DollarSign className="mx-auto mb-2 h-5 w-5" />
-                  You can leave a review once you have completed a shift at this owner.
+                  {t("can_review_desc")}
                 </div>
               )}
 
               {canReview && editing && (
                 <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-4">
                   <div>
-                    <Label className="text-xs font-medium">Rating</Label>
+                    <Label className="text-xs font-medium">{t("rating")}</Label>
                     <div className="mt-1.5 flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <button key={s} onClick={() => setRating(s)} className="focus:outline-none">
@@ -410,21 +438,21 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                     </div>
                   </div>
                   <div>
-                    <Label className="text-xs font-medium">Comment</Label>
+                    <Label className="text-xs font-medium">{t("comment")}</Label>
                     <Textarea
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      placeholder="How was your experience working at this owner?"
+                      placeholder={t("review_placeholder")}
                       className="mt-1.5 resize-none"
                       rows={4}
                     />
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
-                      Cancel
+                      {t("cancel")}
                     </Button>
                     <Button size="sm" onClick={submitReview} disabled={!text.trim()}>
-                      Submit
+                      {t("submit")}
                     </Button>
                   </div>
                 </div>
@@ -434,7 +462,7 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
                 <div className="rounded-xl border border-border/60 bg-card p-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm font-medium">Your review</p>
+                      <p className="text-sm font-medium">{t("your_review_title")}</p>
                       <p className="text-xs text-muted-foreground">{existingReview.date}</p>
                     </div>
                     <div className="flex items-center gap-0.5">
@@ -457,10 +485,10 @@ export function PracticeOwnerSheet({ practiceId, highlightPostingId, onOpenChang
               {canReview && !existingReview && !editing && (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-center text-sm text-muted-foreground">
                   <Star className="mx-auto mb-2 h-5 w-5 text-amber-400" />
-                  You haven't left a review for this owner yet.
+                  {t("no_review_yet")}
                   <br />
                   <button className="mt-2 text-primary underline-offset-2 hover:underline" onClick={openEdit}>
-                    Write one now
+                    {t("write_one_now")}
                   </button>
                 </div>
               )}

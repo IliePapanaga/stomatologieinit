@@ -1,14 +1,31 @@
 import { useState, useMemo } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ShieldCheck, Mail, Phone, MapPin, Award, CheckCircle2, MessageSquare, Plus } from "lucide-react";
+import {
+  Star,
+  ShieldCheck,
+  Mail,
+  Phone,
+  MapPin,
+  Award,
+  CheckCircle2,
+  MessageSquare,
+  Plus,
+} from "lucide-react";
 import { Professional } from "@/lib/types/mdd";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/lib/store/app-store";
 import { mockActivity } from "@/lib/mock";
 
@@ -36,29 +53,40 @@ const generateMockReviews = (id: string) => {
     author: authors[(seed + i) % authors.length],
     rating: 4 + ((seed + i) % 2), // 4 or 5 stars
     text: comments[(seed + i) % comments.length],
-    date: new Date(Date.now() - (i * 86400000 * 5)).toLocaleDateString(),
+    date: new Date(Date.now() - i * 86400000 * 5).toLocaleDateString(),
   }));
 };
 
-export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "overview" }: ProfessionalProfileSheetProps) {
+export function ProfessionalProfileSheet({
+  pro,
+  onOpenChange,
+  defaultTab = "overview",
+}: ProfessionalProfileSheetProps) {
   const [tab, setTab] = useState<"overview" | "reviews">(defaultTab);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(5);
 
-  const { practiceReviews, addPracticeReview } = useAppStore();
-  const proReviews = useMemo(() => (practiceReviews || []).filter(r => r.professionalId === pro?.id), [practiceReviews, pro]);
+  const { practiceReviews, addPracticeReview, bannedProfessionalIds, banProfessional, unbanProfessional } = useAppStore();
+  const { t } = useTranslation();
+  
+  const proReviews = useMemo(
+    () => (practiceReviews || []).filter((r) => r.professionalId === pro?.id),
+    [practiceReviews, pro],
+  );
 
-  const mockReviews = useMemo(() => pro ? generateMockReviews(pro.id) : [], [pro]);
+  const mockReviews = useMemo(() => (pro ? generateMockReviews(pro.id) : []), [pro]);
   const localReviews = useMemo(() => [...proReviews, ...mockReviews], [proReviews, mockReviews]);
 
   const hasWorked = useMemo(() => {
     if (!pro) return false;
     const { jobPostings } = useAppStore.getState();
-    const hiredAnywhere = jobPostings.some(p => p.hiredCandidateIds?.includes(pro.id));
-    const inActivity = mockActivity.some(a => a.kind === "CheckIn" && a.professionalId === pro.id);
+    const hiredAnywhere = jobPostings.some((p) => p.hiredCandidateIds?.includes(pro.id));
+    const inActivity = mockActivity.some(
+      (a) => a.kind === "CheckIn" && a.professionalId === pro.id,
+    );
     // For demo purposes, assume 80% of professionals have worked for you before so you can test reviews
-    const isDemoWorker = (pro.id.charCodeAt(pro.id.length - 1) % 5) !== 0; 
+    const isDemoWorker = pro.id.charCodeAt(pro.id.length - 1) % 5 !== 0;
     return hiredAnywhere || inActivity || isDemoWorker;
   }, [pro]);
   const existingReview = proReviews[0];
@@ -76,6 +104,19 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
         setNewRating(5);
       }
       setReviewOpen(true);
+    }
+  };
+
+  const isBanned = pro ? bannedProfessionalIds.includes(pro.id) : false;
+
+  const handleToggleBan = () => {
+    if (!pro) return;
+    if (isBanned) {
+      unbanProfessional(pro.id);
+      toast.success(t("unban_professional"));
+    } else {
+      banProfessional(pro.id);
+      toast.success(t("ban_professional"));
     }
   };
 
@@ -108,16 +149,34 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <h2 className="text-xl font-bold tracking-tight">
-                {pro.firstName} {pro.lastName}
-              </h2>
-              <p className="text-sm text-muted-foreground">{pro.specialty}</p>
+              <div className="flex justify-between items-start gap-2">
+                <div>
+                  <h2 className="text-xl font-bold tracking-tight">
+                    {pro.firstName} {pro.lastName}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">{pro.specialty}</p>
+                </div>
+                <Button 
+                  variant={isBanned ? "destructive" : "outline"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={handleToggleBan}
+                >
+                  {isBanned ? t("unban_professional") : t("ban_professional")}
+                </Button>
+              </div>
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="gap-1 bg-amber-500/10 text-amber-600 border-amber-500/30">
+                <Badge
+                  variant="outline"
+                  className="gap-1 bg-amber-500/10 text-amber-600 border-amber-500/30"
+                >
                   <Star className="h-3 w-3 fill-amber-500" />
                   {pro.rating.toFixed(1)}
                 </Badge>
-                <Badge variant="outline" className="gap-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                <Badge
+                  variant="outline"
+                  className="gap-1 bg-emerald-500/10 text-emerald-600 border-emerald-500/30"
+                >
                   <ShieldCheck className="h-3 w-3" />
                   Verified
                 </Badge>
@@ -155,10 +214,13 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
           {tab === "overview" ? (
             <div className="space-y-8">
               <section>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">About</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  About
+                </h3>
                 <p className="mt-2 text-sm">
-                  {pro.firstName} is a highly rated {pro.specialty} with {pro.rating} stars across {localReviews.length} assignments.
-                  Known for being punctual, professional, and excellent with patients.
+                  {pro.firstName} is a highly rated {pro.specialty} with {pro.rating} stars across{" "}
+                  {localReviews.length} assignments. Known for being punctual, professional, and
+                  excellent with patients.
                 </p>
                 <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4" />
@@ -167,10 +229,14 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
               </section>
 
               <section>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Stats</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  Stats
+                </h3>
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   <div className="rounded-xl border border-border/60 bg-card p-3">
-                    <div className="text-2xl font-bold text-foreground">{localReviews.length * 3 + 12}</div>
+                    <div className="text-2xl font-bold text-foreground">
+                      {localReviews.length * 3 + 12}
+                    </div>
                     <div className="text-xs text-muted-foreground">Total Shifts</div>
                   </div>
                   <div className="rounded-xl border border-border/60 bg-card p-3">
@@ -181,27 +247,42 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
               </section>
 
               <section>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Certificates</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  Certificates
+                </h3>
                 <div className="mt-3 space-y-2">
-                  {["CPR/BLS", "State License", "Liability Insurance", "OSHA Training"].map((cert, i) => (
-                    <div key={i} className="flex items-center justify-between rounded-lg border border-border/60 bg-card p-3">
-                      <div className="flex items-center gap-3">
-                        <Award className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">{cert}</span>
+                  {["CPR/BLS", "State License", "Liability Insurance", "OSHA Training"].map(
+                    (cert, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between rounded-lg border border-border/60 bg-card p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Award className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-medium">{cert}</span>
+                        </div>
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                       </div>
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </section>
             </div>
           ) : (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">All Reviews</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  All Reviews
+                </h3>
                 {canReview && (
                   <Button size="sm" onClick={handleOpenReview} className="gap-1">
-                    {reviewOpen ? "Cancel" : <><Plus className="h-4 w-4" /> {existingReview ? "Edit Review" : "Add Review"}</>}
+                    {reviewOpen ? (
+                      "Cancel"
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" /> {existingReview ? "Edit Review" : "Add Review"}
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
@@ -212,23 +293,31 @@ export function ProfessionalProfileSheet({ pro, onOpenChange, defaultTab = "over
                     <Label>Rating</Label>
                     <div className="mt-1 flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <button key={star} onClick={() => setNewRating(star)} className="focus:outline-none">
-                          <Star className={`h-6 w-6 ${star <= newRating ? "fill-amber-500 text-amber-500" : "text-muted-foreground/30"}`} />
+                        <button
+                          key={star}
+                          onClick={() => setNewRating(star)}
+                          className="focus:outline-none"
+                        >
+                          <Star
+                            className={`h-6 w-6 ${star <= newRating ? "fill-amber-500 text-amber-500" : "text-muted-foreground/30"}`}
+                          />
                         </button>
                       ))}
                     </div>
                   </div>
                   <div>
                     <Label>Comment</Label>
-                    <Textarea 
-                      value={newReview} 
-                      onChange={(e) => setNewReview(e.target.value)} 
-                      placeholder="How was their performance?" 
+                    <Textarea
+                      value={newReview}
+                      onChange={(e) => setNewReview(e.target.value)}
+                      placeholder="How was their performance?"
                       className="mt-1 resize-none"
                     />
                   </div>
                   <div className="flex justify-end">
-                    <Button size="sm" onClick={submitReview}>Submit</Button>
+                    <Button size="sm" onClick={submitReview}>
+                      Submit
+                    </Button>
                   </div>
                 </div>
               )}

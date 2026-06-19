@@ -11,6 +11,8 @@ import {
 } from "@/lib/types/mdd";
 import { Sparkles, Stethoscope, HelpCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export const Route = createFileRoute("/professional/specialties")({
   component: SpecialtiesPage,
@@ -19,28 +21,82 @@ export const Route = createFileRoute("/professional/specialties")({
 const specialties = Object.keys(subcategoriesBySpecialty) as ProfessionalSpecialty[];
 
 const subLabels: Record<ProfessionalSubcategory, string> = {
-  RDH: "Registered Dental Hygienist",
-  EFDA: "Expanded Function DA",
-  DentalAssistant: "Dental Assistant",
-  SterilizationTech: "Sterilization Tech",
-  TreatmentCoordinator: "Treatment Coordinator",
-  Receptionist: "Receptionist",
-  OfficeManager: "Office Manager",
-  GeneralDentist: "General Dentist",
-  Endodontist: "Endodontist",
-  Periodontist: "Periodontist",
-  OralSurgeon: "Oral Surgeon",
-  Pediatric: "Pediatric",
+  get RDH() {
+    return i18n.t("rdh_label");
+  },
+  get EFDA() {
+    return i18n.t("efda_label");
+  },
+  get DentalAssistant() {
+    return i18n.t("dental_assistant_label");
+  },
+  get SterilizationTech() {
+    return i18n.t("sterilization_tech_label");
+  },
+  get TreatmentCoordinator() {
+    return i18n.t("treatment_coordinator_label");
+  },
+  get Receptionist() {
+    return i18n.t("receptionist_label");
+  },
+  get OfficeManager() {
+    return i18n.t("office_manager_label");
+  },
+  get GeneralDentist() {
+    return i18n.t("general_dentist_label");
+  },
+  get Endodontist() {
+    return i18n.t("endodontist_label");
+  },
+  get Periodontist() {
+    return i18n.t("periodontist_label");
+  },
+  get OralSurgeon() {
+    return i18n.t("oral_surgeon_label");
+  },
+  get Pediatric() {
+    return i18n.t("pediatric_label");
+  },
 };
 
-const HYG_ASS_SUBS: ProfessionalSubcategory[] = ["RDH", "EFDA", "DentalAssistant", "SterilizationTech"];
+const HYG_ASS_SUBS: ProfessionalSubcategory[] = [
+  "RDH",
+  "EFDA",
+  "DentalAssistant",
+  "SterilizationTech",
+];
 
 const QUESTIONS = [
-  { key: "dentrix", label: "Are you familiar with Dentrix software?" },
-  { key: "eaglesoft", label: "Are you familiar with Eaglesoft software?" },
-  { key: "opendental", label: "Are you familiar with Open Dental software?" },
-  { key: "scaling", label: "Comfortable performing scaling & root planing (SRP)?" },
-  { key: "pediatric", label: "Experience working with pediatric patients?" },
+  {
+    key: "dentrix",
+    get label() {
+      return i18n.t("q_dentrix");
+    },
+  },
+  {
+    key: "eaglesoft",
+    get label() {
+      return i18n.t("q_eaglesoft");
+    },
+  },
+  {
+    key: "opendental",
+    get label() {
+      return i18n.t("q_opendental");
+    },
+  },
+  {
+    key: "scaling",
+    get label() {
+      return i18n.t("q_scaling");
+    },
+  },
+  {
+    key: "pediatric",
+    get label() {
+      return i18n.t("q_pediatric");
+    },
+  },
 ];
 
 function SpecialtiesPage() {
@@ -48,26 +104,31 @@ function SpecialtiesPage() {
   const toggle = useAppStore((s) => s.toggleSpecialty);
   const setComfort = useAppStore((s) => s.setComfortLevel);
   const setQ = useAppStore((s) => s.setQuestionnaire);
+  const { t } = useTranslation();
 
   const showQuestionnaire = profile.specialties.some((s) => HYG_ASS_SUBS.includes(s));
 
   return (
     <div className="space-y-6 p-6">
       <header>
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">My Account</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Specialties</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Pick everything you're qualified for. Rate your comfort to improve match quality.
+        <p className="text-xs font-medium uppercase tracking-wider text-primary">
+          {t("my_account")}
         </p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("specialties")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("specialties_desc")}</p>
       </header>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-muted-foreground">Selected:</span>
+        <span className="text-xs text-muted-foreground">{t("selected")}</span>
         {profile.specialties.length === 0 ? (
-          <span className="text-xs italic text-muted-foreground">None yet</span>
+          <span className="text-xs italic text-muted-foreground">{t("none_yet")}</span>
         ) : (
           profile.specialties.map((s) => (
-            <Badge key={s} variant="outline" className="border-primary/40 bg-primary/10 text-primary">
+            <Badge
+              key={s}
+              variant="outline"
+              className="border-primary/40 bg-primary/10 text-primary"
+            >
               {subLabels[s]}
             </Badge>
           ))
@@ -90,7 +151,7 @@ function SpecialtiesPage() {
                 <div>
                   <p className="text-sm font-semibold">{sp}</p>
                   <p className="text-[11px] text-muted-foreground">
-                    {subcategoriesBySpecialty[sp].length} subcategories
+                    {subcategoriesBySpecialty[sp].length} {t("subcategories")}
                   </p>
                 </div>
               </div>
@@ -99,10 +160,7 @@ function SpecialtiesPage() {
                   const checked = profile.specialties.includes(sub);
                   const comfort = profile.comfortLevels[sub] ?? 5;
                   return (
-                    <div
-                      key={sub}
-                      className="rounded-lg border border-border/60 bg-muted/30 p-3"
-                    >
+                    <div key={sub} className="rounded-lg border border-border/60 bg-muted/30 p-3">
                       <label className="flex cursor-pointer items-center gap-2.5 text-sm">
                         <Checkbox checked={checked} onCheckedChange={() => toggle(sub)} />
                         <span>{subLabels[sub]}</span>
@@ -110,7 +168,7 @@ function SpecialtiesPage() {
                       {checked && (
                         <div className="mt-3 space-y-1.5">
                           <div className="flex items-center justify-between text-[11px]">
-                            <span className="text-muted-foreground">Comfort level</span>
+                            <span className="text-muted-foreground">{t("comfort_level")}</span>
                             <span className="font-semibold text-primary">{comfort} / 10</span>
                           </div>
                           <Slider
@@ -135,11 +193,9 @@ function SpecialtiesPage() {
         <Card className="space-y-3 border-primary/30 bg-primary/5 p-5">
           <div className="flex items-center gap-2">
             <HelpCircle className="h-4 w-4 text-primary" />
-            <p className="text-sm font-semibold">Hygienist & Assistant questionnaire</p>
+            <p className="text-sm font-semibold">{t("hyg_ass_quest")}</p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Help us match you with practices that fit your toolkit and experience.
-          </p>
+          <p className="text-xs text-muted-foreground">{t("quest_desc")}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {QUESTIONS.map((q) => {
               const v = profile.questionnaire[q.key] ?? false;
@@ -159,10 +215,7 @@ function SpecialtiesPage() {
 
       <Card className="flex items-center gap-3 border-primary/30 bg-primary/5 p-4">
         <Sparkles className="h-5 w-5 text-primary" />
-        <p className="text-xs text-muted-foreground">
-          Comfort levels are surveyed periodically. Owners see them as a confidence indicator,
-          not a hard filter.
-        </p>
+        <p className="text-xs text-muted-foreground">{t("comfort_level_desc")}</p>
       </Card>
     </div>
   );

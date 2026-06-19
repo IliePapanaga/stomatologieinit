@@ -37,23 +37,35 @@ export function BillingVaultPreview() {
               transition={{ delay: i * 0.07 }}
               className="group relative flex items-center gap-3 overflow-hidden rounded-lg border border-border/60 bg-card p-3"
             >
-              <div className={`flex h-9 w-12 items-center justify-center rounded-md text-[10px] font-bold tracking-wide ${
-                pm.type === "ACH"
-                  ? "bg-secondary text-secondary-foreground"
-                  : "bg-gradient-brand text-primary-foreground"
-              }`}>
-                {pm.type === "ACH" ? <Landmark className="h-4 w-4" /> : <CreditCard className="h-4 w-4" />}
+              <div
+                className={`flex h-9 w-12 items-center justify-center rounded-md text-[10px] font-bold tracking-wide ${
+                  pm.type === "ACH"
+                    ? "bg-secondary text-secondary-foreground"
+                    : "bg-gradient-brand text-primary-foreground"
+                }`}
+              >
+                {pm.type === "ACH" ? (
+                  <Landmark className="h-4 w-4" />
+                ) : (
+                  <CreditCard className="h-4 w-4" />
+                )}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">
                   {pm.brand} •••• {pm.last4}
                 </p>
                 <p className="truncate text-[11px] text-muted-foreground">
-                  {pm.holderName}{pm.expMonth ? ` · ${pm.expMonth.toString().padStart(2, "0")}/${pm.expYear?.toString().slice(-2)}` : ""}
+                  {pm.holderName}
+                  {pm.expMonth
+                    ? ` · ${pm.expMonth.toString().padStart(2, "0")}/${pm.expYear?.toString().slice(-2)}`
+                    : ""}
                 </p>
               </div>
               {pm.isDefault && (
-                <Badge variant="outline" className="border-success/40 bg-success/10 text-success text-[10px]">
+                <Badge
+                  variant="outline"
+                  className="border-success/40 bg-success/10 text-success text-[10px]"
+                >
                   Default
                 </Badge>
               )}

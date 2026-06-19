@@ -24,6 +24,15 @@ import { useCreateSosRequest } from "@/lib/hooks/practice";
 import { mockLocations } from "@/lib/mock";
 import type { ProfessionalSpecialty } from "@/lib/types/mdd";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+
+const specialties: ProfessionalSpecialty[] = [
+  "Hygienist",
+  "Dentist",
+  "Assistant",
+  "FrontOffice",
+  "Orthodontist",
+];
 
 const HOLD_MS = 3000;
 
@@ -35,6 +44,7 @@ export function SosButton() {
   const [locationId, setLocationId] = useState(mockLocations[0].id);
   const [radius, setRadius] = useState(12);
   const [message, setMessage] = useState("");
+  const { t } = useTranslation();
 
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -80,8 +90,8 @@ export function SosButton() {
       setConfirm(false);
       setProgress(0);
       setMessage("");
-      toast.success("SOS broadcast sent", {
-        description: `Notifying ${specialty}s within ${radius} mi · ${res.id}`,
+      toast.success(t("sos_broadcast_sent"), {
+        description: t("sos_broadcast_desc", { specialty: t(`${specialty.toLowerCase()}_label`), radius }),
       });
     }, 1100);
   };
@@ -93,7 +103,7 @@ export function SosButton() {
     <>
       <div className="relative flex flex-col items-center justify-center rounded-2xl border border-destructive/25 bg-gradient-to-br from-destructive/5 via-warning/5 to-transparent p-5 shadow-soft sm:p-6">
         <div className="mb-3 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-destructive">
-          <Siren className="h-3.5 w-3.5" /> Emergency staffing
+          <Siren className="h-3.5 w-3.5" /> {t("emergency_staffing")}
         </div>
 
         <button
@@ -134,52 +144,69 @@ export function SosButton() {
           </svg>
           <div className="relative flex flex-col items-center gap-1">
             <Siren className="h-7 w-7" />
-            <span className="text-sm font-semibold tracking-tight">I need staff</span>
+            <span className="text-sm font-semibold tracking-tight">{t("i_need_staff")}</span>
             <span className="text-[10px] font-medium uppercase tracking-widest opacity-80">
-              NOW
+              {t("now")}
             </span>
           </div>
         </button>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Hold for 3 seconds to broadcast a <span className="font-medium text-foreground">SosRequest</span> to nearby pros.
+          {t("hold_to_broadcast")}
         </p>
       </div>
 
-      <Sheet open={open} onOpenChange={(o) => { setOpen(o); if (!o) setProgress(0); }}>
+      <Sheet
+        open={open}
+        onOpenChange={(o) => {
+          setOpen(o);
+          if (!o) setProgress(0);
+        }}
+      >
         <SheetContent side="right" className="w-full sm:max-w-md flex flex-col">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-destructive/10 text-destructive">
                 <Siren className="h-4 w-4" />
               </span>
-              Confirm SOS broadcast
+              <span className="text-xl">{t("confirm_sos_title")}</span>
             </SheetTitle>
             <SheetDescription>
-              Verified pros nearby will get an instant push & SMS.
+              {t("confirm_sos_desc")}
             </SheetDescription>
           </SheetHeader>
 
           <div className="mt-6 flex-1 space-y-5 px-4">
             <div className="space-y-1.5">
-              <Label>Role needed</Label>
-              <Select value={specialty} onValueChange={(v) => setSpecialty(v as ProfessionalSpecialty)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Label>{t("specialty")}</Label>
+              <Select
+                value={specialty}
+                onValueChange={(v) => setSpecialty(v as ProfessionalSpecialty)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {(["Hygienist", "Dentist", "Assistant", "FrontOffice", "Orthodontist"] as ProfessionalSpecialty[]).map((s) => (
-                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  {specialties.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {t(`${s.toLowerCase()}_label`)}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-1.5">
-              <Label>Location</Label>
+              <Label>{t("location")}</Label>
               <Select value={locationId} onValueChange={setLocationId}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {mockLocations.map((l) => (
-                    <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+                    <SelectItem key={l.id} value={l.id}>
+                      {l.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -187,16 +214,22 @@ export function SosButton() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label>Search radius</Label>
-                <span className="text-sm font-semibold tabular-nums">{radius} mi</span>
+                <Label className="text-sm">{t("broadcast_radius")}</Label>
+                <span className="text-sm font-semibold tabular-nums text-foreground">{radius} {t("mi")}</span>
               </div>
-              <Slider value={[radius]} onValueChange={([v]) => setRadius(v)} min={2} max={30} step={1} />
+              <Slider
+                value={[radius]}
+                onValueChange={([v]) => setRadius(v)}
+                min={2}
+                max={30}
+                step={1}
+              />
             </div>
 
             <div className="space-y-1.5">
-              <Label>Message (optional)</Label>
+              <Label>{t("message_optional")}</Label>
               <Textarea
-                placeholder="Need coverage for afternoon prophy block…"
+                placeholder={t("message_placeholder")}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={3}
@@ -205,21 +238,35 @@ export function SosButton() {
           </div>
 
           <SheetFooter className="px-4 pb-4">
-            <Button variant="outline" onClick={() => setOpen(false)} disabled={sos.isPending || confirm}>
-              Cancel
+            <Button
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={sos.isPending || confirm}
+            >
+              {t("cancel")}
             </Button>
             <Button
               onClick={handleConfirm}
               disabled={sos.isPending || confirm}
-              className="bg-gradient-sos text-primary-foreground"
+              className="gap-2 bg-gradient-sos text-primary-foreground"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {confirm ? (
-                  <motion.span key="ok" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" /> Sent
+                  <motion.span
+                    key="ok"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="flex items-center gap-2"
+                  >
+                    <CheckCircle2 className="h-4 w-4" /> {t("sent")}
                   </motion.span>
                 ) : (
-                  <motion.span key="send" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2">
+                  <motion.span
+                    key="send"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex items-center gap-2"
+                  >
                     <Siren className="h-4 w-4" /> Broadcast SOS
                   </motion.span>
                 )}

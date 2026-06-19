@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNearbyProfessionals } from "@/lib/hooks/practice";
 import type { ProfessionalSpecialty } from "@/lib/types/mdd";
+import { useTranslation } from "react-i18next";
 
 const SPECIALTY_COLORS: Record<ProfessionalSpecialty, string> = {
   Hygienist: "var(--color-primary)",
@@ -17,6 +18,7 @@ const RADIUS = 14;
 
 export function LiveRadar() {
   const { data: pros = [] } = useNearbyProfessionals(RADIUS);
+  const { t } = useTranslation();
   const onlineCount = pros.filter((p) => p.online).length;
   const specialties = Object.keys(SPECIALTY_COLORS) as ProfessionalSpecialty[];
 
@@ -39,16 +41,19 @@ export function LiveRadar() {
         <div>
           <CardTitle className="flex items-center gap-2 text-base">
             <Users className="h-4 w-4 text-primary" />
-            Nearby talent
+            {t("nearby_talent")}
           </CardTitle>
           <p className="mt-1 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{pros.length} professionals</span> within{" "}
-            {RADIUS} mi · {onlineCount} online
+            <span className="font-semibold text-foreground">{t("professionals_within", { count: pros.length, dist: RADIUS })}</span>{" "}
+            · {t("online", { count: onlineCount })}
           </p>
         </div>
-        <Badge variant="outline" className="gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <Badge
+          variant="outline"
+          className="gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          Live
+          {t("live")}
         </Badge>
       </CardHeader>
 
@@ -56,7 +61,7 @@ export function LiveRadar() {
         {/* Distance distribution */}
         <div>
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            By distance
+            {t("by_distance")}
           </p>
           <ul className="mt-3 space-y-3">
             {buckets.map((b, i) => {
@@ -65,7 +70,7 @@ export function LiveRadar() {
               return (
                 <li key={b.label} className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">{b.label}</span>
+                    <span className="text-muted-foreground">{b.label.replace('mi', t('mi'))}</span>
                     <span className="font-semibold tabular-nums text-foreground">{count}</span>
                   </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
@@ -85,7 +90,7 @@ export function LiveRadar() {
         {/* Specialty breakdown */}
         <div>
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            By specialty
+            {t("by_specialty")}
           </p>
           <ul className="mt-3 space-y-2">
             {specialties.map((s) => {
@@ -101,10 +106,10 @@ export function LiveRadar() {
                       className="h-2 w-2 rounded-full"
                       style={{ background: SPECIALTY_COLORS[s] }}
                     />
-                    {s}
+                    {t(`${s.toLowerCase()}_label`)}
                   </span>
                   <span className="flex items-center gap-2">
-                    <span className="text-muted-foreground">{online} online</span>
+                    <span className="text-muted-foreground">{t("online", { count: online })}</span>
                     <span className="font-semibold tabular-nums text-foreground">{count}</span>
                   </span>
                 </li>
@@ -113,7 +118,7 @@ export function LiveRadar() {
           </ul>
 
           <div className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <MapPin className="h-3 w-3" /> Mission Bay Studio · updated just now
+            <MapPin className="h-3 w-3" /> Mission Bay Studio · {t("updated_just_now")}
           </div>
         </div>
       </CardContent>

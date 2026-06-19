@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAppStore } from "@/lib/store/app-store";
 import { toast } from "sonner";
 import { Save, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/professional/profile")({
   component: ProfilePage,
@@ -25,19 +26,21 @@ function ProfilePage() {
 
   const initials = `${form.firstName[0] ?? ""}${form.lastName[0] ?? ""}`.toUpperCase();
 
+  const { t } = useTranslation();
+
   const onSave = () => {
     update({ ...form, avatarInitials: initials });
-    toast.success("Profile saved");
+    toast.success(t("profile_saved"));
   };
 
   return (
     <div className="space-y-6 p-6">
       <header>
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">My Account</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Edit profile</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Update your contact info and how far you'll travel for shifts.
+        <p className="text-xs font-medium uppercase tracking-wider text-primary">
+          {t("my_account")}
         </p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t("edit_profile")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("edit_profile_desc")}</p>
       </header>
 
       <div className="grid gap-5 lg:grid-cols-3">
@@ -69,49 +72,49 @@ function ProfilePage() {
               }}
             />
             <span className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-xs font-medium hover:bg-accent">
-              Upload avatar
+              {t("upload_avatar")}
             </span>
           </label>
         </Card>
 
         <Card className="space-y-5 p-6 lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="First name">
+            <Field label={t("first_name")}>
               <Input value={form.firstName} onChange={(e) => set("firstName", e.target.value)} />
             </Field>
-            <Field label="Last name">
+            <Field label={t("last_name")}>
               <Input value={form.lastName} onChange={(e) => set("lastName", e.target.value)} />
             </Field>
-            <Field label="Phone number">
+            <Field label={t("phone_number")}>
               <Input value={form.phone} onChange={(e) => set("phone", e.target.value)} />
             </Field>
-            <Field label="Email">
+            <Field label={t("email")}>
               <Input value={form.email} onChange={(e) => set("email", e.target.value)} />
             </Field>
           </div>
-          <Field label="Home address">
+          <Field label={t("home_address")}>
             <Input
               value={form.address}
               onChange={(e) => set("address", e.target.value)}
-              placeholder="123 Main St, City, ST"
+              placeholder={t("home_address_placeholder")}
             />
           </Field>
-          <Field label="Short bio">
+          <Field label={t("short_bio")}>
             <Textarea
               rows={3}
               value={form.bio}
               onChange={(e) => set("bio", e.target.value)}
-              placeholder="A few sentences about your background…"
+              placeholder={t("short_bio_placeholder")}
             />
           </Field>
 
           <div className="space-y-3 rounded-xl border border-border/70 bg-muted/30 p-4">
             <div className="flex items-center justify-between">
               <Label className="flex items-center gap-2 text-sm">
-                <MapPin className="h-4 w-4 text-primary" /> Commuting radius
+                <MapPin className="h-4 w-4 text-primary" /> {t("commuting_radius")}
               </Label>
               <span className="text-sm font-semibold text-primary">
-                {form.commutingRadius} mi
+                {form.commutingRadius} {t("mi_away").replace(" away", "")}
               </span>
             </div>
             <Slider
@@ -121,14 +124,12 @@ function ProfilePage() {
               max={50}
               step={1}
             />
-            <p className="text-[11px] text-muted-foreground">
-              You'll only see jobs within this distance of your home base.
-            </p>
+            <p className="text-[11px] text-muted-foreground">{t("commuting_radius_desc")}</p>
           </div>
 
           <div className="flex justify-end">
             <Button onClick={onSave}>
-              <Save className="h-4 w-4" /> Save changes
+              <Save className="h-4 w-4" /> {t("save_changes")}
             </Button>
           </div>
         </Card>

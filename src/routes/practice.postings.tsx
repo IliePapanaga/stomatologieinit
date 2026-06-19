@@ -16,7 +16,13 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { NewPostingSheet } from "@/components/practice/new-posting-sheet";
@@ -25,6 +31,8 @@ import { usePostings, useRemovePosting } from "@/lib/hooks/postings";
 import { mockLocations, mockProfessionals } from "@/lib/mock";
 import { Trash2 } from "lucide-react";
 import { calculateMatchScore } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 import type {
   JobPosting,
   PermanentJobPosting,
@@ -39,18 +47,53 @@ export const Route = createFileRoute("/practice/postings")({
 
 type SortMode = "match" | "date" | "applicants" | "pay";
 
-const sortModes: { id: SortMode; label: string; icon: typeof MapPin; desc: string }[] = [
-  { id: "match",      label: "Best match",  icon: Sparkles,   desc: "Highest candidate match score first" },
-  { id: "applicants", label: "Applicants",  icon: Users,      desc: "Most applicants first" },
-  { id: "pay",        label: "Pay",         icon: DollarSign, desc: "Highest pay first" },
-  { id: "date",       label: "Newest",      icon: CalendarDays, desc: "Most recently created" },
+const sortModes = [
+  {
+    id: "match",
+    get label() {
+      return i18n.t("best_match");
+    },
+    icon: Sparkles,
+    get desc() {
+      return i18n.t("best_match_desc");
+    },
+  },
+  {
+    id: "applicants",
+    get label() {
+      return i18n.t("applicants");
+    },
+    icon: Users,
+    get desc() {
+      return i18n.t("applicants_desc");
+    },
+  },
+  {
+    id: "pay",
+    get label() {
+      return i18n.t("pay");
+    },
+    icon: DollarSign,
+    get desc() {
+      return i18n.t("pay_desc");
+    },
+  },
+  {
+    id: "date",
+    get label() {
+      return i18n.t("newest");
+    },
+    icon: CalendarDays,
+    get desc() {
+      return i18n.t("newest_desc");
+    },
+  },
 ];
 
-const formatSub = (s: ProfessionalSubcategory) =>
-  s.replace(/([A-Z])/g, " $1").trim();
+const formatSub = (s: ProfessionalSubcategory) => s.replace(/([A-Z])/g, " $1").trim();
 
 const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  new Date(iso).toLocaleDateString(i18n.language, { month: "short", day: "numeric", year: "numeric" });
 
 const statusStyles: Record<PostingStatus, string> = {
   Open: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
@@ -66,17 +109,20 @@ function PostingsPage() {
   const [q, setQ] = useState("");
   const [spaceFilter, setSpaceFilter] = useState<"All" | "Current" | "Full" | "Past">("All");
   const [sort, setSort] = useState<SortMode>("match");
+  const { t } = useTranslation();
 
   const filtered = useMemo(() => {
     if (!data) return [];
     const term = q.trim().toLowerCase();
     const now = new Date().getTime();
-    
+
     return data
       .filter((p) => p.kind === tab)
       .filter((p) => {
         if (spaceFilter === "All") return true;
-        const endDate = p.endDate ? new Date(p.endDate).getTime() : new Date(p.startDate).getTime() + 86400000;
+        const endDate = p.endDate
+          ? new Date(p.endDate).getTime()
+          : new Date(p.startDate).getTime() + 86400000;
         const isPast = endDate < now;
         if (spaceFilter === "Past") return isPast;
         if (isPast) return false;
@@ -89,23 +135,36 @@ function PostingsPage() {
         !term
           ? true
           : (p.title ?? "").toLowerCase().includes(term) ||
-            p.specialty.toLowerCase().includes(term) ||
-            p.subcategory.toLowerCase().includes(term)
+            t(`${p.specialty.toLowerCase()}_label`).toLowerCase().includes(term) ||
+            t(`${p.subcategory.toLowerCase()}_label`, formatSub(p.subcategory)).toLowerCase().includes(term),
       );
-  }, [data, tab, q, spaceFilter]);
+  }, [data, tab, q, spaceFilter, t]);
 
   const sorted = useMemo(() => {
     const list = [...filtered];
     switch (sort) {
-      case "match":      return list.sort((a, b) => b.matchPercentage - a.matchPercentage);
-      case "applicants": return list.sort((a, b) => b.applicantsCount - a.applicantsCount);
-      case "pay":        return list.sort((a, b) => {
-        const valA = a.kind === "Temporary" ? (a as { hourlyRate: number }).hourlyRate : (a as { salaryRange: { max: number } }).salaryRange.max;
-        const valB = b.kind === "Temporary" ? (b as { hourlyRate: number }).hourlyRate : (b as { salaryRange: { max: number } }).salaryRange.max;
-        return valB - valA;
-      });
-      case "date":       return list.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
-      default:           return list;
+      case "match":
+        return list.sort((a, b) => b.matchPercentage - a.matchPercentage);
+      case "applicants":
+        return list.sort((a, b) => b.applicantsCount - a.applicantsCount);
+      case "pay":
+        return list.sort((a, b) => {
+          const valA =
+            a.kind === "Temporary"
+              ? (a as { hourlyRate: number }).hourlyRate
+              : (a as { salaryRange: { max: number } }).salaryRange.max;
+          const valB =
+            b.kind === "Temporary"
+              ? (b as { hourlyRate: number }).hourlyRate
+              : (b as { salaryRange: { max: number } }).salaryRange.max;
+          return valB - valA;
+        });
+      case "date":
+        return list.sort(
+          (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+        );
+      default:
+        return list;
     }
   }, [filtered, sort]);
 
@@ -119,10 +178,8 @@ function PostingsPage() {
     <div className="space-y-6 p-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Roles</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage permanent roles and temporary shifts. Live match scores update as candidates apply.
-          </p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("roles_title")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("roles_desc")}</p>
         </div>
         <NewPostingSheet />
       </div>
@@ -132,14 +189,14 @@ function PostingsPage() {
           <TabsList>
             <TabsTrigger value="Permanent" className="gap-2">
               <Briefcase className="h-3.5 w-3.5" />
-              Permanent
+              {t("permanent")}
               <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
                 {counts.perm}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="Temporary" className="gap-2">
               <Clock4 className="h-3.5 w-3.5" />
-              Temporary
+              {t("temporary")}
               <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
                 {counts.temp}
               </Badge>
@@ -147,12 +204,14 @@ function PostingsPage() {
           </TabsList>
           <div className="flex flex-wrap items-center gap-3">
             <Select value={spaceFilter} onValueChange={(v) => setSpaceFilter(v as any)}>
-              <SelectTrigger className="w-[120px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">All statuses</SelectItem>
-                <SelectItem value="Current">Current</SelectItem>
-                <SelectItem value="Full">Full</SelectItem>
-                <SelectItem value="Past">Past</SelectItem>
+                <SelectItem value="All">{t("all_statuses")}</SelectItem>
+                <SelectItem value="Current">{t("current")}</SelectItem>
+                <SelectItem value="Full">{t("full")}</SelectItem>
+                <SelectItem value="Past">{t("past")}</SelectItem>
               </SelectContent>
             </Select>
             <div className="relative w-full sm:w-[200px]">
@@ -160,7 +219,7 @@ function PostingsPage() {
               <Input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search title, specialty…"
+                placeholder={t("search_title")}
                 className="pl-9"
               />
             </div>
@@ -169,7 +228,9 @@ function PostingsPage() {
 
         {/* Sort bar */}
         <div className="flex flex-wrap items-center gap-2 mt-2">
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Sort by</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            {t("sort_by")}
+          </span>
           <div className="flex flex-wrap gap-1.5">
             {sortModes.map((m) => {
               const active = sort === m.id;
@@ -177,7 +238,7 @@ function PostingsPage() {
                 <button
                   key={m.id}
                   title={m.desc}
-                  onClick={() => setSort(m.id)}
+                  onClick={() => setSort(m.id as SortMode)}
                   className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
                     active
                       ? "border-primary/50 bg-primary/10 text-primary shadow-sm"
@@ -197,14 +258,16 @@ function PostingsPage() {
           <PostingsList
             postings={sorted as PermanentJobPosting[]}
             loading={isLoading}
-            empty="No permanent postings yet"
+            empty={t("no_perm_postings")}
+            subEmpty={t("try_different_search")}
           />
         </TabsContent>
         <TabsContent value="Temporary" className="mt-5">
           <PostingsList
             postings={sorted as TemporaryJobPosting[]}
             loading={isLoading}
-            empty="No temporary shifts posted"
+            empty={t("no_temp_postings")}
+            subEmpty={t("try_different_search")}
           />
         </TabsContent>
       </Tabs>
@@ -216,10 +279,12 @@ function PostingsList({
   postings,
   loading,
   empty,
+  subEmpty,
 }: {
   postings: JobPosting[];
   loading: boolean;
   empty: string;
+  subEmpty: string;
 }) {
   if (loading) {
     return (
@@ -235,9 +300,7 @@ function PostingsList({
       <div className="rounded-2xl border border-dashed border-border/70 p-12 text-center">
         <Sparkles className="mx-auto h-6 w-6 text-muted-foreground" />
         <p className="mt-3 text-sm font-medium">{empty}</p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Try a different search or create a new posting.
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">{subEmpty}</p>
       </div>
     );
   }
@@ -262,11 +325,12 @@ function PostingCard({ posting }: { posting: JobPosting }) {
   const [sheetMode, setSheetMode] = useState<"candidates" | "hired" | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const remove = useRemovePosting();
+  const { t } = useTranslation();
 
   const location = mockLocations.find((l) => l.id === posting.locationId);
   const isTemp = posting.kind === "Temporary";
   const maxMatch = useMemo(() => {
-    let pool = mockProfessionals.filter(p => p.specialty === posting.specialty);
+    let pool = mockProfessionals.filter((p) => p.specialty === posting.specialty);
     if (pool.length === 0) pool = mockProfessionals;
     let max = 0;
     for (const pro of pool) {
@@ -280,8 +344,8 @@ function PostingCard({ posting }: { posting: JobPosting }) {
     maxMatch >= 85
       ? "text-emerald-600 dark:text-emerald-400"
       : maxMatch >= 70
-      ? "text-primary"
-      : "text-amber-600 dark:text-amber-400";
+        ? "text-primary"
+        : "text-amber-600 dark:text-amber-400";
 
   return (
     <motion.article
@@ -299,25 +363,23 @@ function PostingCard({ posting }: { posting: JobPosting }) {
               variant="outline"
               className={`h-5 px-2 text-[10px] font-medium ${statusStyles[posting.status]}`}
             >
-              {posting.status}
+              {t(`status_${posting.status.toLowerCase()}`, posting.status)}
             </Badge>
             <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              {posting.specialty}
+              {t(`${posting.specialty.toLowerCase()}_label`)}
             </span>
           </div>
           <h3 className="mt-2 truncate text-base font-semibold text-foreground">
-            {posting.title ?? `${formatSub(posting.subcategory)} role`}
+            {posting.title ?? `${t(`${posting.subcategory.toLowerCase()}_label`, formatSub(posting.subcategory))} ${t("role")}`}
           </h3>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
-            {formatSub(posting.subcategory)}
+            {t(`${posting.subcategory.toLowerCase()}_label`, formatSub(posting.subcategory))}
           </p>
         </div>
         <div className="text-right">
-          <div className={`text-xl font-bold tabular-nums ${matchTone}`}>
-            {maxMatch}%
-          </div>
+          <div className={`text-xl font-bold tabular-nums ${matchTone}`}>{maxMatch}%</div>
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
-            match
+            {t("match")}
           </div>
         </div>
       </div>
@@ -326,12 +388,18 @@ function PostingCard({ posting }: { posting: JobPosting }) {
         <Stat
           icon={<MapPin className="h-3.5 w-3.5" />}
           label={location?.name ?? "—"}
-          sub={`${posting.commutingRadius} mi radius`}
+          sub={`${posting.commutingRadius} mi ${t("radius").toLowerCase()}`}
         />
         <Stat
           icon={<CalendarDays className="h-3.5 w-3.5" />}
           label={fmtDate(posting.startDate)}
-          sub={posting.endDate ? `→ ${fmtDate(posting.endDate)}` : isTemp ? "single shift" : "open-ended"}
+          sub={
+            posting.endDate
+              ? `→ ${fmtDate(posting.endDate)}`
+              : isTemp
+                ? t("single_shift")
+                : t("open_ended")
+          }
         />
       </div>
 
@@ -343,32 +411,51 @@ function PostingCard({ posting }: { posting: JobPosting }) {
               : `$${((posting as PermanentJobPosting).salaryRange.min / 1000).toFixed(0)}k – $${((posting as PermanentJobPosting).salaryRange.max / 1000).toFixed(0)}k`}
           </div>
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
-            {isTemp ? (posting as TemporaryJobPosting).temporaryKind + " schedule" : (posting as PermanentJobPosting).fullTime ? "Full-time" : "Part-time"}
+            {isTemp
+              ? t(`schedule_${(posting as TemporaryJobPosting).temporaryKind.toLowerCase()}`) + " " + t("schedule")
+              : (posting as PermanentJobPosting).fullTime
+                ? t("full_time")
+                : t("part_time")}
           </div>
         </div>
         <div className="flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs">
           <Users className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="font-medium">{posting.applicantsCount}</span>
-          <span className="text-muted-foreground">applicants</span>
+          <span className="text-muted-foreground">{t("applicants").toLowerCase()}</span>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button size="sm" variant="outline" className="flex-1 bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary" onClick={() => setSheetMode("candidates")}>
-          View candidates
+        <Button
+          size="sm"
+          variant="outline"
+          className="flex-1 bg-primary/5 border-primary/20 hover:bg-primary/10 text-primary"
+          onClick={() => setSheetMode("candidates")}
+        >
+          {t("view_candidates")}
         </Button>
-        <Button size="sm" variant="outline" className="flex-1 border-primary/20 hover:bg-primary/5 text-primary" onClick={() => setSheetMode("hired")}>
-          Hired ({posting.hiredCandidateIds?.length || 0})
+        <Button
+          size="sm"
+          variant="outline"
+          className="flex-1 border-primary/20 hover:bg-primary/5 text-primary"
+          onClick={() => setSheetMode("hired")}
+        >
+          {t("hired")} ({posting.hiredCandidateIds?.length || 0})
         </Button>
-        <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => setEditOpen(true)}>
-          Edit
+        <Button
+          size="sm"
+          variant="ghost"
+          className="text-muted-foreground"
+          onClick={() => setEditOpen(true)}
+        >
+          {t("edit")}
         </Button>
-        <Button 
-          size="sm" 
-          variant="ghost" 
+        <Button
+          size="sm"
+          variant="ghost"
           className="text-destructive hover:bg-destructive/10 hover:text-destructive px-2"
           onClick={() => {
-            if (window.confirm("Are you sure you want to delete this role?")) {
+            if (window.confirm(t("delete_role_confirm"))) {
               remove.mutate(posting.id);
             }
           }}
@@ -380,7 +467,9 @@ function PostingCard({ posting }: { posting: JobPosting }) {
       <CandidatesSheet
         posting={sheetMode ? posting : null}
         mode={sheetMode || "candidates"}
-        onOpenChange={(v) => { if (!v) setSheetMode(null); }}
+        onOpenChange={(v) => {
+          if (!v) setSheetMode(null);
+        }}
       />
       <NewPostingSheet
         open={editOpen}
@@ -392,15 +481,7 @@ function PostingCard({ posting }: { posting: JobPosting }) {
   );
 }
 
-function Stat({
-  icon,
-  label,
-  sub,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  sub?: string;
-}) {
+function Stat({ icon, label, sub }: { icon: React.ReactNode; label: string; sub?: string }) {
   return (
     <div className="flex items-start gap-2">
       <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-md bg-muted text-muted-foreground">

@@ -13,7 +13,7 @@ export function useCreatePosting() {
   return {
     mutate: (
       input: CreatePostingInput,
-      opts?: { onSuccess?: (p: JobPosting) => void; onError?: (e: unknown) => void }
+      opts?: { onSuccess?: (p: JobPosting) => void; onError?: (e: unknown) => void },
     ) => {
       try {
         const p = addPosting(input);
@@ -29,7 +29,10 @@ export function useCreatePosting() {
 export function useUpdatePosting() {
   const updatePosting = useAppStore((s) => s.updatePosting);
   return {
-    mutate: (args: { id: string; updates: Partial<JobPosting> }, opts?: { onSuccess?: () => void }) => {
+    mutate: (
+      args: { id: string; updates: Partial<JobPosting> },
+      opts?: { onSuccess?: () => void },
+    ) => {
       updatePosting(args.id, args.updates);
       opts?.onSuccess?.();
     },
