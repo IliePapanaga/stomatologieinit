@@ -5,6 +5,7 @@ import {
   Briefcase,
   ChevronDown,
   Calendar,
+  CalendarDays,
   Building2,
   Ban,
   History,
@@ -56,6 +57,7 @@ const isGroup = (n: NavItem): n is NavGroup => "items" in n;
 
 const nav: NavItem[] = [
   { title: "Overview", url: "/professional", icon: LayoutDashboard, exact: true },
+  { title: "Schedule", url: "/professional/schedule", icon: CalendarDays },
   {
     title: "Assignments",
     icon: Briefcase,

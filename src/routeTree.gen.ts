@@ -20,6 +20,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProfessionalTemporaryJobsRouteImport } from './routes/professional.temporary-jobs'
 import { Route as ProfessionalSpecialtiesRouteImport } from './routes/professional.specialties'
 import { Route as ProfessionalSkillsRouteImport } from './routes/professional.skills'
+import { Route as ProfessionalScheduleRouteImport } from './routes/professional.schedule'
 import { Route as ProfessionalProfileRouteImport } from './routes/professional.profile'
 import { Route as ProfessionalPermanentJobsRouteImport } from './routes/professional.permanent-jobs'
 import { Route as ProfessionalJobHistoryRouteImport } from './routes/professional.job-history'
@@ -88,6 +89,11 @@ const ProfessionalSpecialtiesRoute = ProfessionalSpecialtiesRouteImport.update({
 const ProfessionalSkillsRoute = ProfessionalSkillsRouteImport.update({
   id: '/skills',
   path: '/skills',
+  getParentRoute: () => ProfessionalRoute,
+} as any)
+const ProfessionalScheduleRoute = ProfessionalScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
   getParentRoute: () => ProfessionalRoute,
 } as any)
 const ProfessionalProfileRoute = ProfessionalProfileRouteImport.update({
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/professional/job-history': typeof ProfessionalJobHistoryRoute
   '/professional/permanent-jobs': typeof ProfessionalPermanentJobsRoute
   '/professional/profile': typeof ProfessionalProfileRoute
+  '/professional/schedule': typeof ProfessionalScheduleRoute
   '/professional/skills': typeof ProfessionalSkillsRoute
   '/professional/specialties': typeof ProfessionalSpecialtiesRoute
   '/professional/temporary-jobs': typeof ProfessionalTemporaryJobsRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/professional/job-history': typeof ProfessionalJobHistoryRoute
   '/professional/permanent-jobs': typeof ProfessionalPermanentJobsRoute
   '/professional/profile': typeof ProfessionalProfileRoute
+  '/professional/schedule': typeof ProfessionalScheduleRoute
   '/professional/skills': typeof ProfessionalSkillsRoute
   '/professional/specialties': typeof ProfessionalSpecialtiesRoute
   '/professional/temporary-jobs': typeof ProfessionalTemporaryJobsRoute
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/professional/job-history': typeof ProfessionalJobHistoryRoute
   '/professional/permanent-jobs': typeof ProfessionalPermanentJobsRoute
   '/professional/profile': typeof ProfessionalProfileRoute
+  '/professional/schedule': typeof ProfessionalScheduleRoute
   '/professional/skills': typeof ProfessionalSkillsRoute
   '/professional/specialties': typeof ProfessionalSpecialtiesRoute
   '/professional/temporary-jobs': typeof ProfessionalTemporaryJobsRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/professional/job-history'
     | '/professional/permanent-jobs'
     | '/professional/profile'
+    | '/professional/schedule'
     | '/professional/skills'
     | '/professional/specialties'
     | '/professional/temporary-jobs'
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/professional/job-history'
     | '/professional/permanent-jobs'
     | '/professional/profile'
+    | '/professional/schedule'
     | '/professional/skills'
     | '/professional/specialties'
     | '/professional/temporary-jobs'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/professional/job-history'
     | '/professional/permanent-jobs'
     | '/professional/profile'
+    | '/professional/schedule'
     | '/professional/skills'
     | '/professional/specialties'
     | '/professional/temporary-jobs'
@@ -398,6 +410,13 @@ declare module '@tanstack/react-router' {
       path: '/skills'
       fullPath: '/professional/skills'
       preLoaderRoute: typeof ProfessionalSkillsRouteImport
+      parentRoute: typeof ProfessionalRoute
+    }
+    '/professional/schedule': {
+      id: '/professional/schedule'
+      path: '/schedule'
+      fullPath: '/professional/schedule'
+      preLoaderRoute: typeof ProfessionalScheduleRouteImport
       parentRoute: typeof ProfessionalRoute
     }
     '/professional/profile': {
@@ -537,6 +556,7 @@ interface ProfessionalRouteChildren {
   ProfessionalJobHistoryRoute: typeof ProfessionalJobHistoryRoute
   ProfessionalPermanentJobsRoute: typeof ProfessionalPermanentJobsRoute
   ProfessionalProfileRoute: typeof ProfessionalProfileRoute
+  ProfessionalScheduleRoute: typeof ProfessionalScheduleRoute
   ProfessionalSkillsRoute: typeof ProfessionalSkillsRoute
   ProfessionalSpecialtiesRoute: typeof ProfessionalSpecialtiesRoute
   ProfessionalTemporaryJobsRoute: typeof ProfessionalTemporaryJobsRoute
@@ -550,6 +570,7 @@ const ProfessionalRouteChildren: ProfessionalRouteChildren = {
   ProfessionalJobHistoryRoute: ProfessionalJobHistoryRoute,
   ProfessionalPermanentJobsRoute: ProfessionalPermanentJobsRoute,
   ProfessionalProfileRoute: ProfessionalProfileRoute,
+  ProfessionalScheduleRoute: ProfessionalScheduleRoute,
   ProfessionalSkillsRoute: ProfessionalSkillsRoute,
   ProfessionalSpecialtiesRoute: ProfessionalSpecialtiesRoute,
   ProfessionalTemporaryJobsRoute: ProfessionalTemporaryJobsRoute,

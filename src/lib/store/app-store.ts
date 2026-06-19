@@ -175,6 +175,16 @@ export interface PracticeReview {
   date: string;
 }
 
+/** Review left BY a professional ABOUT a practice/owner (one per practice). */
+export interface PracticeOwnerReview {
+  id: string;
+  practiceId: string;
+  professionalId: string;
+  rating: number;
+  text: string;
+  date: string;
+}
+
 export interface CertificateExtra extends Certificate {
   issueDate?: string;
 }
@@ -278,6 +288,7 @@ interface AppState {
   appliedPostingIds: string[];
   jobHistory: JobHistoryEntry[];
   practiceReviews: PracticeReview[];
+  practiceOwnerReviews: PracticeOwnerReview[];
   activeSosRequests: SosRequest[];
 
   // auth
@@ -307,6 +318,7 @@ interface AppState {
   addReference: (entry: Omit<WorkReference, "id">) => void;
   removeReference: (id: string) => void;
   addPracticeReview: (review: Omit<PracticeReview, "id" | "date" | "practiceId" | "author">) => void;
+  addPracticeOwnerReview: (review: Omit<PracticeOwnerReview, "id" | "date" | "professionalId">) => void;
   addSosRequest: (req: SosRequest) => void;
   removeSosRequest: (id: string) => void;
 }
@@ -325,6 +337,7 @@ export const useAppStore = create<AppState>()(
       appliedPostingIds: [],
       jobHistory: initialHistory,
       practiceReviews: [],
+      practiceOwnerReviews: [],
       activeSosRequests: [],
 
       findUserByEmail: (email) =>
@@ -536,12 +549,33 @@ export const useAppStore = create<AppState>()(
           set({ practiceReviews: [newRev, ...get().practiceReviews] });
         }
       },
+      addPracticeOwnerReview: (review) => {
+        const u = get().currentUser;
+        if (!u) return;
+        const reviews = get().practiceOwnerReviews;
+        const existingIdx = reviews.findIndex(
+          (r) => r.practiceId === review.practiceId && r.professionalId === u.id
+        );
+        const newRev: PracticeOwnerReview = {
+          ...review,
+          id: existingIdx >= 0 ? reviews[existingIdx].id : `poreview_${Date.now()}`,
+          professionalId: u.id,
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        };
+        if (existingIdx >= 0) {
+          const updated = [...reviews];
+          updated[existingIdx] = newRev;
+          set({ practiceOwnerReviews: updated });
+        } else {
+          set({ practiceOwnerReviews: [newRev, ...reviews] });
+        }
+      },
       addSosRequest: (req) => set({ activeSosRequests: [req, ...get().activeSosRequests] }),
       removeSosRequest: (id) => set({ activeSosRequests: get().activeSosRequests.filter((r) => r.id !== id) }),
     }),
     {
       name: "mdd-app-store",
-      version: 4,
+      version: 5,
       storage: createJSONStorage(() => {
         if (typeof window === "undefined") {
           return {
@@ -565,6 +599,7 @@ export const useAppStore = create<AppState>()(
           appliedPostingIds: Array.isArray(state.appliedPostingIds) ? state.appliedPostingIds : [],
           jobHistory: Array.isArray(state.jobHistory) ? state.jobHistory : initialHistory,
           practiceReviews: Array.isArray(state.practiceReviews) ? state.practiceReviews : [],
+          practiceOwnerReviews: Array.isArray(state.practiceOwnerReviews) ? state.practiceOwnerReviews : [],
           activeSosRequests: Array.isArray(state.activeSosRequests) ? state.activeSosRequests : [],
         } as AppState;
       },
@@ -578,6 +613,7 @@ export const useAppStore = create<AppState>()(
         appliedPostingIds: s.appliedPostingIds,
         jobHistory: s.jobHistory,
         practiceReviews: s.practiceReviews,
+        practiceOwnerReviews: s.practiceOwnerReviews,
         activeSosRequests: s.activeSosRequests,
       }),
     }
