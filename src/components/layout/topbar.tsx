@@ -148,8 +148,8 @@ export function Topbar() {
         </div>
       </header>
 
-      <div className="fixed bottom-4 left-3 z-[100] md:left-0 md:w-[3rem] flex justify-center transition-all duration-200 !pointer-events-auto">
-        <SidebarTrigger className="h-12 w-12 md:h-9 md:w-9 rounded-full md:rounded-md border border-border/60 md:border-transparent bg-background/90 md:bg-muted/50 backdrop-blur shadow-xl md:shadow-none hover:bg-muted text-foreground flex items-center justify-center !pointer-events-auto" />
+      <div className="fixed bottom-4 left-3 z-[100] md:hidden flex justify-center transition-all duration-200 !pointer-events-auto">
+        <SidebarTrigger className="h-12 w-12 rounded-full border border-border/60 bg-background/90 backdrop-blur shadow-xl hover:bg-muted text-foreground flex items-center justify-center !pointer-events-auto" />
       </div>
 
       <UserProfileSheet open={profileOpen} onOpenChange={setProfileOpen} />

@@ -32,7 +32,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
-import { Globe } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,15 +119,20 @@ function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="flex flex-col gap-2 pb-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}>
-              <Globe className="h-4 w-4" />
+              <span className="text-base leading-none flex items-center justify-center w-4 shrink-0">
+                {i18n.language === "en" ? "🇪🇸" : "🇺🇸"}
+              </span>
               {!collapsed && <span>{i18n.language === "en" ? "Español" : "English"}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        <div className="hidden md:flex justify-center w-full">
+          <SidebarTrigger className="h-9 w-9 border border-border/40 hover:bg-muted" />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
@@ -231,13 +235,13 @@ function AdminTopbar() {
 function AdminFab() {
   const { toggleSidebar } = useSidebar();
   return (
-    <div className="fixed bottom-4 left-3 z-[100] md:left-0 md:w-[3rem] flex justify-center transition-all duration-200 !pointer-events-auto">
+    <div className="fixed bottom-4 left-3 z-[100] md:hidden flex justify-center transition-all duration-200 !pointer-events-auto">
       <button
         onClick={toggleSidebar}
-        className="h-12 w-12 md:h-9 md:w-9 rounded-full md:rounded-md border border-border/60 md:border-transparent bg-background/90 md:bg-muted/50 backdrop-blur shadow-xl md:shadow-none hover:bg-muted text-foreground flex items-center justify-center !pointer-events-auto transition-colors"
+        className="h-12 w-12 rounded-full border border-border/60 bg-background/90 backdrop-blur shadow-xl hover:bg-muted text-foreground flex items-center justify-center !pointer-events-auto transition-colors"
         aria-label="Toggle sidebar"
       >
-        <Menu className="h-5 w-5 md:h-4 md:w-4" />
+        <Menu className="h-5 w-5" />
       </button>
     </div>
   );

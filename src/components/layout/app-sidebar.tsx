@@ -23,7 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
-import { Globe } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const navItems = [
   { title: "Dashboard", url: "/practice", icon: LayoutDashboard, exact: true },
@@ -78,15 +78,20 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="flex flex-col gap-2 pb-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={() => i18n.changeLanguage(i18n.language === "en" ? "es" : "en")}>
-              <Globe className="h-4 w-4" />
+              <span className="text-base leading-none flex items-center justify-center w-4 shrink-0">
+                {i18n.language === "en" ? "🇪🇸" : "🇺🇸"}
+              </span>
               {!collapsed && <span>{i18n.language === "en" ? "Español" : "English"}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        <div className="hidden md:flex justify-center w-full">
+          <SidebarTrigger className="h-9 w-9 border border-border/40 hover:bg-muted" />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
