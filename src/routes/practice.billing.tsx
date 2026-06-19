@@ -6,8 +6,6 @@ import {
   Lock,
   Plus,
   ShieldCheck,
-  FileText,
-  Download,
   Receipt,
   CheckCircle2,
   Trash2,
@@ -25,44 +23,7 @@ export const Route = createFileRoute("/practice/billing")({
   component: BillingPage,
 });
 
-interface JasperReport {
-  id: string;
-  name: string;
-  period: string;
-  size: string;
-  generatedAt: string;
-}
 
-const reports: JasperReport[] = [
-  {
-    id: "rpt_001",
-    name: "Monthly payments_report.pdf",
-    period: "June 2026",
-    size: "184 KB",
-    generatedAt: "2026-06-15",
-  },
-  {
-    id: "rpt_002",
-    name: "Monthly payments_report.pdf",
-    period: "May 2026",
-    size: "212 KB",
-    generatedAt: "2026-05-31",
-  },
-  {
-    id: "rpt_003",
-    name: "Quarterly placements_summary.pdf",
-    period: "Q2 2026",
-    size: "446 KB",
-    generatedAt: "2026-06-01",
-  },
-  {
-    id: "rpt_004",
-    name: "Annual tax statement_1099.pdf",
-    period: "FY 2025",
-    size: "98 KB",
-    generatedAt: "2026-01-12",
-  },
-];
 
 function BillingPage() {
   const { t } = useTranslation();
@@ -70,7 +31,7 @@ function BillingPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("billing")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{t("billing_desc")}</p>
         </div>
         <Badge
@@ -89,7 +50,6 @@ function BillingPage() {
         </div>
         <div className="space-y-6">
           <Vault />
-          <ReportsCard />
         </div>
       </div>
     </div>
@@ -255,58 +215,7 @@ function Vault() {
   );
 }
 
-function ReportsCard() {
-  const { t } = useTranslation();
-  const downloadMock = (r: JasperReport) => {
-    const blob = new Blob(
-      [`JasperReports export\n${r.name}\nPeriod: ${r.period}\nGenerated: ${r.generatedAt}\n`],
-      { type: "application/pdf" },
-    );
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = r.name.replace(".pdf", `_${r.period.replace(/\s+/g, "_")}.pdf`);
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success(t("report_downloaded"), { description: r.name });
-  };
 
-  return (
-    <Card className="border-border/70 shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-        <div>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <FileText className="h-4 w-4 text-primary" /> {t("reports")}
-          </CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">{t("reports_desc")}</p>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        {reports.map((r, i) => (
-          <motion.button
-            key={r.id}
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.05 }}
-            onClick={() => downloadMock(r)}
-            className="group flex w-full items-center gap-3 rounded-lg border border-border/60 bg-card p-3 text-left transition hover:border-primary/40 hover:bg-muted/40"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
-              <FileText className="h-4 w-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{r.name}</p>
-              <p className="truncate text-[11px] text-muted-foreground">
-                {r.period} · {r.size}
-              </p>
-            </div>
-            <Download className="h-4 w-4 text-muted-foreground transition group-hover:text-primary" />
-          </motion.button>
-        ))}
-      </CardContent>
-    </Card>
-  );
-}
 
 function RecentPayments() {
   const { t } = useTranslation();

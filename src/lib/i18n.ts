@@ -570,6 +570,32 @@ const en = {
     oral_surgeon_label: "Oral Surgeon",
     pediatric_label: "Pediatric",
 
+    // Reports Tabs
+    report_clients: "Clients",
+    report_professionals: "Professionals",
+    report_payments: "Payments",
+    report_positions: "Positions",
+    report_canceled: "Canceled Postings",
+    report_notfilled: "Not Filled Positions",
+
+    // Filter Bar & Common UI
+    filter_from: "From",
+    filter_to: "To",
+    reset_filters: "Reset",
+    export_pdf: "Export to PDF",
+
+    // Period options
+    period_all: "All Time",
+    period_today: "Today",
+    period_this_week: "This Week",
+    period_last_week: "Last Week",
+    period_this_month: "This Month",
+    period_this_quarter: "This Quarter",
+    period_this_year: "This Year",
+
+    // Positions & Status Select
+    all_positions: "All Positions",
+    position: "Position",
   },
 };
 
@@ -1149,6 +1175,33 @@ const es = {
     pediatric_label: "Pediátrico",
 
     // Documents Pro
+
+    // Reports Tabs
+    report_clients: "Clientes",
+    report_professionals: "Profesionales",
+    report_payments: "Pagos",
+    report_positions: "Puestos",
+    report_canceled: "Ofertas Canceladas",
+    report_notfilled: "Puestos no Cubiertos",
+
+    // Filter Bar & Common UI
+    filter_from: "Desde",
+    filter_to: "Hasta",
+    reset_filters: "Restablecer",
+    export_pdf: "Exportar a PDF",
+
+    // Period options
+    period_all: "Todo el tiempo",
+    period_today: "Hoy",
+    period_this_week: "Esta semana",
+    period_last_week: "La semana pasada",
+    period_this_month: "Este mes",
+    period_this_quarter: "Este trimestre",
+    period_this_year: "Este año",
+
+    // Positions & Status Select
+    all_positions: "Todos los puestos",
+    position: "Puesto",
   },
 };
 

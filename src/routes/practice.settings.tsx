@@ -31,21 +31,21 @@ export const Route = createFileRoute("/practice/settings")({
 function SettingsPage() {
   const { t } = useTranslation();
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{t("settings_title")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{t("settings_desc")}</p>
       </header>
 
       <Tabs defaultValue="practice" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="practice" className="gap-2">
+        <TabsList className="w-full flex justify-start overflow-x-auto scrollbar-none h-auto p-1 gap-1 whitespace-nowrap">
+          <TabsTrigger value="practice" className="gap-2 shrink-0">
             <Building2 className="h-3.5 w-3.5" /> {t("practice")}
           </TabsTrigger>
-          <TabsTrigger value="locations" className="gap-2">
+          <TabsTrigger value="locations" className="gap-2 shrink-0">
             <MapPin className="h-3.5 w-3.5" /> {t("locations")}
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-2">
+          <TabsTrigger value="notifications" className="gap-2 shrink-0">
             <Bell className="h-3.5 w-3.5" /> {t("notifications")}
           </TabsTrigger>
         </TabsList>

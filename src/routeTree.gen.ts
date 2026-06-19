@@ -30,6 +30,7 @@ import { Route as ProfessionalBannedOfficesRouteImport } from './routes/professi
 import { Route as PracticeStaffRouteImport } from './routes/practice.staff'
 import { Route as PracticeSettingsRouteImport } from './routes/practice.settings'
 import { Route as PracticeScheduleRouteImport } from './routes/practice.schedule'
+import { Route as PracticeReportsRouteImport } from './routes/practice.reports'
 import { Route as PracticePostingsRouteImport } from './routes/practice.postings'
 import { Route as PracticeBillingRouteImport } from './routes/practice.billing'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -144,6 +145,11 @@ const PracticeScheduleRoute = PracticeScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => PracticeRoute,
 } as any)
+const PracticeReportsRoute = PracticeReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => PracticeRoute,
+} as any)
 const PracticePostingsRoute = PracticePostingsRouteImport.update({
   id: '/postings',
   path: '/postings',
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/practice/billing': typeof PracticeBillingRoute
   '/practice/postings': typeof PracticePostingsRoute
+  '/practice/reports': typeof PracticeReportsRoute
   '/practice/schedule': typeof PracticeScheduleRoute
   '/practice/settings': typeof PracticeSettingsRoute
   '/practice/staff': typeof PracticeStaffRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/practice/billing': typeof PracticeBillingRoute
   '/practice/postings': typeof PracticePostingsRoute
+  '/practice/reports': typeof PracticeReportsRoute
   '/practice/schedule': typeof PracticeScheduleRoute
   '/practice/settings': typeof PracticeSettingsRoute
   '/practice/staff': typeof PracticeStaffRoute
@@ -227,6 +235,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/practice/billing': typeof PracticeBillingRoute
   '/practice/postings': typeof PracticePostingsRoute
+  '/practice/reports': typeof PracticeReportsRoute
   '/practice/schedule': typeof PracticeScheduleRoute
   '/practice/settings': typeof PracticeSettingsRoute
   '/practice/staff': typeof PracticeStaffRoute
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/practice/billing'
     | '/practice/postings'
+    | '/practice/reports'
     | '/practice/schedule'
     | '/practice/settings'
     | '/practice/staff'
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/practice/billing'
     | '/practice/postings'
+    | '/practice/reports'
     | '/practice/schedule'
     | '/practice/settings'
     | '/practice/staff'
@@ -307,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/practice/billing'
     | '/practice/postings'
+    | '/practice/reports'
     | '/practice/schedule'
     | '/practice/settings'
     | '/practice/staff'
@@ -482,6 +494,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PracticeScheduleRouteImport
       parentRoute: typeof PracticeRoute
     }
+    '/practice/reports': {
+      id: '/practice/reports'
+      path: '/reports'
+      fullPath: '/practice/reports'
+      preLoaderRoute: typeof PracticeReportsRouteImport
+      parentRoute: typeof PracticeRoute
+    }
     '/practice/postings': {
       id: '/practice/postings'
       path: '/postings'
@@ -530,6 +549,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface PracticeRouteChildren {
   PracticeBillingRoute: typeof PracticeBillingRoute
   PracticePostingsRoute: typeof PracticePostingsRoute
+  PracticeReportsRoute: typeof PracticeReportsRoute
   PracticeScheduleRoute: typeof PracticeScheduleRoute
   PracticeSettingsRoute: typeof PracticeSettingsRoute
   PracticeStaffRoute: typeof PracticeStaffRoute
@@ -539,6 +559,7 @@ interface PracticeRouteChildren {
 const PracticeRouteChildren: PracticeRouteChildren = {
   PracticeBillingRoute: PracticeBillingRoute,
   PracticePostingsRoute: PracticePostingsRoute,
+  PracticeReportsRoute: PracticeReportsRoute,
   PracticeScheduleRoute: PracticeScheduleRoute,
   PracticeSettingsRoute: PracticeSettingsRoute,
   PracticeStaffRoute: PracticeStaffRoute,
