@@ -232,7 +232,7 @@ function PermanentJobsPage() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      title="Practice info"
+                      title="Owner info"
                       onClick={() => {
                         setSelectedPracticeId(p.practiceId);
                         setSelectedPostingId(p.id);

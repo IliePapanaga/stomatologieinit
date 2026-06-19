@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Search, LogOut, KeyRound, MapPin } from "lucide-react";
+import { Bell, ChevronDown, Search, LogOut, KeyRound, MapPin, Globe } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -18,6 +18,7 @@ import {
 import { mockLocations, mockPractice } from "@/lib/mock";
 import { useAppStore } from "@/lib/store/app-store";
 import { UserProfileSheet } from "@/components/user-profile-sheet";
+import { useTranslation } from "react-i18next";
 
 export function Topbar() {
   const [activeLoc, setActiveLoc] = useState(mockLocations[0]);
@@ -27,6 +28,11 @@ export function Topbar() {
   const stopImpersonation = useAppStore((s) => s.stopImpersonation);
   const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === "en" ? "es" : "en");
+  };
 
   const onLogout = () => {
     logout();
@@ -63,7 +69,7 @@ export function Topbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuLabel>Switch location</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("switch_location")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {mockLocations.map((loc) => (
               <DropdownMenuItem key={loc.id} onSelect={() => setActiveLoc(loc)}>
@@ -80,14 +86,14 @@ export function Topbar() {
 
         {impersonator && (
           <Badge variant="outline" className="ml-1 hidden md:flex gap-1.5 border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400">
-            <KeyRound className="h-3 w-3" /> Impersonating
+            <KeyRound className="h-3 w-3" /> {t("impersonating")}
           </Badge>
         )}
 
         <div className="relative ml-2 hidden flex-1 max-w-md md:block">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search professionals, postings, certificates…"
+            placeholder={t("search_placeholder")}
             className="h-9 rounded-full border-border/60 bg-muted/40 pl-9 text-sm focus-visible:bg-background"
           />
         </div>
@@ -96,8 +102,8 @@ export function Topbar() {
           {impersonator && (
             <Button size="sm" variant="outline" onClick={onStopImpersonation} className="h-8 gap-1.5 px-2 md:px-3 border-amber-500/30 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <KeyRound className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Exit impersonation</span>
-              <span className="inline sm:hidden">Exit</span>
+              <span className="hidden sm:inline">{t("exit_impersonation")}</span>
+              <span className="inline sm:hidden">{t("exit")}</span>
             </Button>
           )}
           <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications">
@@ -127,12 +133,15 @@ export function Topbar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => setProfileOpen(true)}>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Owner settings</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setProfileOpen(true)}>{t("profile")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("owner_settings")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("billing")}</DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={toggleLanguage}>
+                <Globe className="mr-2 h-3.5 w-3.5" /> {i18n.language === "en" ? "Español" : "English"}
+              </DropdownMenuItem>
               <DropdownMenuItem onSelect={onLogout} className="text-destructive focus:text-destructive">
-                <LogOut className="mr-2 h-3.5 w-3.5" /> Sign out
+                <LogOut className="mr-2 h-3.5 w-3.5" /> {t("sign_out")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -21,6 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useTranslation } from "react-i18next";
 
 const navItems = [
   { title: "Dashboard", url: "/practice", icon: LayoutDashboard, exact: true },
@@ -35,6 +36,7 @@ export function AppSidebar() {
   const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useTranslation();
 
   const isActive = (url: string, exact?: boolean) =>
     exact ? pathname === url : pathname === url || pathname.startsWith(url + "/");
@@ -43,7 +45,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent className="pt-4">
         <SidebarGroup>
-          <SidebarGroupLabel>Owner</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("owner_view")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
@@ -64,7 +66,7 @@ export function AppSidebar() {
                         }}
                       >
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-sm">{item.title}</span>}
+                        {!collapsed && <span className="text-sm">{t(item.title.toLowerCase())}</span>}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -47,6 +47,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/lib/store/app-store";
 
 type NavLeaf = { title: string; url: string; icon: typeof Briefcase; exact?: boolean };
@@ -81,6 +82,7 @@ const nav: NavItem[] = [
 ];
 
 function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }) {
+  const { t } = useTranslation();
   const anyActive = group.items.some((i) => pathname === i.url || pathname.startsWith(i.url + "/"));
   const [open, setOpen] = useState(anyActive);
   const { state } = useSidebar();
@@ -112,7 +114,7 @@ function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={group.title} isActive={anyActive}>
             <group.icon className="h-4 w-4" />
-            <span className="text-sm">{group.title}</span>
+            <span className="text-sm">{t(group.title.toLowerCase().replace(" ", "_"))}</span>
             <ChevronDown
               className={`ml-auto h-4 w-4 transition-transform ${open || anyActive ? "rotate-180" : ""}`}
             />
@@ -125,7 +127,7 @@ function NavGroupItem({ group, pathname }: { group: NavGroup; pathname: string }
                 <SidebarMenuSubButton asChild isActive={pathname === sub.url}>
                   <Link to={sub.url} className="flex items-center gap-2">
                     <sub.icon className="h-3.5 w-3.5" />
-                    <span>{sub.title}</span>
+                    <span>{t(sub.title.toLowerCase().replace(" ", "_"))}</span>
                   </Link>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
@@ -141,6 +143,7 @@ function ProSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useTranslation();
 
   return (
     <Sidebar collapsible="icon">
@@ -161,7 +164,7 @@ function ProSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("workspace")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {nav.map((item) =>
@@ -176,7 +179,7 @@ function ProSidebar() {
                     >
                       <Link to={item.url} className="flex items-center gap-2.5">
                         <item.icon className="h-4 w-4" />
-                        {!collapsed && <span className="text-sm">{item.title}</span>}
+                        {!collapsed && <span className="text-sm">{t(item.title.toLowerCase().replace(" ", "_"))}</span>}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

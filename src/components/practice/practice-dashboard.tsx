@@ -10,11 +10,14 @@ import { ActiveSosTracker } from "@/components/practice/active-sos-tracker";
 import { usePracticeDashboard } from "@/lib/hooks/practice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppStore } from "@/lib/store/app-store";
-import { Briefcase, CheckCircle2, CalendarClock, Siren } from "lucide-react";
+import { Briefcase, CheckCircle2, CalendarClock, Siren, AlertCircle } from "lucide-react";
 import type { KpiItem } from "@/components/practice/kpi-strip";
+import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export function PracticeDashboard() {
   const { data, isLoading } = usePracticeDashboard();
+  const { t } = useTranslation();
 
   const { 
     currentUser, 
@@ -45,15 +48,13 @@ export function PracticeDashboard() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">
+          <Badge variant="outline" className="mb-2 border-primary/20 bg-primary/10 text-primary">
             {data.location.name}
-          </p>
+          </Badge>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Good morning, {currentUser?.firstName || "there"}
+            {t("good_morning", { name: currentUser?.firstName || "" }).trim()}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Here's what's happening across your practice today.
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("whats_happening_owner")}</p>
         </div>
         <NewPostingSheet />
       </div>
@@ -61,33 +62,33 @@ export function PracticeDashboard() {
       <KpiStrip kpis={[
         { 
           key: "activePostings", 
-          label: "Active postings", 
+          label: t("active_postings"), 
           value: jobPostings.filter(p => p.status === "Open").length, 
           icon: Briefcase, tint: "primary", 
-          delta: "+2 this week",
+          delta: t("this_week", { count: "+2" }),
           href: "/practice/postings"
         },
         { 
           key: "filledToday", 
-          label: "Filled today", 
+          label: t("filled_today"), 
           value: jobPostings.reduce((sum, p) => sum + (p.hiredCandidateIds?.length || 0), 0), 
           icon: CheckCircle2, tint: "success", 
-          delta: "98% match" 
+          delta: `98% ${t("match")}` 
         },
         { 
           key: "pendingInterviews", 
-          label: "Pending interviews", 
+          label: t("pending_interviews"), 
           value: appliedPostingIds.length || 4, // fallback to 4 for demo
           icon: CalendarClock, tint: "warning", 
-          delta: "3 today",
+          delta: t("today", { count: "3" }),
           href: "/practice/schedule"
         },
         { 
           key: "sosSent", 
-          label: "Active SOS Broadcasts", 
+          label: t("active_sos"), 
           value: activeSosRequests.length, 
-          icon: Siren, tint: "destructive", 
-          delta: activeSosRequests.length > 0 ? "Searching now" : "All resolved",
+          icon: AlertCircle, tint: "destructive", 
+          delta: activeSosRequests.length > 0 ? t("searching_now") : t("all_resolved"),
         },
       ]} />
 

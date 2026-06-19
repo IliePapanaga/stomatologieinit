@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Briefcase,
   CalendarClock,
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/professional/")({
 });
 
 function OverviewPage() {
+  const { t } = useTranslation();
   const profile = useAppStore((s) => s.professionalProfile);
   const postings = useAppStore((s) => s.jobPostings);
   const applied = useAppStore((s) => s.appliedPostingIds);
@@ -56,12 +58,12 @@ function OverviewPage() {
     <div className="space-y-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-primary">Overview</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-primary">{t("overview")}</p>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-            Welcome back, {profile.firstName}
+            {t("good_morning", { name: profile.firstName || "" }).trim()}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Here's your activity & opportunity snapshot.
+            {t("whats_happening_pro")}
           </p>
         </div>
         <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
@@ -105,16 +107,16 @@ function OverviewPage() {
 
         <div className="lg:col-span-2 grid gap-4 sm:grid-cols-2">
           <KpiCard
-            label="Total earnings"
+            label={t("earnings")}
             value={`$${totalEarnings.toLocaleString()}`}
-            sub={`${totalHours} hrs worked`}
+            sub={`${totalHours} ${t("hours")}`}
             icon={DollarSign}
             tint="emerald"
           />
           <KpiCard
             label="Jobs applied"
             value={applied.length.toString()}
-            sub={`${upcoming.length} upcoming`}
+            sub={`${upcoming.length} ${t("upcoming")}`}
             icon={Briefcase}
             tint="primary"
           />
@@ -142,13 +144,13 @@ function OverviewPage() {
       <Card className="p-5">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold">Upcoming shifts</p>
+            <p className="text-sm font-semibold">{t("upcoming")} {t("shifts")}</p>
             <p className="text-xs text-muted-foreground">
               Temporary jobs you've applied for.
             </p>
           </div>
           <Button asChild variant="ghost" size="sm">
-            <Link to="/professional/temporary-jobs">View all</Link>
+            <Link to="/professional/temporary-jobs">{t("view_all")}</Link>
           </Button>
         </div>
         {upcoming.length === 0 ? (

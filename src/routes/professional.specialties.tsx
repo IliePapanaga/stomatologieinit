@@ -160,7 +160,7 @@ function SpecialtiesPage() {
       <Card className="flex items-center gap-3 border-primary/30 bg-primary/5 p-4">
         <Sparkles className="h-5 w-5 text-primary" />
         <p className="text-xs text-muted-foreground">
-          Comfort levels are surveyed periodically. Practices see them as a confidence indicator,
+          Comfort levels are surveyed periodically. Owners see them as a confidence indicator,
           not a hard filter.
         </p>
       </Card>

@@ -265,7 +265,7 @@ function TempCard({
             {posting.subcategory}
           </Badge>
           <h3 className="mt-2 truncate text-sm font-semibold">{posting.title}</h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">{practice?.name ?? "Practice"}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{practice?.name ?? "Owner"}</p>
         </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Match</p>
@@ -320,7 +320,7 @@ function TempCard({
             <><Briefcase className="h-3.5 w-3.5" /> Accept shift</>
           )}
         </Button>
-        <Button size="sm" variant="ghost" onClick={onInfo} title="Practice info">
+        <Button size="sm" variant="ghost" onClick={onInfo} title="Owner info">
           <Info className="h-3.5 w-3.5" />
         </Button>
         <Button size="sm" variant="ghost" onClick={onBan} title="Ban practice">

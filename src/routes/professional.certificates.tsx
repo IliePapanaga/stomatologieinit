@@ -101,7 +101,7 @@ function CertificatesPage() {
         <p className="text-xs font-medium uppercase tracking-wider text-primary">My Account</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">Certificates</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Upload certifications & licenses. Practices see verified status.
+          Upload certifications & licenses. Owners see verified status.
         </p>
       </header>
 

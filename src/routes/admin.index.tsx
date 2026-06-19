@@ -29,7 +29,7 @@ interface Metric {
 }
 
 const metrics: Metric[] = [
-  { label: "Active practices", value: "1,284", delta: "+38 this week", trend: "up", icon: Building2, tone: "primary" },
+  { label: "Active owners", value: "1,284", delta: "+38 this week", trend: "up", icon: Building2, tone: "primary" },
   { label: "Active professionals", value: "9,762", delta: "+412 this month", trend: "up", icon: Users, tone: "emerald" },
   { label: "Pending certificates", value: "147", delta: "32 over 7 days", trend: "down", icon: FileCheck2, tone: "amber" },
   { label: "Open incidents", value: "3", delta: "All under SLA", trend: "flat", icon: AlertTriangle, tone: "rose" },
@@ -47,7 +47,7 @@ const auditEvents = [
   { id: "ev2", actor: "System", action: "Auto-rejected", target: "12 expired CPR certificates", at: "21m ago", level: "warn" },
   { id: "ev3", actor: "SystemAdmin · achen", action: "Approved", target: "X-Ray license · pro_412", at: "1h ago", level: "info" },
   { id: "ev4", actor: "System", action: "Rate-limit triggered", target: "PrimeRate webhook · 503 burst", at: "3h ago", level: "warn" },
-  { id: "ev5", actor: "SystemAdmin · achen", action: "Suspended", target: "Practice prc_204 (chargeback)", at: "6h ago", level: "critical" },
+  { id: "ev5", actor: "SystemAdmin · achen", action: "Suspended", target: "Owner prc_204 (chargeback)", at: "6h ago", level: "critical" },
 ];
 
 const levelStyles: Record<string, string> = {

@@ -5,7 +5,7 @@ import { dashboardQuery } from "@/lib/hooks/practice";
 export const Route = createFileRoute("/practice/")({
   head: () => ({
     meta: [
-      { title: "Practice Dashboard · MDD Dental Staffing" },
+      { title: "Owner Dashboard · MDD Dental Staffing" },
       { name: "description", content: "Real-time view of postings, nearby pros, attendance, and billing for your dental practice." },
     ],
   }),
